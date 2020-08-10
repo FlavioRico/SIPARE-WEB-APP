@@ -3,8 +3,11 @@
 }
 
 .container-mega-menu > a{
-    padding: 5px;
-    margin: 5px;
+    margin: 10px;
+}
+
+.container-mega-menu {
+    margin: 0;
 }
 
 .dependencia:hover{
@@ -17,4 +20,27 @@
 
 .navbar-text {
     padding: 10px;
+}
+
+.dropdown-item{
+    color: #355ca3;
+    padding: 10px;
+}
+
+.dropdown-item:hover{
+    background-color: rgba(230, 231, 230, 0.938);
+    border-radius: 10px;
+}
+
+.dropdown-menu{
+    margin: 1rem 0 0;
+}
+
+.dropdown-menu {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.301), 
+                0 10px 10px rgba(0, 0, 0, 0.096);
+}
+
+.logo-multiva {
+    margin-right: 150px;
 }
