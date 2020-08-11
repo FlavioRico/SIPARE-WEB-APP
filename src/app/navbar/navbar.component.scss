@@ -25,6 +25,7 @@
 .dropdown-item{
     color: #355ca3;
     padding: 10px;
+    text-align: center;
 }
 
 .dropdown-item:hover{
@@ -33,7 +34,7 @@
 }
 
 .dropdown-menu{
-    margin: 1rem 0 0;
+    margin: 0rem 0 0;
 }
 
 .dropdown-menu {
@@ -49,4 +50,13 @@
 
 .icons-user { 
     text-align: center;
+}
+
+.icon-option {
+    width: 35px;
+    height: 35px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
 }
