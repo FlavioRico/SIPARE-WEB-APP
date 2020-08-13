@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { BalanceComponent } from './balance/balance.component';
+import { BitacoraComponent } from './bitacora/bitacora.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    BalanceComponent
+    BalanceComponent,
+    BitacoraComponent
   ],
   imports: [
     BrowserModule,
