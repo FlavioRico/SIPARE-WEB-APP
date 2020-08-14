@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "V2Sipare"
+    }
+  },
+  "defaultProject": "V2Sipare",
+  "cli": {
+    "analytics": false
+  }
 }
