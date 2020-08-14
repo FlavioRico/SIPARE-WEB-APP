@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BitacoraComponent implements OnInit {
 
+  text1 = 'Generando contenido';
+  text2 = 'Aprobación de contenido';
+  text3 = 'Generando archivo';
+  text4 = 'Archivo enviado';
   constructor() { }
 
   ngOnInit(): void {
   }
 
 }
+
