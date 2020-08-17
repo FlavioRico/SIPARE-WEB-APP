@@ -1,0 +1,59 @@
+.navbar-menu{
+    background: white;
+}
+
+.container-mega-menu > a{
+    margin: 10px;
+}
+
+.container-mega-menu {
+    margin: 0;
+}
+
+.dependencia:hover{
+    border-bottom: 1.5px solid red;
+}
+
+.navbar-text {
+    padding: 10px;
+}
+
+.dropdown-item{
+    color: #355ca3;
+    padding: 10px;
+    text-align: center;
+}
+
+.dropdown-item:hover{
+    background-color: rgba(230, 231, 230, 0.938);
+    border-radius: 10px;
+}
+
+.dropdown-menu{
+    margin: 0rem 0 0;
+}
+
+.dropdown-menu {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.301), 
+                0 10px 10px rgba(0, 0, 0, 0.096);
+}
+
+.logo-multiva {
+    width: 180px;
+    margin-right: 10px;
+    border-right: 2px solid rgba(196, 24, 24, 0.377);
+}
+
+.icons-user { 
+    text-align: center;
+}
+
+.icon-option {
+    width: 35px;
+    height: 35px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    // border-bottom: 1.5px solid red;
+}
