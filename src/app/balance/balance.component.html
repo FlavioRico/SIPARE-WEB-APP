@@ -1,11 +1,8 @@
-<app-navbar></app-navbar>
+<app-navbar (dependenciaClicked)="selectDependencia($event)" (dependenciaClicked)="reloadDataTable(this.valueRCV, this.valueT2RCV, this.valueIMSSACV, this.valueT1RCV, this.totalArchivo, this.totalAuxiliares)"></app-navbar>
 
 <!-- balance -->
 
 <div class="container">
-    <!-- <app-cabecera-opc-menus></app-cabecera-opc-menus> -->
-
-    <!-- posible componente aparte -->
     <div class="row justify-content-between table-titles">
         <div class="col-sm-3 title-table">Archivo</div>
         <div class="col-sm-3 title-table">T24 Auxiliares</div>
@@ -62,10 +59,7 @@
     </div>
 
 </div>
-
 <!-- modal -->
-
-<!-- Modal -->
 <div class="modal fade" id="infoModalAutOK" tabindex="-1" aria-labelledby="infoModalAutOKLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -86,4 +80,4 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
