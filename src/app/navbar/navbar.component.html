@@ -62,12 +62,12 @@
                                 <div id="dropdown-menu" class="dropdown-menu" style="width: 400px;" aria-labelledby="dropdownMenuButton">
                                     <div >   
                                         <div class="row row-cols-3 container container-mega-menu">
-                                            <a class="dropdown-item" routerLink="/">
+                                            <a (click)="opcConsarConciliacion()" class="dropdown-item" routerLink="/">
                                                 <img src="../../assets/icons/balance_SIPARE.png" class="icon-option" alt="):">
                                                 <br>
                                                 Conciliación <br> de cifras
                                             </a>
-                                            <a class="dropdown-item" routerLink="/">                                
+                                            <a (click)="opcConsarBitacora()" class="dropdown-item" routerLink="/">                                
                                                 <img src="../../assets/icons/bitacora_SIPARE.png" class="icon-option" alt="):">
                                                 <br>
                                                 Bitacora <br> de archivos
@@ -101,4 +101,9 @@
             </div>
         </nav>
     </header>
+    <app-cabecera-opc-menus
+    [dependencia]="dependencia"
+    [opcMenu]="opcMenu"
+    [opcMenuShort]="opcMenuShort">
+</app-cabecera-opc-menus>
 </div>
