@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +11,9 @@ export class NavbarComponent implements OnInit {
   dependencia: string;
   opcMenu: string;
   opcMenuShort: string;
+
+  @Output() dependenciaClicked: EventEmitter<any> = new EventEmitter();
+
   constructor() {
   }
 
@@ -18,17 +21,24 @@ export class NavbarComponent implements OnInit {
 
   }
 
-  opcConsarConciliacion(){
+  opcConsarConciliacionCONSAR(){
     this.dependencia = 'CONSAR';
     this.opcMenu = 'Conciliación de cifras';
     this.opcMenuShort = 'Balance';
-
+    console.log('balance consar');
+    this.dependenciaClicked.emit(this.dependencia);
   }
-  opcConsarBitacora(){
+  opcConsarBitacoraCONSAR(){
     this.dependencia = 'CONSAR';
     this.opcMenu = 'Bitácora de Archivos';
     this.opcMenuShort = 'Bitácora';
-    console.log('entra debug');
-
+    console.log('bitacora consar');
+  }
+  opcConsarConciliacionPROCESAR(){
+    this.dependencia = 'PROCESAR';
+    this.opcMenu = 'Conciliación de cifras';
+    this.opcMenuShort = 'Balance';
+    console.log('balance procesar');
+    this.dependenciaClicked.emit(this.dependencia);
   }
 }
