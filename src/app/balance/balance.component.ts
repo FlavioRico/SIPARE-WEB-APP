@@ -14,13 +14,6 @@ export class BalanceComponent implements OnInit {
   @ViewChild('buttonValidacion') btnAutorizar: ElementRef;
   @ViewChild('msjValidacion') messageValidacion: ElementRef;
 
-  /*Variables necesarias para la fecha*/
-  fecha = new Date();
-  day: any;
-  month: any;
-  year: number;
-  fechaCompleta: any;
-
   /*Valores de la tabla sin formato*/
   valueRCV = 12324.50;
   valueIMSSACV = 123246.75;
@@ -45,14 +38,6 @@ export class BalanceComponent implements OnInit {
   constructor(private render: Renderer2) {}
 
   ngOnInit(): void {
-    this.day = this.fecha.getDate();
-    this.month  = this.fecha.getMonth() + 1;
-    this.year  = this.fecha.getFullYear();
-
-    this.month = this.formatDate(this.month);
-    this.day = this.formatDate(this.day);
-
-    this.fechaCompleta = this.year + '/' + this.month + '/' + this.day;
     this.RCVformated = this.formatTable(this.valueRCV);
     this.T2RCVformated = this.formatTable(this.valueT2RCV);
     this.IMSSACVformated = this.formatTable(this.valueIMSSACV);
@@ -63,13 +48,6 @@ export class BalanceComponent implements OnInit {
 
   ngAfterViewInit(){
     this.validaSaldos();
-  }
-
-  formatDate(val){
-    if (val < 10) {
-      val = '0' + val;
-    }
-    return val;
   }
 
   formatTable(valTable){
