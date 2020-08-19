@@ -1,8 +1,11 @@
-<app-navbar (dependenciaClicked)="selectDependencia($event)" (dependenciaClicked)="reloadDataTable(this.valueRCV, this.valueT2RCV, this.valueIMSSACV, this.valueT1RCV, this.totalArchivo, this.totalAuxiliares)"></app-navbar>
-
+<!-- nabar -->
+<app-navbar 
+    (dependenciaClicked)="selectDependencia($event)" 
+    (dependenciaClicked)="reloadDataTable(this.valueRCV, this.valueT2RCV, 
+    this.valueIMSSACV, this.valueT1RCV, this.totalArchivo, this.totalAuxiliares)">
+</app-navbar>
 <!-- balance -->
-
-<div class="container">
+<div #container class="container">
     <div class="row justify-content-between table-titles">
         <div class="col-sm-3 title-table">Archivo</div>
         <div class="col-sm-3 title-table">T24 Auxiliares</div>
