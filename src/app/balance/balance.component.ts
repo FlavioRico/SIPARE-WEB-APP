@@ -43,7 +43,7 @@ export class BalanceComponent implements OnInit {
   totalAuxiliaresformated: any;
 
   constructor(private render: Renderer2) {
-    this.dependencia = 'CONSAR';
+    this.dependencia = 'PROCESAR';
     this.selectDependencia(this.dependencia);
     console.log('BANDERA: ', this.conditionSaldosEmpty);
   }

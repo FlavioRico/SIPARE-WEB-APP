@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { LoginComponent } from './login/login.component';
 import { BalanceComponent } from './balance/balance.component';
 import { BitacoraComponent } from './bitacora/bitacora.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/balance',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
@@ -17,6 +18,9 @@ const routes: Routes = [
   {
     path: 'bitacora',
     component: BitacoraComponent
+  },{
+    path: 'login',
+    component: LoginComponent
   }
 ];
 

@@ -39,7 +39,7 @@ export class CabeceraOpcMenusComponent implements OnInit {
   }
 
   defaultValues(){
-    this.dependencia = 'CONSAR';
+    this.dependencia = 'PROCESAR';
     this.opcMenu = 'Conciliación de cifras';
     this.opcMenuShort = 'Balance';
   }
