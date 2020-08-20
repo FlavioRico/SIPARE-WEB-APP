@@ -67,7 +67,7 @@ export class BalanceComponent implements OnInit {
       // this.reloadDataTable();
     }else if (dependencia === 'PROCESAR'){
       console.log('checamos' + dependencia);
-      this.valueRCV = 505.18;
+      this.valueRCV = 505.17;
       this.valueIMSSACV = 4897.89;
       this.valueT2RCV = 505.17;
       this.valueT1RCV = 4897.89;
