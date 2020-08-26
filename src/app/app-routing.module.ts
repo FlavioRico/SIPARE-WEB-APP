@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { BalanceComponent } from './balance/balance.component';
+import { BalanceConsarComponent } from './balance/balance-consar/balance-consar.component';
+import { BalanceProcesarComponent } from './balance/balance-procesar/balance-procesar.component';
 import { BitacoraComponent } from './bitacora/bitacora.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/balance',
+    redirectTo: '/balanceProcesar',
     pathMatch: 'full'
   },
   {
@@ -17,6 +19,14 @@ const routes: Routes = [
   {
     path: 'bitacora',
     component: BitacoraComponent
+  },
+  {
+    path: 'balanceConsar',
+    component: BalanceConsarComponent
+  },
+  {
+    path: 'balanceProcesar',
+    component: BalanceProcesarComponent
   }
 ];
 
