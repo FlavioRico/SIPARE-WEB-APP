@@ -1,0 +1,25 @@
+<li class="nav-item">
+    <div class="nav-link">
+        <div class="dropdown">
+            <button class="dependencia btn dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img src="../../assets/icons/logoCONSAR.png" alt="">
+            </button>
+            <div id="dropdown-menu" class="dropdown-menu" style="width: 400px;" aria-labelledby="dropdownMenuButton">
+                <div >   
+                    <div class="row row-cols-3 container container-mega-menu">
+                        <a (click)="opcConsarConciliacionCONSAR()" class="dropdown-item" routerLink="/balanceConsar">
+                            <img src="../../assets/icons/balance_SIPARE.png" class="icon-option" alt="):">
+                            <br>
+                            Conciliación <br> de cifras
+                        </a>
+                        <a (click)="opcConsarBitacoraCONSAR()" class="dropdown-item" routerLink="/bitacora">                                
+                            <img src="../../assets/icons/bitacora_SIPARE.png" class="icon-option" alt="):">
+                            <br>
+                            Bitacora <br> de archivos
+                        </a>                                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
