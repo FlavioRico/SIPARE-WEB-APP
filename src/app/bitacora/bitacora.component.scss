@@ -1,15 +1,14 @@
-.container {
-    width: 100%;
-  }
+
   
   .progressbar {
     counter-reset: step;
     text-align: center;
+    display: table;
   }
   .progressbar li {
     width: 25%;
     list-style: none;
-    display: inline-block;
+    display: table-cell;
     position: relative;
     text-align: center;
   }

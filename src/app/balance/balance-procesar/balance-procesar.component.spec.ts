@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CabeceraOpcMenusComponent } from './cabecera-opc-menus.component';
+import { BalanceProcesarComponent } from './balance-procesar.component';
 
-describe('CabeceraOpcMenusComponent', () => {
-  let component: CabeceraOpcMenusComponent;
-  let fixture: ComponentFixture<CabeceraOpcMenusComponent>;
+describe('BalanceProcesarComponent', () => {
+  let component: BalanceProcesarComponent;
+  let fixture: ComponentFixture<BalanceProcesarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CabeceraOpcMenusComponent ]
+      declarations: [ BalanceProcesarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CabeceraOpcMenusComponent);
+    fixture = TestBed.createComponent(BalanceProcesarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
