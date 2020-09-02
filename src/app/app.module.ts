@@ -14,6 +14,8 @@ import { BalanceProcesarComponent } from './balance/balance-procesar/balance-pro
 import { BalanceConsarComponent } from './balance/balance-consar/balance-consar.component';
 import { ModalAuthComponent } from './balance/modals/modal-auth/modal-auth.component';
 import { SharedComponent } from './shared/shared/shared.component';
+import { HttpClientModule } from '@angular/common/http';
+import { BitacoraServiceService } from './services/bitacora/bitacora-service.service';
 
 @NgModule({
   declarations: [
@@ -32,9 +34,12 @@ import { SharedComponent } from './shared/shared/shared.component';
   imports: [
     FormsModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    BitacoraServiceService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

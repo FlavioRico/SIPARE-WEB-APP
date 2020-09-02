@@ -22,14 +22,12 @@ export class ItemCONSARComponent implements OnInit {
     this.dependencia = 'CONSAR';
     this.opcMenu = 'Conciliación de cifras';
     this.opcMenuShort = 'Balance';
-    console.log('balance consar');
     this.dependenciaClicked.emit(this.dependencia);
   }
   opcConsarBitacoraCONSAR(){
     this.dependencia = 'CONSAR';
     this.opcMenu = 'Bitácora de Archivos';
     this.opcMenuShort = 'Bitácora';
-    console.log('bitacora consar');
   }
 
 }
