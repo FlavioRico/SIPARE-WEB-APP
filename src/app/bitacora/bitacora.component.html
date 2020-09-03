@@ -16,6 +16,13 @@
   <span class="name-file-not-found">
     {{ fileName }}
   </span>
+  <br>
+  <strong>
+    Estatus:
+  </strong>
+  <span class="name-file-not-found">
+    {{ statusFile }}
+  </span>
 
   <div class="row title-short">
       <div class="col-12">
@@ -24,12 +31,12 @@
   </div>
 
   <div class="container-step-progress-bar">
-    <ul class="progressbar">
-      <li *ngFor="let step of baseFileStatus" class="">
+    <ul #stepLists class="progressbar">
+      <!-- <li *ngFor="let step of baseFileStatus" class="">
         <div class="text">
-          {{ step.description }}
+          {{ step.id }}
         </div>
-      </li>
+      </li> -->
     </ul>
   </div>
 </div>

@@ -1,5 +1,5 @@
 export class FileStatus {
     id: number;
-    description: String;
+    description: string;
     type: String;
 }
