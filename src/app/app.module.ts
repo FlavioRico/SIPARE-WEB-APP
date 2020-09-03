@@ -16,6 +16,7 @@ import { ModalAuthComponent } from './balance/modals/modal-auth/modal-auth.compo
 import { SharedComponent } from './shared/shared/shared.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BitacoraServiceService } from './services/bitacora/bitacora-service.service';
+import { BalanceServiceService } from './services/balance/balance-service.service';
 
 @NgModule({
   declarations: [
@@ -35,11 +36,13 @@ import { BitacoraServiceService } from './services/bitacora/bitacora-service.ser
     FormsModule,
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
-    BitacoraServiceService
+    BitacoraServiceService,
+    BalanceServiceService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule { }
