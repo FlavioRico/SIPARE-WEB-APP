@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { BalanceConsarComponent } from './balance/balance-consar/balance-consar.component';
 import { BalanceProcesarComponent } from './balance/balance-procesar/balance-procesar.component';
 import { BitacoraComponent } from './bitacora/bitacora.component';
+import { PreloaderComponent } from './preloader/preloader.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'balanceProcesar',
     component: BalanceProcesarComponent
+  },
+  {
+    path: 'preloader',
+    component: PreloaderComponent
   }
 ];
 

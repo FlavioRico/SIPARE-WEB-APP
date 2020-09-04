@@ -1,8 +1,9 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { SharedComponent } from '../shared/shared/shared.component';
 import { FileStatus } from '../models/models-bitacora/fileStatus';
-import { FileWorklog } from '../models/fileWorklog';
+import { FileWorklog } from '../models/models-bitacora/fileWorklog';
 import { BitacoraServiceService } from '../services/bitacora/bitacora-service.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-bitacora',
@@ -10,8 +11,11 @@ import { BitacoraServiceService } from '../services/bitacora/bitacora-service.se
   styleUrls: ['./bitacora.component.scss','../balance/balance-consar/balance-consar.component.scss']
 })
 export class BitacoraComponent implements OnInit {
+
+  /*others*/
   shared = new SharedComponent();
   fechaCompleta = this.shared.getDateFormated();
+  public loadComplete: boolean = false;
 
   fileName: String;
   statusFile: number;
@@ -23,14 +27,15 @@ export class BitacoraComponent implements OnInit {
   
   constructor(
     private serviceFileStatus: BitacoraServiceService,
-    private renderer: Renderer2) {}
+    private renderer: Renderer2,
+    private spinner: NgxSpinnerService) 
+  {}
   
   ngOnInit(): void {
-    
+    this.spinner.show();
     this.serviceFileStatus.fileWorklog().subscribe(data => {
       if(data === null){
         this.fileName = 'Sin archivo del día actual.';
-        console.log(this.fileName);
         return;
       }else{
         this.serviceFileStatus.fileStatus().subscribe(data => {
@@ -39,27 +44,25 @@ export class BitacoraComponent implements OnInit {
           this.verifyFinalStep(this.fileWorklog, this.baseFileStatus);
         });
         this.fileWorklog = data;
-        console.log(data);
         
         this.fileName = this.fileWorklog.file_name;
         this.statusFile = this.fileWorklog.status;
       }
+      this.spinner.hide();  
     });
-
   }
 
   generateBaseSteps(listFileStatusEmpity: FileStatus[]) {
     listFileStatusEmpity = this.fileStatus.filter(step => 
-      (step.id%2) === (0)
+      (step.type) === ('SUCCESS')
   );
 
     return listFileStatusEmpity;
   }
 
   verifyFinalStep(data: FileWorklog, base: FileStatus[]){
+    
     //Ruta completa
-    // let statusTest = 201;
-    //real value = data.status
     if (data.status === 400) {
       this.createSteps(0, base.length, base, "active");
       return;

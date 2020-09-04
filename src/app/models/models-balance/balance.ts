@@ -1,5 +1,5 @@
 import { Summary } from './summary';
-import { Comparsion } from './comparsion';
+import { Comparsion } from './comparison';
 
 export class Balance {
     id: number;

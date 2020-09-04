@@ -11,8 +11,14 @@ export class BalanceServiceService {
 
   //urlBalanceCONSAR = 'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR';
   urlBalanceCONSAR = 'http://localhost:8765/sipare-retrieve-consar-balance/balances?date=2020-09-01&type=CONSAR';
+  urlBalancePROCESAR = 'http://localhost:8083/balances?type=PROCESAR';
 
   retrieveBalanceCONSAR(){
     return this.hhtp.get<Balance>(this.urlBalanceCONSAR);
   }
+
+  retrieveBalancePROCESAR(){
+    return this.hhtp.get<Balance>(this.urlBalancePROCESAR);
+  }
+
 }

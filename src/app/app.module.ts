@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +17,9 @@ import { SharedComponent } from './shared/shared/shared.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BitacoraServiceService } from './services/bitacora/bitacora-service.service';
 import { BalanceServiceService } from './services/balance/balance-service.service';
+import { PreloaderComponent } from './preloader/preloader.component';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -30,19 +33,23 @@ import { BalanceServiceService } from './services/balance/balance-service.servic
     BalanceProcesarComponent,
     BalanceConsarComponent,
     ModalAuthComponent,
-    SharedComponent
+    SharedComponent,
+    PreloaderComponent
   ],
   imports: [
     FormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule
   ],
   providers: [
     BitacoraServiceService,
     BalanceServiceService
   ],
   bootstrap: [AppComponent],
-  exports: []
+  exports: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
