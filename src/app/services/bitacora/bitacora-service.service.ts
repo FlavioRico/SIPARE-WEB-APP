@@ -10,9 +10,9 @@ export class BitacoraServiceService {
 
   constructor(private http:HttpClient) { }
 
-  urlFileStatus = 'http://localhost:8765/sipare-consar-file-status/status';
+  urlFileStatus = 'http://10.160.14.213:8081/sipare-consar-file-status/status';
   // urlFileWorklog = 'http://localhost:8765/sipare-consar-file-worklog/worklogs/';
-  urlFileWorklog = 'http://localhost:8765/sipare-consar-file-worklog/worklogs/2020-10-08';
+  urlFileWorklog = 'http://10.160.14.213:8081/sipare-consar-file-worklog/worklogs/';
   // urlFileWorklog = 'http://localhost:8765/sipare-consar-file-worklog/worklogs/2020-09-01';
 
   fileStatus(){    

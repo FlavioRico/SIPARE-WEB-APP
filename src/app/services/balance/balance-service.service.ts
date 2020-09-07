@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Balance } from 'src/app/models/models-balance/balance';
+import { BalanceProcesar } from 'src/app/models/models-balance/balance-procesar';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +11,16 @@ export class BalanceServiceService {
   constructor(private hhtp:HttpClient) { }
 
   //urlBalanceCONSAR = 'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR';
-  urlBalanceCONSAR = 'http://localhost:8765/sipare-retrieve-consar-balance/balances?date=2020-09-01&type=CONSAR';
-  urlBalancePROCESAR = 'http://localhost:8083/balances?type=PROCESAR';
+  // urlBalanceCONSAR = 'http://localhost:8765/sipare-retrieve-consar-balance/balances?date=2020-09-01&type=CONSAR';
+  urlBalanceCONSAR = 'http://10.160.14.213:8081/sipare-retrieve-consar-balance/balances?type=CONSAR';
+  urlBalancePROCESAR = 'http://localhost:8080/balances?type=PROCESAR';
 
   retrieveBalanceCONSAR(){
     return this.hhtp.get<Balance>(this.urlBalanceCONSAR);
   }
 
   retrieveBalancePROCESAR(){
-    return this.hhtp.get<Balance>(this.urlBalancePROCESAR);
+    return this.hhtp.get<BalanceProcesar>(this.urlBalancePROCESAR);
   }
 
 }
