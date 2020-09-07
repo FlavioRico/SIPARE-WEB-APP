@@ -21,6 +21,7 @@ export class BalanceConsarComponent implements OnInit {
   @ViewChild('iconVerifyACV') iconCompACV: ElementRef;
   @ViewChild('iconVerifyRCV') iconCompRCV: ElementRef;
   @ViewChild('iconVerifyTotal') iconCompTotal: ElementRef;
+  @ViewChild('fileName') nameFile: ElementRef;
   iconos = [this.iconCompACV, this.iconCompRCV, this.iconCompTotal];
 
   /*Others*/
@@ -29,6 +30,7 @@ export class BalanceConsarComponent implements OnInit {
   fechaCompleta = this.shared.getDateFormated();
   public loadComplete: boolean = false;
   resourceBalance: ResourceBalance = new ResourceBalance(this.render);
+  fileName: String;
 
   /*Valores de la tabla SIN formato para PROCESAR*/
   valueRCV: number;
@@ -58,10 +60,13 @@ export class BalanceConsarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.spinner.show();
+    //this.spinner.show();
     this.serviceBalance.retrieveBalanceCONSAR().subscribe(data => {
       if(data === null){
-        alert('No hay archivos de envio diario a la CONSAR.');
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        // this.fileName = 'Sin archivo del día actual.';7
+        alert('Sin archivo del día actual.');
+        //this.spinner.hide();  
       }else{
         this.balance = data;
         console.log('dev',this.balance.status);
@@ -82,7 +87,7 @@ export class BalanceConsarComponent implements OnInit {
           );
         }
       }
-      this.spinner.hide();  
+      //this.spinner.hide();  
     });
   }
   /*Posibles a quedarse debido a la naturaleza de los componentes en Angular */

@@ -4,6 +4,7 @@ import { BalanceServiceService } from 'src/app/services/balance/balance-service.
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Summary } from 'src/app/models/models-balance/summary';
 import { Balance } from 'src/app/models/models-balance/balance';
+import { BalanceProcesar } from 'src/app/models/models-balance/balance-procesar';
 import { Comparsion } from 'src/app/models/models-balance/comparison';
 import { ResourceBalance } from '../util/resource-balance';
 
@@ -23,7 +24,7 @@ export class BalanceProcesarComponent implements OnInit {
 
   /*Others*/
   shared = new SharedComponent();
-  balance: Balance;
+  balance: BalanceProcesar;
   fechaCompleta = this.shared.getDateFormated();
   public loadComplete: boolean = false;
   resourceBalance: ResourceBalance = new ResourceBalance(this.render);
@@ -56,13 +57,14 @@ export class BalanceProcesarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.spinner.show();
+    //this.spinner.show();
     this.serviceBalance.retrieveBalancePROCESAR().subscribe(data => {
       if(data === null){
-        alert('No hay archivos de envio diario a la CONSAR.');
+        //this.spinner.hide();
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       }else{
         this.balance = data;
-        console.log(this.balance.comparison);
+        console.log(this.balance.comparisons);
         this.setT24Amounts(this.balance.t24_amounts);
         this.setFileAmounts(this.balance.file_amounts);
         this.format();
@@ -73,14 +75,14 @@ export class BalanceProcesarComponent implements OnInit {
         );
         if (!saldosEmpity){
           this.resourceBalance.validationChangeIcons(
-            this.balance.comparison,
+            this.balance.comparisons,
             this.iconCompACV, 
             this.iconCompRCV,
             this.iconCompTotal
           );
         }
       }
-      this.spinner.hide();  
+      //this.spinner.hide();  
     });
   }
 
