@@ -5,18 +5,18 @@
             <img src="../../assets/icons/logoMULTIVA.png">
         </figure>
     </div>
-    
+
     <div class="alert alert-primary title-login" role="alert">
         <div class="text-title align-middle">
             SIPARE
         </div>
     </div>
-    
+
     <div class="modal-dialog text-center">
         <div class="col-sm-12">
             <div class="modal-content">
-                <form class="col-12">
-                    <div class="form-group">                    
+                <form (submit)="onSubmitLogin()" class="col-12"> <!---->
+                    <div class="form-group">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">
@@ -25,8 +25,8 @@
                                   </svg>
                               </span>
                             </div>
-                            <input [(ngModel)]="nameUser" name="value-user" 
-                                type="text" class="form-control" placeholder="Nombre de usuario" 
+                            <input [(ngModel)]="userName" name="userName"
+                                type="text" class="form-control" placeholder="Nombre de usuario"
                                 aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
@@ -40,14 +40,13 @@
                                   </svg>
                               </span>
                             </div>
-                            <input [(ngModel)]="password" name="value-password" 
-                                type="password" class="form-control" placeholder="Contraseña" 
+                            <input [(ngModel)]="password" name="password"
+                                type="password" class="form-control" placeholder="Contraseña"
                                 aria-describedby="basic-addon1">
                         </div>
                     </div>
-                    <button (click)="login()" 
-                        type="submit" class="btn btn-primary btn-login" 
-                        [routerLink]="['/balanceProcesar']">Iniciar Sesión
+                    <button
+                        type="submit" class="btn btn-primary btn-login">Iniciar Sesión
                     </button>
                 </form>
             </div>
