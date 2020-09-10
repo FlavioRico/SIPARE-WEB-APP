@@ -3,9 +3,7 @@ import { SharedComponent } from 'src/app/shared/shared/shared.component';
 import { BalanceServiceService } from 'src/app/services/balance/balance-service.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Summary } from 'src/app/models/models-balance/summary';
-import { Balance } from 'src/app/models/models-balance/balance';
 import { BalanceProcesar } from 'src/app/models/models-balance/balance-procesar';
-import { Comparsion } from 'src/app/models/models-balance/comparison';
 import { ResourceBalance } from '../util/resource-balance';
 
 @Component({
@@ -57,14 +55,13 @@ export class BalanceProcesarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.spinner.show();
+    this.spinner.show();
     this.serviceBalance.retrieveBalancePROCESAR().subscribe(data => {
       if(data === null){
-        //this.spinner.hide();
+        this.spinner.hide();
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       }else{
         this.balance = data;
-        console.log(this.balance.comparisons);
         this.setT24Amounts(this.balance.t24_amounts);
         this.setFileAmounts(this.balance.file_amounts);
         this.format();
@@ -82,7 +79,7 @@ export class BalanceProcesarComponent implements OnInit {
           );
         }
       }
-      //this.spinner.hide();  
+      this.spinner.hide();  
     });
   }
 
@@ -91,9 +88,16 @@ export class BalanceProcesarComponent implements OnInit {
     let saldosToday = t24Amounts.total;
     
     if (saldosToday === 0) {
-      this.createMessage('alert-warning', 'Advertencia. No hay archivos de T-24 del día actual.');
-      this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
-      this.setIconsWarning();
+      if(status == 203){
+        this.aprovedTrue(); 
+      }else{
+        console.log('this: ',status);
+        
+        this.createMessage('alert-warning', 'Advertencia. No hay archivos de T-24 del día actual.');
+        this.render.removeClass(this.btnAutorizar.nativeElement, 'btn-outline-success');
+        this.render.addClass(this.btnAutorizar.nativeElement, 'btn-outline-warning');
+        this.setIconsWarning();
+      }
       return 1;
     }
     
@@ -104,7 +108,7 @@ export class BalanceProcesarComponent implements OnInit {
     }
 
     if (status === 203){
-      this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+      this.aprovedTrue();
       return 0;
     }
 
@@ -117,6 +121,11 @@ export class BalanceProcesarComponent implements OnInit {
       this.createMessage('alert-success', 'Los saldos cuadran correctamente.');
       return 0;
     }
+  }
+
+  aprovedTrue(){
+    this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+    this.createMessage('alert-success', 'La autorización ya fue realizada.');
   }
 
   createMessage (classMessage: string, textMessage: string) {
@@ -166,5 +175,14 @@ export class BalanceProcesarComponent implements OnInit {
     }
   }  
 
-
+  aproveBalancePROCESAR(){
+    console.log('debug aqui',this.balance);
+    let a: any;
+    this.serviceBalance.aproveBalancePROCESAR(this.balance).subscribe(
+      data => {
+        a = data;
+        console.log('thissss ->',a);
+      }
+    );
+  }
 }

@@ -75,8 +75,8 @@
 <div class="container">
     <div #msjValidacion class="alert menssage-to-user" role="alert"></div>
     
-    <div #buttonValidacion class="button-autorizar">
-        <button (click)="this.resourceBalance.authSucess(
+    <div class="button-autorizar">
+        <button #buttonValidacion (click)="aproveBalancePROCESAR()" (click)="this.resourceBalance.authSucess(
             btnAutorizar, messageValidacion)" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
             Autorizar
         </button>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { SharedComponent } from 'src/app/shared/shared/shared.component';
 import { BalanceServiceService } from 'src/app/services/balance/balance-service.service';
-import { Balance } from '../../models/models-balance/balance';
+import { BalanceConsar } from '../../models/models-balance/balance-consar';
 import { Summary } from 'src/app/models/models-balance/summary';
 import { Comparsion } from 'src/app/models/models-balance/comparison';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -21,16 +21,17 @@ export class BalanceConsarComponent implements OnInit {
   @ViewChild('iconVerifyACV') iconCompACV: ElementRef;
   @ViewChild('iconVerifyRCV') iconCompRCV: ElementRef;
   @ViewChild('iconVerifyTotal') iconCompTotal: ElementRef;
-  @ViewChild('fileName') nameFile: ElementRef;
+  // @ViewChild('fileName') nameFile: ElementRef;
   iconos = [this.iconCompACV, this.iconCompRCV, this.iconCompTotal];
 
   /*Others*/
   shared = new SharedComponent();
-  balance: Balance;
+  balance: BalanceConsar;
   fechaCompleta = this.shared.getDateFormated();
   public loadComplete: boolean = false;
   resourceBalance: ResourceBalance = new ResourceBalance(this.render);
-  fileName: String;
+  flagFilesNotFound: boolean = true;
+  // fileName: String;
 
   /*Valores de la tabla SIN formato para PROCESAR*/
   valueRCV: number;
@@ -60,16 +61,14 @@ export class BalanceConsarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.spinner.show();
+    this.spinner.show();
     this.serviceBalance.retrieveBalanceCONSAR().subscribe(data => {
       if(data === null){
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
-        // this.fileName = 'Sin archivo del día actual.';7
-        alert('Sin archivo del día actual.');
-        //this.spinner.hide();  
+        alert('Sin archivos del día actual.');
+        this.spinner.hide();  
       }else{
         this.balance = data;
-        console.log('dev',this.balance.status);
         this.setT24Amounts(this.balance.t24_amounts);
         this.setFileAmounts(this.balance.file_amounts);
         this.format();
@@ -87,9 +86,10 @@ export class BalanceConsarComponent implements OnInit {
           );
         }
       }
-      //this.spinner.hide();  
+      this.spinner.hide();  
     });
   }
+
   /*Posibles a quedarse debido a la naturaleza de los componentes en Angular */
   setMessageValidacion (balanced: boolean, t24Amounts: Summary, status: number) {
     
@@ -97,7 +97,8 @@ export class BalanceConsarComponent implements OnInit {
     
     if (saldosToday === 0) {
       this.createMessage('alert-warning', 'Advertencia. No hay archivos de T-24 del día actual.');
-      this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+      this.render.removeClass(this.btnAutorizar.nativeElement, 'btn-outline-success');
+      this.render.addClass(this.btnAutorizar.nativeElement, 'btn-outline-dark');
       this.setIconsWarning();
       return 1;
     }
@@ -109,7 +110,8 @@ export class BalanceConsarComponent implements OnInit {
     }
 
     if (status === 203){
-      this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+      this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+      this.createMessage('alert-success', 'Autorización realizada.');
       return 0;
     }
 

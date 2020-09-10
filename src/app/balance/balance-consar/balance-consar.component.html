@@ -73,8 +73,8 @@
 <div class="container">
     <div #msjValidacion class="alert menssage-to-user" role="alert"></div>
     
-    <div #buttonValidacion class="button-autorizar">
-        <button (click)="this.resourceBalance.authSucess(
+    <div class="button-autorizar">
+        <button #buttonValidacion (click)="this.resourceBalance.authSucess(
             btnAutorizar, messageValidacion)" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
             Autorizar
         </button>
@@ -82,3 +82,5 @@
 </div>
 
 <app-modal-auth></app-modal-auth>
+
+<!-- <app-modal-files-not-found *ngIf="flagFilesNotFound" style="display: none;"></app-modal-files-not-found> -->
