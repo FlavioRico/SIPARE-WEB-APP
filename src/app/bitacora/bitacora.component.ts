@@ -32,11 +32,11 @@ export class BitacoraComponent implements OnInit {
   {}
   
   ngOnInit(): void {
-    //this.spinner.show();
+    this.spinner.show();
     this.serviceFileStatus.fileWorklog().subscribe(data => {
       if(data === null){
         this.fileName = 'Sin archivo del día actual.';
-        //this.spinner.hide(); 
+        this.spinner.hide(); 
         return;
       }else{
         this.serviceFileStatus.fileStatus().subscribe(data => {
@@ -49,7 +49,7 @@ export class BitacoraComponent implements OnInit {
         this.fileName = this.fileWorklog.file_name;
         this.statusFile = this.fileWorklog.status;
       }
-      //this.spinner.hide();  
+      this.spinner.hide();  
     });
   }
 
@@ -77,8 +77,6 @@ export class BitacoraComponent implements OnInit {
     }
     //Estatus erroneo
     if (data.status%2 != 0) {
-      console.log(data.status%2, 'base', base);
-      console.log(Math.floor(data.status/100));
       let stop = Math.floor(data.status/100);
       this.createSteps(0, stop - 1, base, "active");
       this.createSteps(stop, stop + 1, base, "noActive");
