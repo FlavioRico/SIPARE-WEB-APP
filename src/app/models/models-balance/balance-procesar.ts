@@ -3,11 +3,12 @@ import { Comparsion } from './comparison';
 
 export class BalanceProcesar {
     id: number;
-    dispatch_date: string;
     type: string;
-    file_amounts: Summary;
-    t24_amounts: Summary;
-    comparisons: any;
+    comparisons: Comparsion;
     balanced: boolean;
     status: number;
+    dispatch_date: string;
+    payment_date: string;
+    file_amounts: Summary;
+    t24_amounts: Summary;
 }
