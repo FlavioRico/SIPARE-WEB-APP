@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-icons-menu',
@@ -7,10 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IconsMenuComponent implements OnInit {
   
-  nameUser: string = 'Flavio';
-  constructor() { }
+  public isLogin : boolean;
+  nameUser: string = '';
+  constructor(public authServ : AuthenticationService,private router: Router) { }
 
   ngOnInit(): void {
+    this.nameUser = localStorage.getItem('username');
+  }
+
+  onClickLogout(){
+    this.authServ.logoutService(localStorage.getItem('username')).subscribe(
+        result => {           
+          if(result.resultCode == 0){
+            this.isLogin=false;
+            this.router.navigate(['/']);
+            localStorage.clear();
+          }
+        },error => {
+          console.log(error.resultDescription);
+        }
+      );
   }
 
 }

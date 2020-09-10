@@ -3,8 +3,25 @@
     //  border-bottom: 1.5px solid red;
 }
 
-.dependencia:hover{
-    border-bottom: 1.5px solid red;
+.dependencia {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    &::before{
+        content: "";
+        display: block;
+        width: 0;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        position: absolute;
+        transition: all .5s;
+    }
+}
+
+.dependencia:hover::before {
+    width: 100%;
+    background: red;
 }
 
 .dropdown-menu{
