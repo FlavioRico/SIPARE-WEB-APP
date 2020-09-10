@@ -1,0 +1,246 @@
+input[type=text] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	height: 30px;
+	width: 400px;
+	background: #f7f7f7;
+	color: #969696;
+	margin-top: 36px;
+	/* 	margin: 30px auto; */
+}
+
+.divBtnXls{
+	margin-left: 19.5%;
+}
+.divRangeDate{
+	margin-left: 10%; 
+	margin-top: 2%;
+}
+
+.divBtnSearchDate{
+	margin-top: 2%; 
+	margin-left: 5px;
+}
+
+.bar {
+	background: #eaf1f9;
+	margin-top: 3%;
+	margin-left: 10%;
+	margin-right: 10%;
+	width: 80%;
+}
+
+.divPaginationFather{
+	width: 100%;
+}
+
+.divPaginationSon{
+	margin-left: 15%;
+	width: 80%;
+	text-align: center;
+}
+
+.pTdFileName{
+	text-align: left; 
+	font-size: 13px;
+}
+
+.pTdCountRegistry{
+	text-align: center; 
+	font-size: 13px;
+}
+
+.pTdStatusFile{
+	text-align: center; 
+	font-size: 13px;
+}
+
+.pTdDateProcess{
+	text-align: left; 
+	font-size: 13px;
+}
+
+.divOptions{
+	width: 81%;
+	margin-left: 13%;
+}
+
+.divTableSipare{
+	width: 80%;
+	margin-left: 14%;
+	margin-top: 1%;
+    overflow-x: hidden;
+}
+
+.barranombre {
+	background: #eaf1f9;
+	width: 80%;
+	margin-top: 1%;
+	margin-left: 13.5%;
+}
+
+.divInfoShow{
+	width: 80%; 
+	margin-left: 14%; 
+	margin-top: 1%;
+}
+
+.divErrorShow{
+	width: 80%; 
+	margin-left: 14%; 
+	margin-top: 1%;
+}
+
+.table {
+	border-radius: 0px;
+	width: 100%;
+	font-size: 11px;
+}
+
+@media only screen and (max-width:463px){
+	.divInfoShow{
+		width: 133%; 
+		margin-left: 2%; 
+		margin-top: 3%;
+	}
+	.divErrorShow{
+		width: 133%; 
+		margin-left: 2%; 
+		margin-top: 3%;
+	}
+	.barranombre {
+		background: #eaf1f9;
+		width: 137%;
+		margin-top: 1%;
+		margin-left: 0%;
+	}
+	.bodyApp{
+		width: 87%;
+		height: 100%;
+	}
+	.table thead{
+		display: none;
+	}
+
+	.table, .table tbody, .table tr, .table td{
+		display: block;
+		width: 100%;
+	}
+	.table tr{
+		margin-bottom:15px;
+	}
+	.table td{
+		text-align: right;
+		padding-left: 50%;
+		text-align: right;
+		position: relative;
+	}
+	.table td::before{
+		content: attr(data-label);
+		position: absolute;
+		left:0;
+		width: 48%;
+		padding-left:1px;
+		font-size:12px;
+		font-weight: bold;
+		text-align: left;
+	}
+	.divTableSipare{
+		width: 134%;
+		margin-left: 2%;
+		margin-top: 1%;
+		overflow-x: hidden;
+	}
+	.pTdFileName{
+		font-size: 12px;
+		text-align: center;
+		margin-left: 38%;
+	}
+
+	.pTdCountRegistry{
+		font-size: 12px;
+		text-align: center;
+	}
+
+	.pTdStatusFile{
+		font-size: 12px;
+		text-align: center;
+		margin-left: 35%;
+	}
+
+	.pTdDateProcess{
+		font-size: 12px;
+		text-align: center;
+		margin-left: 22%;
+	}
+
+	.divPaginationFather{
+		width: 100%;
+		margin-left: 17%;
+	}
+
+	.divPaginationSon{
+		margin-left: 6%;
+		width: 79%;
+	}
+	.trTableArchivosMensualesProcesar{
+		margin-bottom: 7%;
+		border: 1px solid #ddd;
+	}
+}
+
+@media only screen and (max-width:920px) and (orientation: landscape){
+	.barranombre {
+		background: #eaf1f9;
+		margin-top: -1%;
+		width: 111%;
+		margin-left: 0%;
+	}
+	.divSearchInput{
+		margin-top: -6.99%;
+	}
+	.divIconSearch{
+		margin-left: 0%;
+	}
+	.divRangeDate{
+		margin-left: 8%;
+		margin-top: 0.3%;
+	}
+	.divTableSipare{
+		width: 109%;
+		margin-left: 1%;
+		margin-top: 1%;
+		height: 219px;
+    	overflow-y: auto;
+		overflow-x: hidden;
+	}
+	.thead-tbody-display { 
+		display: contents; 
+	}
+
+	.tbody-scroll {
+		height: 470px;
+		display: table;
+		overflow-y: auto;
+		overflow-x: auto;
+	}
+	.divBtnSearchDate{
+		margin-top: 0.3%;
+		margin-left: 5px;
+	}
+	.divOptions{
+		width: 122%;
+		margin-left: -11%;
+	}
+	.divBtnXls{
+		margin-top: -5.9%;
+		margin-left: 87.5%;
+	}
+	.divInfoShow{
+		width: 100%;
+		margin-left: 5.6%;
+		margin-top: 1%;
+	}
+}

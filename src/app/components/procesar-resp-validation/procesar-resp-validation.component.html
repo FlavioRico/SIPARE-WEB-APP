@@ -1,0 +1,447 @@
+<!-- this -->
+<app-navbar></app-navbar>
+
+<div class="container-fluid barranombre" style="margin-top: 1%">
+	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
+		<ul class="nav navbar-nav col-md-12">
+			<h4>
+				<font color=#0c3a6b style="font-size: 12px;">Reporte Validaciones PROCESAR</font> <font
+					color=#0c3a6b></font>
+			</h4>
+		</ul>
+	</div>
+</div>
+
+<!-- Tabla de cambio -->
+<!-- <div *ngIf="tableStatusProcesar" class="mce-container row" style="width: 80%; height: 458px; margin-left: 20%; margin-top: 1%;">
+	<table class="table table-hover tbody-scroll" id="tablafullModal" style="border: 2px;">
+		<thead class="thead-tbody-display">
+			<tr>
+			    <th colspan="8" style="text-align: center;">Resultato de Validaciones PROCESAR para correcciones (Resumen)</th>
+			</tr>
+			<tr>
+			    <th colspan="5"></th>
+			    <th colspan="3">Estatus a la Fecha AA/MM/DD</th>
+			</tr>
+			<tr>
+			    <th style="width: 120px;">Fecha Operaci&oacute;n</th>
+			    <th style="width: 54px;">Clave</th>
+			    <th style="width: 450px;">Concepto</th>
+			    <th style="width: 140px;">Total Operaciones</th>
+			    <th style="width: 152px; text-align: center;">Monto Total</th>
+			    <th>Rechazadas</th>
+			    <th>Atendidas</th>
+			    <th>Pendientes</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let row of rows | paginate: { itemsPerPage: 9, currentPage: p }">
+				<td style="padding: 0rem; width: 120px; border-top: 0px;">
+					<div class="col-md-9" style="width: 120px;">
+						<p style="text-align: left; font-size: 13px; margin-left: 10px;width: 135px;">
+							{{row.dateOperation}}
+						</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 54px; border-top: 0px;">
+					<div class="col-md-9" style="width: 54px;">
+						<p (click)="listRegisterByCodeAndFileResponseProcesar(row.oid, row.clave);" style="text-align: left; font-size: 12px; margin-left: 10px;width: 135px;">
+							<b class="pointer">{{row.clave}}</b>
+						</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; border-top: 0px; width: 445px;">
+					<div style="width: 445px;">
+						<p style="text-align: left; font-size: 13px; margin-left: 10px;">
+							{{row.descrip}}
+						</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; border-top: 0px; width: 140px;">
+					<div style="width: 140px;">
+						<p style="text-align: left; font-size: 13px; margin-left: 10px;">
+							{{row.total}}
+						</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; border-top: 0px; width: 152px;">
+					<div style="width: 152px;">
+						<p style="text-align: left; font-size: 13px; margin-left: 10px;">
+							$ {{row.amount}}
+						</p>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div> -->
+<!-- Tabla de cambio fin -->
+
+<div *ngIf="tableListRegisterByCode"  class="row" style="width: 100%;">
+	<div class="col-md-10" style="margin-left: 15.8%; margin-top: 7px;">
+		<div class="mce-container row">
+			<div class="col-md-3">
+				<div class="input-group">
+					<input type="text"
+						class="form-control" placeholder="Buscar" id="buscador"
+						style="margin-top: 9%; height: 32px; width: 120%;" /> <!--this (keyup)="searchFileName(); searchFileDate()"-->
+						<span class="input-group-append" style="margin-top: -32px; margin-left: 100%;">
+                  			<div class="input-group-text"><i class="fa fa-search"></i></div>
+            			</span>
+				</div>
+			</div>
+			<div style="margin-left: 10%; margin-top: 2%;">
+				<app-date-range [(dateRange)]="dateRange"></app-date-range>
+			</div>
+			<div style="margin-top: 2%; margin-left: 5px;">
+				<button class="btn btn-default" > <!--this (click)="searchByDate();"-->
+					<font color=#286e9d>
+						Buscar por Fecha
+					</font>
+				</button>
+			</div>
+			<div style="margin-top: -3%; margin-left: 84.5%;">
+				<button class="btn btn-default"><!--this (click)="exportXLSWO();"-->
+					<font color=#286e9d>
+						EXPORTAR EXCEL
+					</font>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="tableListRegisterByCode" class="mce-container row" style="width: 80%; height: 458px; margin-left: 14%; margin-top: 1%;">
+	<table class="table table-hover tbody-scroll" id="tablafullModal">
+		<thead class="thead-tbody-display">
+			<tr>
+				<th style="padding: 0.4em; vertical-align: baseline;"><!--this (click)="sortTable(0)"-->
+					<div class="row" style="width: 525px;">
+						<div class="col-md-1" style="margin-bottom: 20px">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" style="margin-left: 20px;">
+						</div>
+						<div class="col-md-9">
+							<p style="margin-left: 5%; font-size: 13px">L&iacute;nea de Captura</p>
+						</div>
+					</div>
+				</th>
+				<th style="padding: 0.4em; vertical-align: baseline;"><!--this (click)="sortTable(1)"-->
+					<div class="row" style="width: 160px;">
+						<div class="col-md-1" style="margin-bottom: 20px">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC">
+						</div>
+						<div class="col-md-7" style="width: 150px;">
+							<p style="margin-left: -15px; text-align: center; font-size: 13px; width: 115px;">
+								Fecha operaci&oacute;n Sucursal
+							</p>
+						</div>
+					</div>
+				</th>
+				<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(1)"-->
+					<div class="row" style="width: 160px;">
+						<div class="col-md-1" style="margin-bottom: 20px">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC">
+						</div>
+						<div class="col-md-7" style="width: 150px;">
+							<p style="margin-left: -15px; text-align: center; font-size: 13px; width: 115px;">
+								Fecha reportada PROCESAR 
+							</p>
+						</div>
+					</div>
+				</th>
+				<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(1)"-->
+					<div class="row" style="width: 160px;">
+						<div class="col-md-1" style="margin-bottom: 20px">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC">
+						</div>
+						<div class="col-md-7" style="width: 150px;">
+							<p style="margin-left: -15px; text-align: center; font-size: 13px; width: 115px;">
+								Fecha respuesta PROCESAR 
+							</p>
+						</div>
+					</div>
+				</th>
+				<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(0)"-->
+					<div class="row" style="width: 500px;">
+						<div class="col-md-1" style="margin-bottom: 20px">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" style="margin-left: 20px;">
+						</div>
+						<div class="col-md-9">
+							<p style="margin-left: 5%; font-size: 13px">Resultado de la operaci&oacute;n</p>
+						</div>
+					</div>
+				</th>
+				<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(5)"-->
+					<div class="row" style="width: 165px;">
+						<div class="col-md-1">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
+						</div>
+						<div class="col-md-9">
+							<p style="text-align: center; font-size: 13px">Monto</p>
+						</div>
+					</div>
+				</th>
+				<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(6)"-->
+					<div class="row" style="width: 165px;">
+						<div class="col-md-1">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
+						</div>
+						<div class="col-md-9">
+							<p style="text-align: center; font-size: 13px">Clave de estatus</p>
+						</div>
+					</div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let fileContent of filesContent | paginate: { itemsPerPage: 7, currentPage: p }"> <!--this, se agregó variable-->
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-9" style="width: 500px;">
+						<a> 
+							<i class="glyphicon glyphicon-align-justify" style="color: blue; left: -75px; top: 15px;"></i>
+						</a>
+						<p (click)="updateRegistry(fileContent.lineCapture, fileContent.oid);" style="text-align: left; font-family: andale mono; font-size: 13px; margin-left: 10px;width: 135px;">
+							<b class="pointer">{{fileContent.lineCapture}}</b>
+						</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-9" style="width: 138px;">
+						<p style="text-align: left; font-size: 13px;">{{fileContent.paymentDate}}</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-12"
+						style="width: 169px; margin-left: 0px;">
+						<p style="text-align: left; font-size: 13px;">{{fileContent.reportProcesarDate}}</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-9" style="width: 138px;">
+						<p style="text-align: left; font-size: 13px;">{{fileContent.respProcesarDate}}</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-9" style="width: 475px;">
+						<p style="text-align: left; font-size: 13px;width: 435px;">{{fileContent.desc}}</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-9"
+						style="width: 152px;">
+						<p style="text-align: left; font-size: 13px;">$ {{fileContent.amount}}</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-9" style="width: 155px;">
+						<p style="text-align: left; font-size: 13px;">{{fileContent.code}}</p>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div *ngIf="tableListRegisterByCode"  class="row" style="width: 100%;">
+	<div class="row" style="margin-top: 20px;width: 100%;">
+		<div class="col-md-9">
+			<div style="margin-left: 35%; width: 50%; margin-top: 3%;">
+				<pagination-controls (pageChange)="p = $event" directionLinks="true" responsive="true" screenReaderPaginationLabel="Pagination" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+			</div>
+		</div>
+		<div class="col-md-3" style="margin-top: 2%;">
+			<button class="btn btn-success" (click)="backPagePrincipal();">
+				<font color=#fff>
+					Regresar
+				</font>
+			</button>
+		</div>
+	</div>
+</div>
+<div *ngIf="isContentTable" class="mce-container row" style="width: 100%; margin-left: 0.1%; margin-bottom: 2%; overflow-y: scroll; height: 550px;">
+	<div class="row" style="margin-left: 17%; margin-top: 8px;">
+		<div class="col-md-2.5">
+			Fecha y Hora de Recepci&oacute;n:
+			<input style="width: 175px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.datePayment}} readonly/>
+		</div>
+		<div class="col-md-2">
+			Sucursal:
+			<input style="width: 80px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.placeOffice}} readonly/>
+		</div>
+		<div class="col-md-2.5">
+			Usuario:
+			<input style="width: 150px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control"  value={{dataRowT24.clientOrUser}} readonly/>
+		</div>
+		<div class="col-md-4">
+			L&iacute;nea de captura:
+			<input style="width: 460px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; font-family: andale mono; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.line}} minlength="53" maxlength="53" readonly/>
+		</div>
+	</div>
+	<div *ngIf="isContentTable" class="container-fluid barranombre" style="margin-top: 1%">
+		<div class="col-md-10 " id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav col-md-12">
+				<h5>
+					<font color="#0c3a6b" style="font-size: 12px;">Detalle L&iacute;nea de Captura</font>
+				</h5>
+			</ul>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: 8px; width: 70%;">
+		<div class="col-md-6">
+			<label for="buscadorModal">Nombre del cliente:</label>
+				<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none; border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" placeholder="Buscar" id="buscadorModal" pattern="[a-zA-Z ]$"/>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%;  margin-top: 8px; width: 70%;">
+		<div class="col-md-2 form-group">
+			<label for="patronRegistry">Registro patronal:</label>
+			<input style="width: 130px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none; border-bottom: 2px solid #eaf1f9; background-color: white; font-family: andale mono;
+    				text-align: right; height: 40px;" type="text" class="form-control" value={{dataRowT24.patronRegistry}} 
+    				minlength="11" maxlength="11" id="patronRegistry" name="patronRegistry" [(ngModel)]="dataRowT24.patronRegistry" readonly />
+		</div>
+		<div class="col-md-5">
+			Nombre o RFC:
+			<input style="width: 350px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none; border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.nameBussines}} id="nameBussines" name="nameBussines" [(ngModel)]="dataRowT24.nameBussines"/>
+		</div>
+		<div class="col-md-3">
+			Forma de Pago: 
+			<input style="width: 150px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none; border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.formatPayment}}  id="buscadorModal" readonly/>
+		</div>
+		<div class="col-md-2">
+			Cliente o Ususario:
+			<input style="width: 110px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.clientOrUser}} id="buscadorModal" readonly/>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: 10px; width: 70%;">
+		<div class="col-md-2">
+			Tel&eacute;fono:
+			<input style="width: 130px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.telephone}} id="telephone" name="telephone" [(ngModel)]="dataRowT24.telephone"/>
+		</div>
+		<div class="col-md-5">
+			Nombre contacto:
+			<input style="width: 350px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.nameContact}} id="nameContact" name="nameContact" [(ngModel)]="dataRowT24.nameContact"/>
+		</div>
+		<div class="col-md-3">
+			Correo electr&oacute;nico:
+			<input style="width: 200px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.email}} id="email" name="email" [(ngModel)]="dataRowT24.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+		</div>
+		<!-- this <div *ngIf="inputAccount" style="width: 80%; margin-left: 5%; display: inline-flex;">
+			<div class="col-md-2">
+			N&uacute;mero de cuenta:
+			<input style="width: 140px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.accountNumber}} id="buscadorModal" readonly/>
+		</div> -->
+	</div>
+	<div class="row" style="margin-left: 20%; margin-top: 10px; width: 70%;">
+		<div class="col-md-2">
+			Importe IMSS:
+			<input style="width: 160px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{ngBalanceImss}} id="ngBalanceImss" name="ngBalanceImss" [(ngModel)]="ngBalanceImss" pattern="^['$ '](?!0\.00)[1-9]\d{0,2}(,\d{3})*(\.\d\d)?$"/>
+		</div>
+		<div class="col-md-2">
+			Importe RCV:
+			<input style="width: 160px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{ngBalanceRcv}} id="ngBalanceRcv" name="ngBalanceRcv" [(ngModel)]="ngBalanceRcv" pattern="^['$ '](?!0\.00)[1-9]\d{0,2}(,\d{3})*(\.\d\d)?$"/>
+		</div>
+		<div class="col-md-2">
+			Importe Vivienda:
+			<input style="width: 160px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{ngBalanceViv}} id="ngBalanceViv" name="ngBalanceViv" [(ngModel)]="ngBalanceViv" pattern="^['$ '](?!0\.00)[1-9]\d{0,2}(,\d{3})*(\.\d\d)?$"/>
+		</div>
+		<div class="col-md-2">
+			Importe ACV:
+			<input style="width: 160px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{ngBalanceAcv}} id="ngBalanceAcv" name="ngBalanceAcv" [(ngModel)]="ngBalanceAcv" pattern="^['$ '](?!0\.00)[1-9]\d{0,2}(,\d{3})*(\.\d\d)?$"/>
+		</div>
+		<div class="col-md-2">
+			Importe Total:
+			<input style="width: 160px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; text-align: right; height: 40px;" type="text"
+					class="form-control" value={{ngBalanceTotal}} id="ngBalanceTotal" name="ngBalanceTotal" [(ngModel)]="ngBalanceTotal" pattern="^['$ '](?!0\.00)[1-9]\d{0,2}(,\d{3})*(\.\d\d)?$"/>
+		</div>
+	</div>
+	<div *ngIf="isContentTable" class="container-fluid barranombre" style="margin-top: 1%">
+		<div class="col-md-10 " id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav col-md-12">
+				<h5>
+					<font color=#0c3a6b>Observaciones:</font>
+				</h5>
+			</ul>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 14%; margin-top: 8px; width: 80%;">
+		<div class="col-md-12">
+			Resultado validaci&oacute;n PROCESAR:
+			<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.respProcesar}} readonly/>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 14%; margin-top: 8px; width: 80%;">
+		<div class="col-md-12">
+			Diagnostico 1:
+		  		<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.respProcesar}} readonly/>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 14%; margin-top: 8px; width: 80%;">
+		<div class="col-md-12">
+			Diagnostico 2:
+		  		<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.respProcesar}} readonly/>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 14%; margin-top: 8px; width: 80%;">
+		<div class="col-md-12">
+			Diagnostico 3:
+		  		<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
+    				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
+					class="form-control" value={{dataRowT24.respProcesar}} readonly/>
+		</div>
+	</div>
+</div>
+<div *ngIf="isContentTable" class="row" style="margin-left: 10%; margin-top: 8px; width: 80%;">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<button class="btn btn-success" (click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
+			<font color=#fff>
+				Actualizar
+			</font>
+		</button>
+			<button class="btn btn-success" (click)="hideContentFileT24Resp();">
+			<font color=#fff>
+				Regresar
+			</font>
+		</button>
+		</div>
+		<div class="col-md-4"></div>
+</div>

@@ -1,0 +1,178 @@
+<!-- this -->
+
+<app-navbar></app-navbar>
+
+<div class="container-fluid barranombre" style="margin-top: 1%">
+	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
+		<ul class="nav navbar-nav col-md-12">
+			<h4>
+				<font color=#0c3a6b style="font-size: 12px;">Liquidaci&oacute;n Back Office</font> <font
+					color=#0c3a6b></font>
+			</h4>
+		</ul>
+	</div>
+</div>
+<div class="alert alert-info alert-dismissible" *ngIf="isInfo" style="width: 80%; margin-left: 10%; margin-top: 1%;">
+  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+  	<strong>{{infoCode}}</strong> - {{infoMsj}}.
+</div>
+<form >
+	<div class="row" style="margin-left: 15%; margin-top: 8px; width: 70%; background: #ddd;">
+		<div class="col-md-2">
+			<label for="buscadorModal">Tipo Operaci&oacute;n:</label>
+		</div>
+		<div class="col-md-3">
+			<input style="border-radius: 38px;height: 24px;margin: 1px 0px 0px -74px; width: 100px;" type="text" name="typeOperation"  class="form-control" required minlength="3" maxlength="7" [(ngModel)]="ngTypeOperation">
+			<!-- <div *ngIf="errorType" style="margin-left: -74%; color: red;">El campo Tipo Operaci&oacute;n {{errorTypeMsj}}.</div> -->
+		</div>
+		<div class="col-md-7"></div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: 0px; width: 70%; background: #ddd;">
+		<div class="col-md-1">
+			<label for="buscadorModal">Oficina:</label>
+		</div>
+		<div class="col-md-3">
+			<input style="border-radius: 38px;height: 24px;margin: 1px 0px 0px -30px; width: 100px;" type="text" name="place" id="place" [(ngModel)]="ngPlace" class="form-control" >
+			<!-- <div *ngIf="errorPlace" style="margin-left: -38%; color: red;">El campo Oficina {{errorPlaceMsj}}.</div> -->
+		</div>
+		<div class="col-md-1" style="margin-left: -3%;">
+			<label for="buscadorModal">Folio:</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px;margin: 1px 0px 0px -44px; width: 110px;" type="text" name="folio" id="folio" [(ngModel)]="ngFolio" class="form-control">
+			<!-- <div *ngIf="errorFolio" style="margin-left: -38%; color: red;">El campo Folio {{errorFolioMsj}}.</div> -->
+		</div>
+		<div class="col-md-2" style="margin-left: -3%;">
+			<label for="buscadorModal">Fecha Registro:</label>
+		</div>
+		<div class="col-md-3">
+			<input style="border-radius: 38px;height: 24px;margin: 1px 0px 0px -44px; width: 110px;" [(ngModel)]="ngDateRegistry" type="text" name="dateRegistry" id="dateRegistry"  class="form-control">
+			<!-- <div *ngIf="errorFolio" style="margin-left: -38%; color: red;">El campo Folio {{errorFolioMsj}}.</div> -->
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-12">
+			<label for="buscadorModal" style="margin-top: 2%;">Instituci&oacute;n Ordenante:</label>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: 0px; width: 70%; background: #ddd;">
+		<div class="col-md-2">
+			<label for="buscadorModal">Clave Banco:</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 0px 0px 0px -87px; width: 166px;" type="text" name="codeBank" id="codeBank" [(ngModel)]="ngCodeBank" class="form-control" >
+			<!-- <div *ngIf="errorCodeBank" style="margin-left: -118%; color: red;">El campo Clave Banco {{errorCodeBankMsj}}.</div> -->
+		</div>
+		<div class="col-md-7">
+			<input style="border-radius: 38px;height: 24px; margin: 1px 0px 0px -85px; width: 656px;" readonly type="text" name="bankName" id="bankName" [(ngModel)]="ngBankName" class="form-control">
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-2">
+			<label for="buscadorModal" style="margin-top: 2%;">Cuenta:</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 0px 0px 0px -87px; width: 166px;" type="text" name="account" id="account" [(ngModel)]="ngAccount" class="form-control">
+			<!-- <div *ngIf="errorAccount" style="margin-left: -118%; color: red;">El campo Cuenta {{errorAccountMsj}}.</div> -->
+		</div>
+		<div class="col-md-8"></div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -2%; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-12">
+			<label for="buscadorModal" style="margin-top: 2%;">Instituci&oacute;n Receptora:</label>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: 0px; width: 70%; background: #ddd; height: 60px;">
+		<div class="col-md-2">
+			<label for="buscadorModal">Entidad receptora:</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 0px 0px 0px -74px; width: 166px;" type="text" name="keyEntity" id="keyEntity"  class="form-control" [(ngModel)]="ngKeyEntity" >
+			<!-- <div *ngIf="errorKeyEntity" style="margin-left: -118%; color: red;">El campo Entidad receptora {{errorKeyEntityMsj}}.</div> -->
+		</div>
+		<div class="col-md-7">
+			<input style="border-radius: 38px;height: 24px; margin: 1px 0px 0px -70px; width: 656px;" type="text" name="bankNameRecep" id="bankNameRecep" [(ngModel)]="ngBankNameRecep" class="form-control" readonly>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -2%; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-4">
+			<label for="buscadorModal" style="margin-top: 5%;">Fecha de recepci&oacute;n de aportaciones:</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 10% 0px 0px -90%; width: 95%;" type="text" name="dateRep" id="dateRep" [(ngModel)]="ngDateRep" class="form-control">
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-4"></div><div class="col-md-4"></div>
+		<div class="col-md-4">
+			<label for="buscadorModal" style="margin-top: 5%; margin-left: 25%;">Importe</label>
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-6"></div>
+		<div class="col-md-4">
+			<label for="buscadorModal" style="margin-top: 5%;margin-left: -10%;">Tipo de deposito:&nbsp;&nbsp;&nbsp;IMSS Cuatro Ramos</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 10% 0px 0px -90%; width: 95%;" type="text" name="imms" id="imms" [(ngModel)]="ngIMSS" class="form-control">
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-6"></div>
+		<div class="col-md-4">
+			<label for="buscadorModal" style="margin-top: 5%;margin-left: -6%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INFONAVIT - VIVIENDA</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 10% 0px 0px -90%; width: 95%;" type="text" name="viv" id="viv" [(ngModel)]="ngViv" class="form-control">
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-6"></div>
+		<div class="col-md-4">
+			<label for="buscadorModal" style="margin-top: 5%;margin-left: -6%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INFONAVIT - ACV</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 10% 0px 0px -90%; width: 95%;" type="text" name="acv" id="acv" [(ngModel)]="ngAcv" class="form-control">
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-6"></div>
+		<div class="col-md-4">
+			<label for="buscadorModal" style="margin-top: 5%;margin-left: -6%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL</label>
+		</div>
+		<div class="col-md-2">
+			<input style="border-radius: 38px;height: 24px; margin: 10% 0px 0px -90%; width: 95%;" type="text" name="total" id="total" [(ngModel)]="ngTotal" class="form-control">
+		</div>
+	</div>
+	<div class="row" style="margin-left: 15%; margin-top: -1px; width: 70%; background: #dddddd; height: 50px;">
+		<div class="col-md-2">
+			<label for="buscadorModal" style="margin-top: 5%;">Texto:</label>
+		</div>
+		<div class="col-md-6">
+			<input style="border-radius: 38px;height: 24px; margin: 0px 0px 0px -74px; width: 558px;" type="text" name="txt" id="txt" [(ngModel)]="ngTxt" class="form-control">
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+	<div class="row" style="width: 80%;margin-left: 6%;margin-top: 1%; height: 50px; overflow-x: hidden;" >
+		<div class="col-md-10"></div>
+		<div class="col-md-1">
+			<div >
+				<button class="btn btn-success" id="btnAuthorized" (click)="paymentTransaction();">
+					<font color=#fff>
+						Aceptar y Firmar
+					</font>
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
+<div class="alert alert-danger alert-dismissible" *ngIf="isError" style="width: 80%; margin-left: 10%; margin-top: 5%;">
+  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+  	<strong>{{errorCode}}</strong> - {{errorMsj}}.
+</div>
+<div class="alert alert-success alert-dismissible" *ngIf="isSuccess" style="width: 80%; margin-left: 10%; margin-top: 5%;">
+  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+  	<strong>{{successCode}}</strong> - {{successrMsj}}.
+</div>

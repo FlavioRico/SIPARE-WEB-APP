@@ -1,0 +1,43 @@
+.barranombre {
+	background: #eaf1f9;
+	width: 80%;
+}
+
+.table {
+	border-radius: 0px;
+	width: 100%;
+	font-size: 11px;
+}
+
+.thead-tbody-display { 
+	display: block; 
+}
+
+.tbody-class {
+	width: 100%;
+    height: 317px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tbody-scroll {
+	height: 470px;
+	display: inline-block;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+.pointer {cursor: pointer;}
+
+input[type=text] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	height: 30px;
+	width: 400px;
+	background: #f7f7f7;
+	color: #969696;
+	margin-top: 3px;
+	/* 	margin: 30px auto; */
+}

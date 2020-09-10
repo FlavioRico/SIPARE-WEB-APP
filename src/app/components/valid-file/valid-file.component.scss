@@ -1,0 +1,59 @@
+// agregado
+.textFont {
+    color: #0c3a6b;
+    font-size: 12px;
+}
+
+//
+.barranombre {
+	background: #eaf1f9;
+	width: 80%;
+}
+
+input[type=text] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	height: 30px;
+	width: 400px;
+	background: #f7f7f7;
+	color: #969696;
+	margin-top: 36px;
+	/* 	margin: 30px auto; */
+}
+
+.tbody-scroll {
+	height: 470px;
+	display: inline-block;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+.thead-tbody-display { 
+	display: block; 
+}
+
+.tbody-class {
+	width: 151%;
+    height: 317px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pointer {cursor: pointer;}
+
+.warning {
+  border-color: #ff9800;
+  color: orange;
+  background: #fff;
+}
+
+.warning:hover {
+  background: #ff9800;
+  color: white;
+}
+
+.textarea {
+    resize: none;
+}

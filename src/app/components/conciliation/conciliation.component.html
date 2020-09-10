@@ -1,0 +1,84 @@
+<app-navbar></app-navbar>
+<div class="container-fluid barranombre" style="margin-top: 1%; margin-left: 14%;">
+	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
+		<ul class="nav navbar-nav col-md-12">
+			<h4>
+				<font color=#0c3a6b style="font-size: 12px;">Conciliaci&oacute;n de Cifras</font> <font
+					color=#0c3a6b></font>
+			</h4>
+		</ul>
+	</div>
+</div>
+
+<div *ngIf="isProgressBar" class="container-fluid" style="margin-top: 1%; margin-left: 5%;">
+	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
+		<div class="progress" style="margin-left: 10%;width: 100%;margin-top: 20%;">
+		  	<div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="100" 
+				aria-valuemin="0" value="Cargando" aria-valuemax="100" style="width: 100%;">
+				<p style="margin-top: 1.5%;"><b>CARGANDO...</b></p>
+			</div>
+		</div>
+	</div>
+</div>	
+<div *ngIf="!isProgressBar" class="container-fluid" style="margin-top: 1%; width: 80%; margin-left: 14%;">
+	<div class="row" style="width: 100%;">
+	<div class="col-md-10" style="margin-left: 9.8%;">
+		<div class="mce-container row">
+			<div class="col-md-3">
+			</div>
+			<div style="margin-left: 10%; margin-top: 2%;">
+			</div>
+			<div style="margin-top: 2%; margin-left: 5px;">
+			</div>
+			<div *ngIf="buttonBoolean" style="margin-top: -1%; margin-left: 84.5%;">
+				<button class="btn btn-default" (click)="exportXLSConciliation();">
+					<font color=#286e9d>
+						EXPORTAR EXCEL
+					</font>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+	<form>
+		<div class="form-row">
+		    <div class="form-group col-md-6">
+		      	<label for="inputEmail4">Fecha:</label>
+		      	<input type="text" value={{dateConciliation}} class="form-control" readonly>
+		    </div>
+		</div>
+		<div class="form-row">
+		    <div class="form-group col-md-6">
+		      	<label for="inputEmail4">Recaudaci&oacute;n IMSS-INFONAVIT:</label>
+		      	<input type="email" class="form-control" value="{{ngBalanceImssT24}}" readonly>
+		    </div>
+		    <div class="form-group col-md-6">
+		      	<label for="inputPassword4">Recaudaci&oacute;n IMSS-RCV:</label>
+		      	<input type="email" class="form-control" value="{{ngBalanceRcvT24}}" readonly>
+		    </div>
+		</div>
+		<div class="form-row">
+		    <div class="form-group col-md-6">
+		      	<label for="inputEmail4">Recaudaci&oacute;n IMSS-INFONAVIT T+1:</label>
+		      	<input type="email" class="form-control" value="{{ngCollectionIMSS}}" readonly>
+		    </div>
+		    <div class="form-group col-md-6">
+		      	<label for="inputPassword4">Recaudaci&oacute;n IMSS-RCV T+2:</label>
+		      	<input type="email" class="form-control" value="{{ngCollectionInfonavit}}" readonly>
+		    </div>
+		</div>
+	  	<div class="alert alert-danger alert-dismissible" *ngIf="isError">
+		  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  	<strong>{{errorCode}}</strong> - {{errorMsj}}.
+		</div>
+		<div class="alert alert-success alert-dismissible" *ngIf="isSuccess">
+		  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  	<strong>{{successCode}}</strong> - {{successrMsj}}.
+		</div>
+		<div class="alert alert-info alert-dismissible" *ngIf="isInfo">
+		  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  	<strong>{{infoCode}}</strong> - {{infoMsj}}.
+		</div>
+		<button type="submit" class="btn btn-outline-success" id="btnAuthorized" (click)="sendFileToConnectDirect();">Autorizar</button>
+	</form>
+</div>
