@@ -46,7 +46,7 @@
 						<td>{{file.type}}</td>
 						<td>
 							<div *ngIf=" file.type == 'Enviar'">
-								<button type="submit" class="btn btn-outline-success" (click)="sendFileToConnectDirect(file.file);">Enviar</button>
+								<button type="submit" class="btn btn-outline-success" (click)="sendFileToConnectDirect(file.file);">Correcto</button>
 							</div>
 							<div *ngIf=" file.type == 'Editar'">
 								<button type="submit" class="btn btn-outline-info" (click)="sendFileToEdit(file.file);">Editar</button>
