@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<div class="container-fluid barranombre" style="margin-top: 1%">
+<!-- <div class="container-fluid barranombre" style="margin-top: 1%">
 	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
 		<ul class="nav navbar-nav col-md-12">
 			<h4>
@@ -12,15 +12,15 @@
 <div class="alert alert-dark alert-dismissible"  style="width: 80%; margin-left: 10%; margin-top: 1%;">
   	<button type="button" class="close" data-dismiss="alert">&times;</button>
   	<strong>INFO</strong> - Se debe de dar de alta los par&aacute;metros de las transacciones T+1 y T+2.
-</div>
-<form >
+</div> -->
+<!-- <form >
 	<div class="row" style="margin-left: 15%; margin-top: 8px; width: 70%; background: #ddd;">
 		<div class="col-md-2">
 			<label for="buscadorModal">Tipo Operaci&oacute;n:</label>
 		</div>
 		<div class="col-md-3">
 			<select (change)="selectChangeHandler($event)" id="category">
-				<option >Seleccione</option><!--  [selected]="isSelected" -->
+				<option >Seleccione</option> [selected]="isSelected"
 			   	<option value="1" >T+1</option>
 			   	<option value="2" >T+2</option>
 			 </select>
@@ -133,12 +133,32 @@
 			</div>
 		</div>
 	</div>
-</form>
-<div class="alert alert-danger alert-dismissible" *ngIf="isError" style="width: 80%; margin-left: 10%; margin-top: 5%;">
+</form> -->
+<!-- <div class="alert alert-danger alert-dismissible" *ngIf="isError" style="width: 80%; margin-left: 10%; margin-top: 5%;">
   	<button type="button" class="close" data-dismiss="alert">&times;</button>
   	<strong>{{errorCode}}</strong> - {{errorMsj}}.
-</div>
-<div class="alert alert-success alert-dismissible" *ngIf="isSuccess" style="width: 80%; margin-left: 10%; margin-top: 5%;">
+</div> -->
+<!-- <div class="alert alert-success alert-dismissible" *ngIf="isSuccess" style="width: 80%; margin-left: 10%; margin-top: 5%;">
   	<button type="button" class="close" data-dismiss="alert">&times;</button>
   	<strong>{{successCode}}</strong> - {{successrMsj}}.
+</div> -->
+
+
+<div class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+        <strong>PROCESAR</strong> - Parametros Back Office
+	</div>
+
+	<app-tipo-de-operacion></app-tipo-de-operacion>
+	<app-institucion-ordenante></app-institucion-ordenante>
+	<app-institucion-receptora></app-institucion-receptora>
+</div>
+<div class="alert alert-primary title-opc" role="alert">
+	<div class="container">
+		<strong>Observaciones:</strong>
+	</div>
+</div>
+<div class="container">
+	<p>Se debe dar de alta los parámetros de las transacciones <strong>116027</strong> y <strong>116018</strong></p>
+	<button type="button" class="btn btn-outline-success float-right" style="margin-bottom: 15px;">Agregar</button>
 </div>

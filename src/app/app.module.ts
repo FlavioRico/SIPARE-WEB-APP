@@ -42,6 +42,10 @@ import { ProcesarRespValidationComponent } from './components/procesar-resp-vali
 import { RegisterPageComponent } from './components/register-page/register-page.component';
 import { SendFileToConnectDirectComponent } from './components/send-file-to-connect-direct/send-file-to-connect-direct.component';
 import { ModalFilesNotFoundComponent } from './balance/modals/modal-files-not-found/modal-files-not-found.component';
+import { TipoDeOperacionComponent } from './components/parameters/subcomponents/tipo-de-operacion/tipo-de-operacion.component';
+import { InstitucionOrdenanteComponent } from './components/parameters/subcomponents/institucion-ordenante/institucion-ordenante.component';
+import { InstitucionReceptoraComponent } from './components/parameters/subcomponents/institucion-receptora/institucion-receptora.component';
+import { LongitudPipe } from './pipes/longitud.pipe';
 
 @NgModule({
   declarations: [
@@ -70,7 +74,11 @@ import { ModalFilesNotFoundComponent } from './balance/modals/modal-files-not-fo
     ProcesarRespValidationComponent,
     RegisterPageComponent,
     SendFileToConnectDirectComponent,
-    ModalFilesNotFoundComponent
+    ModalFilesNotFoundComponent,
+    TipoDeOperacionComponent,
+    InstitucionOrdenanteComponent,
+    InstitucionReceptoraComponent,
+    LongitudPipe
   ],
   imports: [
     FormsModule,
