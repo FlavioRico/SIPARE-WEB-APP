@@ -11,6 +11,7 @@ export const environment = {
   //sipare_ms_authenticate_url : 'http://192.168.0.249:8081/sipareMSAuthenticationApp/multiva/sipare/',
   sipare_ms_processFile_url : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
   sipare_ms_authenticate_url : 'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/',
+  sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
   //sipare_ms_processFile_url : 'http://10.160.81.68:8083/sipareMSProcessFileApp/multiva/sipare/',
   //sipare_ms_authenticate_url : 'http://10.160.81.68:8081/sipareMSAuthenticationApp/multiva/sipare/',
   genetateListAllFilesUrl : 'genetateListAllFiles',
