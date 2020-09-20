@@ -3,6 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,17 +12,17 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 
 //Components
-import { NavbarComponent } from './navbar/navbar.component';
-import { BitacoraComponent } from './bitacora/bitacora.component';
-import { LoginComponent } from './login/login.component';
-import { IconsMenuComponent } from './navbar/icons-menu/icons-menu.component';
-import { ItemPROCESARComponent } from './navbar/navbar-items/item-procesar/item-procesar.component';
-import { ItemCONSARComponent } from './navbar/navbar-items/item-consar/item-consar.component';
-import { BalanceProcesarComponent } from './balance/balance-procesar/balance-procesar.component';
-import { BalanceConsarComponent } from './balance/balance-consar/balance-consar.component';
-import { ModalAuthComponent } from './balance/modals/modal-auth/modal-auth.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { BitacoraComponent } from './components/bitacora/bitacora.component';
+import { LoginComponent } from './components/login/login.component';
+import { IconsMenuComponent } from './components/navbar/icons-menu/icons-menu.component';
+import { ItemPROCESARComponent } from './components/navbar/navbar-items/item-procesar/item-procesar.component';
+import { ItemCONSARComponent } from './components/navbar/navbar-items/item-consar/item-consar.component';
+import { BalanceProcesarComponent } from './components/balance/balance-procesar/balance-procesar.component';
+import { BalanceConsarComponent } from './components/balance/balance-consar/balance-consar.component';
+import { ModalAuthComponent } from './components/balance/modals/modal-auth/modal-auth.component';
 import { SharedComponent } from './shared/shared/shared.component';
-import { PreloaderComponent } from './preloader/preloader.component';
+import { PreloaderComponent } from './components/preloader/preloader.component';
 import { ValidFileComponent } from './components/valid-file/valid-file.component';
 
 //Services
@@ -41,11 +42,7 @@ import { PrivadoPageComponent } from './components/privado-page/privado-page.com
 import { ProcesarRespValidationComponent } from './components/procesar-resp-validation/procesar-resp-validation.component';
 import { RegisterPageComponent } from './components/register-page/register-page.component';
 import { SendFileToConnectDirectComponent } from './components/send-file-to-connect-direct/send-file-to-connect-direct.component';
-import { ModalFilesNotFoundComponent } from './balance/modals/modal-files-not-found/modal-files-not-found.component';
-import { TipoDeOperacionComponent } from './components/parameters/subcomponents/tipo-de-operacion/tipo-de-operacion.component';
-import { InstitucionOrdenanteComponent } from './components/parameters/subcomponents/institucion-ordenante/institucion-ordenante.component';
-import { InstitucionReceptoraComponent } from './components/parameters/subcomponents/institucion-receptora/institucion-receptora.component';
-import { LongitudPipe } from './pipes/longitud.pipe';
+import { ModalFilesNotFoundComponent } from './components/balance/modals/modal-files-not-found/modal-files-not-found.component';
 
 @NgModule({
   declarations: [
@@ -74,11 +71,7 @@ import { LongitudPipe } from './pipes/longitud.pipe';
     ProcesarRespValidationComponent,
     RegisterPageComponent,
     SendFileToConnectDirectComponent,
-    ModalFilesNotFoundComponent,
-    TipoDeOperacionComponent,
-    InstitucionOrdenanteComponent,
-    InstitucionReceptoraComponent,
-    LongitudPipe
+    ModalFilesNotFoundComponent
   ],
   imports: [
     FormsModule,
@@ -93,7 +86,11 @@ import { LongitudPipe } from './pipes/longitud.pipe';
     BitacoraServiceService,
     BalanceServiceService,
     AuthenticationService,
-    ProcessFileService
+    ProcessFileService,
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    }
   ],
   bootstrap: [AppComponent],
   exports: [],
