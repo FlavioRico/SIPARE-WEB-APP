@@ -142,6 +142,8 @@ export class ResourceBalance {
         btnAutorizar: ElementRef,
         messageValidacion: ElementRef
     ) {
+        console.log('entraaaa');
+        
         this.render.setStyle(btnAutorizar.nativeElement, 'display', 'none');
         this.render.setProperty(messageValidacion.nativeElement, 'innerHTML',
         'Autorización realizada');

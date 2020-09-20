@@ -1,8 +1,8 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
-import { SharedComponent } from '../shared/shared/shared.component';
+import { SharedComponent } from '../../shared/shared/shared.component';
 import { FileStatus } from '../models/models-bitacora/fileStatus';
 import { FileWorklog } from '../models/models-bitacora/fileWorklog';
-import { BitacoraServiceService } from '../services/bitacora/bitacora-service.service';
+import { BitacoraServiceService } from '../../services/bitacora/bitacora-service.service';
 import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({

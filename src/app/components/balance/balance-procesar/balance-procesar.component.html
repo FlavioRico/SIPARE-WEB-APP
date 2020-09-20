@@ -9,7 +9,7 @@
         {{ fechaCompleta }}
     </span>
 
-    <button type="button" class="btn btn-outline-success float-right">Exportar a EXCEL</button>
+    <button type="button" class="btn btn-outline-success float-right" (click)="exportXLSConciliation()">Exportar a EXCEL</button>
 
     <div class="row title-short">
         <div class="col-12">
@@ -24,7 +24,7 @@
   color="#fff"
   type="ball-scale-multiple"
 >
-    <p style="font-size: 20px; color: white">Cargando contenido</p>
+    <p style="font-size: 20px; color: white">Cargando...</p>
 </ngx-spinner>
 
 <div class="container"> <!--*ngIf="loadComplete"-->
@@ -78,10 +78,23 @@
     <div #msjValidacion class="alert menssage-to-user" role="alert"></div>
     
     <div class="button-autorizar">
-        <button #buttonValidacion (click)="aproveBalancePROCESAR()" (click)="this.resourceBalance.authSucess(
-            btnAutorizar, messageValidacion)" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
+        <button id="btnAuthorized" #buttonValidacion (click)="sendFileToConnectDirect()" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
             Autorizar
         </button>
+        <!-- (click)="aproveBalancePROCESAR()" (click)="this.resourceBalance.authSucess(
+            btnAutorizar, messageValidacion)"  -->
+    </div>
+    <div class="alert alert-danger alert-dismissible" *ngIf="isError">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>{{errorCode}}</strong> - {{errorMsj}}.
+    </div>
+    <div class="alert alert-success alert-dismissible" *ngIf="isSuccess">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>{{successCode}}</strong> - {{successrMsj}}.
+    </div>
+    <div class="alert alert-info alert-dismissible" *ngIf="isInfo">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>{{infoCode}}</strong> - {{infoMsj}}.
     </div>
 </div>
 
