@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { FileStatus } from '../../models/models-bitacora/fileStatus';
-import { FileWorklog } from '../../models/models-bitacora/fileWorklog';
+import { FileStatus } from '../../components/models/models-bitacora/fileStatus';
+import { FileWorklog } from '../../components/models/models-bitacora/fileWorklog';
 
 @Injectable({
   providedIn: 'root'

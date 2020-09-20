@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BalanceConsar } from '../../models/models-balance/balance-consar';
-import { BalanceProcesar } from 'src/app/models/models-balance/balance-procesar';
+import { BalanceConsar } from 'src/app/components/models/models-balance/balance-consar';
+import { BalanceProcesar } from 'src/app/components/models/models-balance/balance-procesar';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,9 @@ export class BalanceServiceService {
   // urlAproveBalancePROCESAR = 'http://10.160.14.213:8081/sipare-approve-balance/balances';
   
   urlBalanceCONSAR = 'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR';
-  urlBalancePROCESAR = 'http://localhost:8765/sipare-retrieve-balance/balances?type=PROCESAR';
-  urlAproveBalancePROCESAR = 'http://localhost:8765/sipare-approve-balance/balances';
+  
+  urlBalancePROCESAR = 'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR';
+  urlAproveBalancePROCESAR = 'http://10.160.188.123:8765/sipare-approve-balance/balances';
 
 
   retrieveBalanceCONSAR(){
@@ -29,6 +30,7 @@ export class BalanceServiceService {
 
   aproveBalancePROCESAR(balance: BalanceProcesar){
     balance.status = 203;
+    balance.approved_by = localStorage.getItem('username');
     console.log(balance);
     return this.http.put<BalanceProcesar>(this.urlAproveBalancePROCESAR, balance);
   }

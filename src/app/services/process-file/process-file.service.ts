@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { DataTypeOperation } from '../../components/models/models-parameters/dataTypeOperation';
+import { TypeTransaction } from '../../components/models/models-parameters/typeTransaction';
 
 @Injectable()
 export class ProcessFileService {
@@ -84,6 +86,9 @@ export class ProcessFileService {
 
   addParameter(ngTypeOperation : string, ngPlace : string, ngFolio : string, ngCodeBank : string,
         ngAccount : string,ngKeyEntity : string,ngTxt : string) : Observable<any>{
+
+    console.log('se recibe esto en ngTypeOperation => ',ngTypeOperation);
+
     var dto = {
       trxType : ngTypeOperation == '1' ? 'T+1' : 'T+2',
       typeOperation : ngTypeOperation,
@@ -94,6 +99,9 @@ export class ProcessFileService {
       codeBankRecep : ngKeyEntity,
       txt : ngTxt
     };
+    
+    console.log('Esto vamos a enviar al servicio POST =>' , dto);
+    
     return this.http.post(environment.sipare_ms_processFile_url.concat(environment.addParameterBackOfficeUrl), JSON.stringify(dto), 
           {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
@@ -304,5 +312,18 @@ export class ProcessFileService {
       return this.http.post(environment.sipare_ms_processFile_url.concat(environment.getDataByLineCaptureByRespProcesarUrl), 
         JSON.stringify(oidDto), {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
-
+  
+  // this
+  getDataForInitParameters(operationType: TypeTransaction){
+    console.log('en get data me dieron => ', operationType.typeTransaction);
+    
+    if(operationType.typeTransaction === '116027' || operationType.typeTransaction === 'T+1'){
+      operationType.typeTransaction = 'T+1';
+    }else{
+      operationType.typeTransaction = 'T+2';
+    }
+    console.log('Transformé en => ', operationType.typeTransaction);
+    
+    return this.http.post<DataTypeOperation>(environment.sipare_ms_parameters_by_type_transaction, operationType);
+  }
 }
