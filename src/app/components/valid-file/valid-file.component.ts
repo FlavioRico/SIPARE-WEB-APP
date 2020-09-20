@@ -54,7 +54,10 @@ export class ValidFileComponent implements OnInit {
   									this.infoMsj = '';    
 					        		if(response.resultCode == 0){
 										this.fileValid = response.listFiles;
+										console.log("DEBUG->", this.fileValid);
+										
 							        }else{
+										console.log("DEBUG->", response);
 							        	this.isContentTable = false;   
 							        	this.isInfo = true;
   										this.infoMsj = 'No hay archivos para validar';  
