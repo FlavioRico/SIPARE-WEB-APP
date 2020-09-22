@@ -33,24 +33,29 @@ export class BitacoraComponent implements OnInit {
   
   ngOnInit(): void {
     this.spinner.show();
-    this.serviceFileStatus.fileWorklog().subscribe(data => {
-      if(data === null){
-        this.fileName = 'Sin archivo del día actual.';
-        this.spinner.hide(); 
-        return;
-      }else{
-        this.serviceFileStatus.fileStatus().subscribe(data => {
-          this.fileStatus = data;
-          this.baseFileStatus = this.generateBaseSteps(this.baseFileStatus);
-          this.verifyFinalStep(this.fileWorklog, this.baseFileStatus);
-        });
-        this.fileWorklog = data;
-        
-        this.fileName = this.fileWorklog.file_name;
-        this.statusFile = this.fileWorklog.status;
+    this.serviceFileStatus.fileWorklog().subscribe(
+      data => {
+        if(data === null){
+          this.fileName = 'Sin archivo del día actual.';
+          this.spinner.hide(); 
+          return;
+        }else{
+          this.serviceFileStatus.fileStatus().subscribe(data => {
+            this.fileStatus = data;
+            this.baseFileStatus = this.generateBaseSteps(this.baseFileStatus);
+            this.verifyFinalStep(this.fileWorklog, this.baseFileStatus);
+          });
+          this.fileWorklog = data;
+          
+          this.fileName = this.fileWorklog.file_name;
+          this.statusFile = this.fileWorklog.status;
+        }
+        this.spinner.hide();  
+      }, error => {
+        alert(`Error inesperado en los servicios. ${error.message}`);
+        this.spinner.hide();  
       }
-      this.spinner.hide();  
-    });
+    );
   }
 
   generateBaseSteps(listFileStatusEmpity: FileStatus[]) {

@@ -62,32 +62,37 @@ export class BalanceConsarComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
-    this.serviceBalance.retrieveBalanceCONSAR().subscribe(data => {
-      if(data === null){
-        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
-        alert('Sin archivos del día actual.');
-        this.spinner.hide();  
-      }else{
-        this.balance = data;
-        this.setT24Amounts(this.balance.t24_amounts);
-        this.setFileAmounts(this.balance.file_amounts);
-        this.format();
-        let saldosEmpity = this.setMessageValidacion(
-          this.balance.balanced,
-          this.balance.t24_amounts,
-          this.balance.status
-        );
-        if (!saldosEmpity){
-          this.resourceBalance.validationChangeIcons(
-            this.balance.comparison,
-            this.iconCompACV, 
-            this.iconCompRCV,
-            this.iconCompTotal
+    this.serviceBalance.retrieveBalanceCONSAR().subscribe(
+      data => {
+        if(data === null){
+          this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+          alert('Sin archivos del día actual.');
+          this.spinner.hide();  
+        }else{
+          this.balance = data;
+          this.setT24Amounts(this.balance.t24_amounts);
+          this.setFileAmounts(this.balance.file_amounts);
+          this.format();
+          let saldosEmpity = this.setMessageValidacion(
+            this.balance.balanced,
+            this.balance.t24_amounts,
+            this.balance.status
           );
+          if (!saldosEmpity){
+            this.resourceBalance.validationChangeIcons(
+              this.balance.comparison,
+              this.iconCompACV, 
+              this.iconCompRCV,
+              this.iconCompTotal
+            );
+          }
         }
+        this.spinner.hide();  
+      }, error => {
+        alert(`Error inesperado en los servicios. ${error.message}`);
+        this.spinner.hide();  
       }
-      this.spinner.hide();  
-    });
+    );
   }
 
   /*Posibles a quedarse debido a la naturaleza de los componentes en Angular */

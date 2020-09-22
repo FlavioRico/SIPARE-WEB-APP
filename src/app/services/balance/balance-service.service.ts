@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BalanceConsar } from 'src/app/components/models/models-balance/balance-consar';
 import { BalanceProcesar } from 'src/app/components/models/models-balance/balance-procesar';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,12 @@ export class BalanceServiceService {
 
   retrieveBalancePROCESAR(){
     return this.http.get<BalanceProcesar>(this.urlBalancePROCESAR);
+  }
+
+  configUrl = 'assets/config.json';
+  getConfigResponse(): Observable<HttpResponse<any>> {
+    return this.http.get(
+      this.configUrl, { observe: 'response' });
   }
 
   aproveBalancePROCESAR(balance: BalanceProcesar){

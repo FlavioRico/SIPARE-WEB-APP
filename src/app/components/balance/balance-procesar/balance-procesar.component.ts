@@ -92,8 +92,9 @@ export class BalanceProcesarComponent implements OnInit {
           }
         }
         this.spinner.hide();  
-      },error => {
-        console.error(`Error inesperado: ${error}`);
+      }, error => {
+        alert(`Error inesperado en los servicios. ${error.message}`);
+        this.spinner.hide();  
       }
     );
   }
