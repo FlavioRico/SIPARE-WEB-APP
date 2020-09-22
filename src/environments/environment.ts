@@ -15,6 +15,8 @@ export const environment = {
   sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
   //sipare_ms_processFile_url : 'http://10.160.81.68:8083/sipareMSProcessFileApp/multiva/sipare/',
   //sipare_ms_authenticate_url : 'http://10.160.81.68:8081/sipareMSAuthenticationApp/multiva/sipare/',
+  //add
+  addParameter: 'http://10.160.188.123:8765/sipare-procesar-parameters/parameters',
   genetateListAllFilesUrl : 'genetateListAllFiles',
   genetateListAllFilesByDateRangeUrl : 'generateListAllFilesByDateRange',
   genetateListXlsUrl : 'genetateListXls',

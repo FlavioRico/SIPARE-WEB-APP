@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { DataTypeOperation } from '../../components/models/models-parameters/dataTypeOperation';
+import { Parameter } from '../../components/models/models-parameters/parameter';
 import { TypeTransaction } from '../../components/models/models-parameters/typeTransaction';
 
 @Injectable()
@@ -350,6 +351,14 @@ export class ProcessFileService {
       return this.http.put(environment.sipare_ms_updateParameter_url, JSON.stringify(dto), 
             {headers: new HttpHeaders().set(environment.contentType,environment.appJson)}
       );
-    }
-
+  }
+  
+  createParameter (parameter: Parameter):Observable<HttpResponse<Parameter>> {
+    console.log('recibo', parameter);
+    
+    return this.http.post<any>(environment.addParameter, 
+                                    parameter, 
+                                    { observe: 'response' })
+    ;
+  }
 }

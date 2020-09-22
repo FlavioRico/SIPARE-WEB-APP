@@ -4,6 +4,7 @@ import { ProcessFileService } from  '../../services/process-file/process-file.se
 import { msjscode } from '../../../environments/msjsAndCodes';
 import { TypeTransaction } from '../models/models-parameters/typeTransaction';
 import { DataTypeOperation } from '../models/models-parameters/dataTypeOperation';
+import { Parameter } from '../models/models-parameters/parameter';
 
 @Component({
   selector: 'app-parameters',
@@ -46,6 +47,7 @@ export class ParametersComponent implements OnInit {
 	public operation2: string;
 	public globalOperation: string;
 	typeOperationForService: TypeTransaction = new TypeTransaction();
+	parameter: Parameter = new Parameter();
 	public flagObservaciones: boolean;
 	public btnActualizarVisible: boolean;
 	public btnEditVisible: boolean;
@@ -272,9 +274,9 @@ export class ParametersComponent implements OnInit {
 		// this.valdiateInputTypeOperation();
 
 		// console.log('Traemos en ngTypeOperation esto = ', this.ngTypeOperation);
-		this.ngTypeOperation = (this.ngTypeOperation == '116027') ? '1' : '2';
+		// this.ngTypeOperation = (this.ngTypeOperation == '116027') ? '1' : '2';
 		// console.log('Transformamos en esto = ', this.ngTypeOperation);
-
+		
 		this.valdiateInputPlace();
 		this.valdiateInputFolio();
 		this.valdiateInputCodeBank();
@@ -284,39 +286,46 @@ export class ParametersComponent implements OnInit {
 		if(!this.errorPlace && !this.errorFolio && !this.errorCodeBank && !this.errorKeyEntity && !this.errorAccount){
 			// console.log('Enviaremos al servicio addParameter lo siguiente => ', 
 			// this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank, this.ngAccount, this.ngKeyEntity, this.ngTxt);
-			
-			this.processFile.addParameter(this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank,
-				this.ngAccount, this.ngKeyEntity, this.ngTxt).subscribe(
-				result => {           
-	        		if(result.resultCode == msjscode.resultCodeOk){
-			        	this.isSuccess = true;
-			        	this.isError = false;
-			        	this.successCode = 'SUCCESS';
-			        	this.successrMsj = 'Datos agregados con exito';
+			let headers: any;
+			let nameUser = localStorage.getItem('username');
+			this.parameter.operation_type = this.ngTypeOperation;
+			this.parameter.office = this.ngPlace;
+			this.parameter.sheet_number = this.ngFolio;
+			this.parameter.issuing_bank_key = this.ngCodeBank;
+			this.parameter.account_number = this.ngAccount;
+			this.parameter.receiving_bank_key = this.ngKeyEntity;
+			this.parameter.description = this.ngTxt;
+			this.parameter.created_by = nameUser;
+			console.log('Daremos de alta: ', this.parameter);
+			this.processFile.createParameter(this.parameter).subscribe(
+				resp => {
+					const keys = resp.headers.keys();
+					headers = keys.map(key =>
+						`${key}: ${resp.headers.get(key)}`);
+					console.log(resp.status);
+					console.log(resp.body);
+					if (resp.status === 201) {
+						this.isSuccess = true;
+						this.isError = false;
+						this.successCode = 'SUCCESS';
+						this.successrMsj = 'Datos agregados con exito';
 						this.clear();
 						this.renderButtons(false, true, false);
-						// console.log('Dejamos ngTypeOperation así después de agregar => ', this.ngTypeOperation);
-			        }else if(result.resultCode == '1'){
-			        	if(result.resultDescription.includes('Could not commit Hibernate transaction')){
-			        		this.clear();
-			        		this.isError = true;
-			       			this.errorCode = result.resultCode;
-							this.errorMsj = 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible';
-			        	} else {
-			        		this.clear();
-				        	this.isError = true;
-				       		this.errorCode = result.resultCode;
-				        	this.errorMsj = result.resultDescription;
-						}
+					}else {
+						this.clear();
+						this.isError = true;
+						this.errorCode = '';
+						this.errorMsj = 'Error interno en servicio del componente parameters';
 						this.renderButtons(true, false, false);
-			        }
-			    }, error => {
-				    this.isError = true;
-			       	this.errorCode = error.resultCode;
-			        this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
+					}
+				}, error => {
+					alert(`Error inesperado en servicio ${error.message}`);
+					this.isError = true;
+					this.errorCode = error.resultCode;
+					this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
 					this.renderButtons(true, false, false);
 				}
-			);
+			)
 		} else {
 			this.isError = true;
 			this.errorCode = 'Error ';
@@ -442,3 +451,37 @@ export class ParametersComponent implements OnInit {
 		}
 	}
 }
+
+
+// this.processFile.addParameter(this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank,
+// 	this.ngAccount, this.ngKeyEntity, this.ngTxt).subscribe(
+// 	result => {           
+// 		if(result.resultCode == msjscode.resultCodeOk){
+// 			this.isSuccess = true;
+// 			this.isError = false;
+// 			this.successCode = 'SUCCESS';
+// 			this.successrMsj = 'Datos agregados con exito';
+// 			this.clear();
+// 			this.renderButtons(false, true, false);
+// 			// console.log('Dejamos ngTypeOperation así después de agregar => ', this.ngTypeOperation);
+// 		}else if(result.resultCode == '1'){
+// 			if(result.resultDescription.includes('Could not commit Hibernate transaction')){
+// 				this.clear();
+// 				this.isError = true;
+// 				   this.errorCode = result.resultCode;
+// 				this.errorMsj = 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible';
+// 			} else {
+// 				this.clear();
+// 				this.isError = true;
+// 				   this.errorCode = result.resultCode;
+// 				this.errorMsj = result.resultDescription;
+// 			}
+// 			this.renderButtons(true, false, false);
+// 		}
+// 	}, error => {
+// 		this.isError = true;
+// 		   this.errorCode = error.resultCode;
+// 		this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
+// 		this.renderButtons(true, false, false);
+// 	}
+// );
