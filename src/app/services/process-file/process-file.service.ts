@@ -313,7 +313,7 @@ export class ProcessFileService {
         JSON.stringify(oidDto), {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
   
-  // this
+  //this -> agregado
   getDataForInitParameters(operationType: TypeTransaction){
     console.log('en get data me dieron => ', operationType.typeTransaction);
     
@@ -326,4 +326,30 @@ export class ProcessFileService {
     
     return this.http.post<DataTypeOperation>(environment.sipare_ms_parameters_by_type_transaction, operationType);
   }
+
+  updateParameter (ngTypeOperation : string, ngPlace : string, ngFolio : string, ngCodeBank : string,
+    ngAccount : string,ngKeyEntity : string,ngTxt : string) : Observable<any> {
+      if (ngTypeOperation == '1' || ngTypeOperation == '116027') {
+        ngTypeOperation = 'T+1';
+      } else if (ngTypeOperation == '2' || ngTypeOperation == '116018') {
+        ngTypeOperation = 'T+2';
+      }
+      var dto = {
+        trxType : ngTypeOperation == '1' ? 'T+1' : 'T+2',
+        typeOperation : ngTypeOperation,
+        place :ngPlace,
+        folio : ngFolio,
+        codeBank : ngCodeBank,
+        account : ngAccount,
+        codeBankRecep : ngKeyEntity,
+        txt : ngTxt
+      };
+      
+      console.log('Para el PUT se enviará esto =>' , dto);
+
+      return this.http.put(environment.sipare_ms_updateParameter_url, JSON.stringify(dto), 
+            {headers: new HttpHeaders().set(environment.contentType,environment.appJson)}
+      );
+    }
+
 }

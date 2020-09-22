@@ -165,14 +165,8 @@
 	style="margin-bottom: 15px;">
 		Actualizar
 	</button>
+	<!-- (click)="updateParameter()" -->
 </div>
-
-<!-- <div class="container">
-	<div class="alert alert-success alert-dismissible" *ngIf="isSuccess">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>{{successCode}}</strong> - {{successrMsj}}.
-	</div>
-</div> -->
 
 <!-- aqui podemos activar el modal -->
 <div *ngIf="flagObservaciones" class="container">
@@ -183,18 +177,16 @@
 </div>
   
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false"> 
 	<div class="modal-dialog">
 		<div class="modal-content">
 		<div class="modal-header">
 			<h5 class="modal-title" id="exampleModalLabel">Atención.</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
 		<div class="modal-body">
-			<div class="alert alert-danger alert-dismissible" *ngIf="isError">
-				<button type="button" class="close" data-dismiss="alert"></button>
+			<div class="alert alert-danger" role="alert" *ngIf="isError">
 				<strong>{{errorCode}}</strong> - {{errorMsj}}.
 			</div>
 
