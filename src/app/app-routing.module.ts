@@ -17,6 +17,7 @@ import { BackOfficeComponent } from './components/back-office/back-office.compon
 import { PreavisoComponent } from './components/preaviso/preaviso.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
+import { ConciliationReportComponent } from './components/conciliation-report/conciliation-report.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,9 @@ const routes: Routes = [
   },
 	{ 
     path: 'transaction' , component : TransactionComponent
+  },
+	{ 
+    path: 'conciliation-report', component: ConciliationReportComponent
   },
 	{ 
     path: '**', component: NotFoundPageComponent

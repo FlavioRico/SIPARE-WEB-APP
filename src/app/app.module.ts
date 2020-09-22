@@ -24,12 +24,6 @@ import { ModalAuthComponent } from './components/balance/modals/modal-auth/modal
 import { SharedComponent } from './shared/shared/shared.component';
 import { PreloaderComponent } from './components/preloader/preloader.component';
 import { ValidFileComponent } from './components/valid-file/valid-file.component';
-
-//Services
-import { BitacoraServiceService } from './services/bitacora/bitacora-service.service';
-import { BalanceServiceService } from './services/balance/balance-service.service';
-import { AuthenticationService } from './services/authentication/authentication.service';
-import { ProcessFileService } from  './services/process-file/process-file.service';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { ParametersComponent } from './components/parameters/parameters.component';
 import { BackOfficeComponent } from './components/back-office/back-office.component';
@@ -43,6 +37,15 @@ import { ProcesarRespValidationComponent } from './components/procesar-resp-vali
 import { RegisterPageComponent } from './components/register-page/register-page.component';
 import { SendFileToConnectDirectComponent } from './components/send-file-to-connect-direct/send-file-to-connect-direct.component';
 import { ModalFilesNotFoundComponent } from './components/balance/modals/modal-files-not-found/modal-files-not-found.component';
+import { ConciliationReportComponent } from './components/conciliation-report/conciliation-report.component';
+
+//Services
+import { BitacoraServiceService } from './services/bitacora/bitacora-service.service';
+import { BalanceServiceService } from './services/balance/balance-service.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
+import { ProcessFileService } from  './services/process-file/process-file.service';
+import { SipareApiService } from  './services/conciliation-report/sipare-api.service';
+
 
 @NgModule({
   declarations: [
@@ -71,7 +74,8 @@ import { ModalFilesNotFoundComponent } from './components/balance/modals/modal-f
     ProcesarRespValidationComponent,
     RegisterPageComponent,
     SendFileToConnectDirectComponent,
-    ModalFilesNotFoundComponent
+    ModalFilesNotFoundComponent,
+    ConciliationReportComponent
   ],
   imports: [
     FormsModule,
@@ -87,6 +91,7 @@ import { ModalFilesNotFoundComponent } from './components/balance/modals/modal-f
     BalanceServiceService,
     AuthenticationService,
     ProcessFileService,
+    SipareApiService,
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

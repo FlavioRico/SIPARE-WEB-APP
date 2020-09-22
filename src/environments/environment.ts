@@ -13,6 +13,7 @@ export const environment = {
   sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
   sipare_ms_authenticate_url : 'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/',
   sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
+  sipare_api : 'http://127.0.0.1:8765/api/v1/sipare/',
   //sipare_ms_processFile_url : 'http://10.160.81.68:8083/sipareMSProcessFileApp/multiva/sipare/',
   //sipare_ms_authenticate_url : 'http://10.160.81.68:8081/sipareMSAuthenticationApp/multiva/sipare/',
   //add
@@ -48,5 +49,8 @@ export const environment = {
   paymentTransactionAndSendNotificationURL : 'paymentTransactionAndSendNotification',
   listTrxsFailedURL : 'getListTrxsFailed',
   trxReProcessUrl : 'paymentTransactionAndSendNotificationReProcess',
-  trxReProcessProgrammedUrl : 'getUpdateDateProgrammedTrxsFailed'
+  trxReProcessProgrammedUrl : 'getUpdateDateProgrammedTrxsFailed',
+  /* SIPARE REST API*/
+  generateSummaryReportByDate : 'conciliation/daily/summaries',
+  generateSummaryReportByMonth : 'conciliation/monthly/summaries',
 };
