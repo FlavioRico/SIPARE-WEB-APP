@@ -5,6 +5,7 @@ import { msjscode } from '../../../environments/msjsAndCodes';
 import { TypeTransaction } from '../models/models-parameters/typeTransaction';
 import { DataTypeOperation } from '../models/models-parameters/dataTypeOperation';
 import { Parameter } from '../models/models-parameters/parameter';
+import { GetParameter } from '../models/models-parameters/getParameter';
 
 @Component({
   selector: 'app-parameters',
@@ -52,6 +53,7 @@ export class ParametersComponent implements OnInit {
 	public btnActualizarVisible: boolean;
 	public btnEditVisible: boolean;
 	public searchSucces : boolean;
+	
 	/*Elementos del DOM a renderizar con Renderer2*/
 	@ViewChild('oficina') oficina: ElementRef;
 	@ViewChild('folio') folio: ElementRef;
@@ -92,17 +94,21 @@ export class ParametersComponent implements OnInit {
 
 	/*this-> agregado */
 	seleccion(operationType: string){
-		// console.log('En método selección recibimos =>', operationType);
+		console.log('En método selección recibimos =>', operationType);
 		this.typeOperationForService.typeTransaction = operationType;
 		this.globalOperation = operationType;
 		this.ngTypeOperation = operationType;
-		// console.log('Dejamos ngTypeOperation con =>', this.ngTypeOperation);
+		console.log('Dejamos ngTypeOperation con =>', this.ngTypeOperation);
+		console.log('Dejamos operationType con =>', operationType);
 
-		this.processFile.getDataForInitParameters(this.typeOperationForService).subscribe(
+		this.processFile.getParameter(operationType).subscribe(
 			data =>{
 				// console.log(data);
+				let headers;
+				const keys = data.headers.keys();
+					headers = keys.map(key =>
+						`${key}: ${data.headers.get(key)}`);
 				this.loadNewData(data);
-				// this.spinner.hide();
 			},error =>{
 				alert(`Error inesperado en los servicios ${error.resultCode}`);
 			}
@@ -126,27 +132,24 @@ export class ParametersComponent implements OnInit {
 		this.btnActualizarVisible = true;  //botón de ACTUALIZAR mostrandose para hacer PUT
 	}
 
-	loadNewData(data: DataTypeOperation) {
-		if (data.resultCode !== '0'){
-			this.flagObservaciones = true; 	   //botón de AGREGAR mostrandose
-			this.btnEditVisible = false;       //botón de EDITAR FALSE
-			this.btnActualizarVisible = false; //botón de ACTUALIZAR FALSE
+	loadNewData(data: any) {
+		if (data.status === 204){
+			this.renderButtons(true, false, false);
 			this.clear(); 					   //limpiamos por si había algo
 			this.renderForm(false);            //dejamos editables los campos
-			console.log(data);
-		}else{
-			this.flagObservaciones = false;     //botón de AGREGAR FALSE
-			this.btnEditVisible = true;		    //botón de EDITAR mostrandose
-			this.btnActualizarVisible = false;  //botón de ACTUALIZAR FALSE
+		}else if (data.status === 200){
+			this.renderButtons(false, true, false);
 			this.renderForm(true);
-			this.ngPlace = data.resp.place;
-			this.ngFolio = data.resp.folio;
-			this.ngCodeBank = data.resp.bankCode;
-			this.ngBankName = data.resp.orderingInstitution;
-			this.ngAccount = data.resp.account;
-			this.ngKeyEntity = data.resp.receivingEntity;
-			this.ngBankNameRecep = data.resp.receivingInstitution;
-			this.ngTxt = data.resp.text;
+			console.log(data.body);
+			
+			this.ngPlace = data.body.office;
+			this.ngFolio = data.body.sheet_number;
+			this.ngCodeBank = data.body.issuing_bank_key;
+			this.ngBankName = data.body.issuing_bank_name;
+			this.ngAccount = data.body.account_number;
+			this.ngKeyEntity = data.body.receiving_bank_key;
+			this.ngBankNameRecep = data.body.receiving_bank_name;
+			this.ngTxt = data.body.description;
 		}
 	}
 
@@ -175,19 +178,6 @@ export class ParametersComponent implements OnInit {
 		this.btnActualizarVisible = flagButtonActualizar; //botón de ACTUALIZAR mostrandose para hacer PUT
 	}
 
-	verifyContentInputs (input: string) {
-		if (input === undefined || input === ''){
-			this.errorPlace = true;
-			this.errorPlaceMsj = 'es obligatorio';
-			console.log('esta indefinido o vacio');
-			
-		}else {
-			this.errorPlace = false;
-			this.errorPlaceMsj = '';
-			console.log('trae contenido');
-		}
-	}
-
 	updateParameter () {
 
 		this.valdiateInputPlace();
@@ -197,41 +187,50 @@ export class ParametersComponent implements OnInit {
 		this.valdiateInputKeyEntity();
 
 		if(!this.errorPlace && !this.errorFolio && !this.errorCodeBank && !this.errorKeyEntity && !this.errorAccount){
-			console.log('Enviaremos al servicio UPDATE lo siguiente => ', 
-			this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank, this.ngAccount, this.ngKeyEntity, this.ngTxt);
-			
-			this.processFile.updateParameter(this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank,
-				this.ngAccount, this.ngKeyEntity, this.ngTxt).subscribe(
-				result => {           
-	        		if(result.resultCode == msjscode.resultCodeOk){
-			        	this.isSuccess = true;
-			        	this.isError = false;
-			        	this.successCode = 'SUCCESS';
-			        	this.successrMsj = 'Datos actualizados con exito';
+			// console.log('Enviaremos al servicio addParameter lo siguiente => ', 
+			// this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank, this.ngAccount, this.ngKeyEntity, this.ngTxt);
+			let headers: any;
+			let nameUser = localStorage.getItem('username');
+			this.parameter.operation_type = this.ngTypeOperation;
+			this.parameter.office = this.ngPlace;
+			this.parameter.sheet_number = this.ngFolio;
+			this.parameter.issuing_bank_key = this.ngCodeBank;
+			this.parameter.account_number = this.ngAccount;
+			this.parameter.receiving_bank_key = this.ngKeyEntity;
+			this.parameter.description = this.ngTxt;
+			this.parameter.created_by = nameUser;
+			console.log('Actualizatemos con =>>> : ', this.parameter);
+			this.processFile.actualizarParametro(this.parameter).subscribe(
+				resp => {
+					const keys = resp.headers.keys();
+					headers = keys.map(key =>
+						`${key}: ${resp.headers.get(key)}`);
+					console.log(resp.status);
+					console.log(resp.body);
+					if (resp.status === 201) {
+						this.isSuccess = true;
+						this.isError = false;
+						this.errorCode = 'SUCCESS';
+						this.errorMsj = 'Datos actualizados con éxito.';
 						this.clear();
 						this.renderButtons(false, true, false);
-						// console.log('Dejamos ngTypeOperation así después de agregar => ', this.ngTypeOperation);
-			        }else if(result.resultCode == '1'){
-			        	if(result.resultDescription.includes('Could not commit Hibernate transaction')){
-			        		this.clear();
-			        		this.isError = true;
-			       			this.errorCode = result.resultCode;
-							this.errorMsj = 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible';
-			        	} else {
-			        		this.clear();
-				        	this.isError = true;
-				       		this.errorCode = result.resultCode;
-				        	this.errorMsj = result.resultDescription;
-						}
+						this.refresh();
+					}else {
+						this.clear();
+						this.isSuccess = false;
+						this.isError = true;
+						this.errorCode = 'ERROR';
+						this.errorMsj = 'No se pudieron actualizar los datos';
 						this.renderButtons(true, false, false);
-			        }
-			    }, error => {
-				    this.isError = true;
-			       	this.errorCode = error.resultCode;
-			        this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
+					}
+				}, error => {
+					alert(`Error inesperado en servicio ${error.message}`);
+					this.isError = true;
+					this.errorCode = error.resultCode;
+					this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
 					this.renderButtons(true, false, false);
 				}
-			);
+			)
 		} else {
 			this.isError = true;
 			this.errorCode = 'Error ';
@@ -271,11 +270,6 @@ export class ParametersComponent implements OnInit {
 	}
 
 	createParameter(){
-		// this.valdiateInputTypeOperation();
-
-		// console.log('Traemos en ngTypeOperation esto = ', this.ngTypeOperation);
-		// this.ngTypeOperation = (this.ngTypeOperation == '116027') ? '1' : '2';
-		// console.log('Transformamos en esto = ', this.ngTypeOperation);
 		
 		this.valdiateInputPlace();
 		this.valdiateInputFolio();
@@ -284,8 +278,7 @@ export class ParametersComponent implements OnInit {
 		this.valdiateInputKeyEntity();
 
 		if(!this.errorPlace && !this.errorFolio && !this.errorCodeBank && !this.errorKeyEntity && !this.errorAccount){
-			// console.log('Enviaremos al servicio addParameter lo siguiente => ', 
-			// this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank, this.ngAccount, this.ngKeyEntity, this.ngTxt);
+			
 			let headers: any;
 			let nameUser = localStorage.getItem('username');
 			this.parameter.operation_type = this.ngTypeOperation;
@@ -311,6 +304,7 @@ export class ParametersComponent implements OnInit {
 						this.successrMsj = 'Datos agregados con exito';
 						this.clear();
 						this.renderButtons(false, true, false);
+						// this.refresh();
 					}else {
 						this.clear();
 						this.isError = true;

@@ -7,7 +7,13 @@
 	<div class="alert alert-danger alert-dismissible" *ngIf="isError">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<strong>{{errorCode}}</strong> - {{errorMsj}}.
-  	</div>
+	  </div>
+	<div *ngIf="flagObservaciones" class="alert alert-warning title-opc" role="alert">
+		<div class="container">
+			<strong>Observaciones:</strong>
+			<p>Se debe dar de alta los parámetros de las transacciones <strong>116027</strong> y <strong>116018</strong></p>
+		</div>
+	</div>
 	<!--this, tipo de operacion-->
 	<div class="row">
 		<div class="col-sm">
@@ -51,7 +57,8 @@
 			<div class="form-group input-info">
 				Clave:
 				<input #clave name="codeBank" id="codeBank" [(ngModel)]="ngCodeBank" 
-				type="text" class="form-control" placeholder="Clave ordenante" aria-describedby="currentName" (keypress)="validatedInputOnlyNumbers($event)" required>
+				type="text" class="form-control" placeholder="Clave ordenante" aria-describedby="currentName" 
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6">
 				<small id="currentName" class="form-text text-primary">Campo numérico</small>				
 			</div>
 		</div>
@@ -98,7 +105,7 @@
 				Clave:
 				<input #claveReceptora name="keyEntity" id="keyEntity" [(ngModel)]="ngKeyEntity" 
 				type="text" class="form-control" placeholder="Clave" aria-describedby="currentName"
-				(keypress)="validatedInputOnlyNumbers($event)" required>
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6">
 				<small id="currentName" class="form-text text-primary">Campo numérico</small>				
 			</div>
 		</div>
@@ -128,28 +135,13 @@
 			<div class="form-group input-info">
 				Texto:
 				<input #texto name="txt" id="txt" [(ngModel)]="ngTxt" type="text" class="form-control" 
-				placeholder="Texto" aria-describedby="currentName" >
+				placeholder="Texto" aria-describedby="currentName" maxlength="120">
 			</div>
 		</div>
 	</div>
 </div>
 
-<!-- sin data -->
-<div *ngIf="flagObservaciones" class="alert alert-primary title-opc" role="alert">
-	<div class="container">
-		<strong>Observaciones:</strong>
-		<p>Se debe dar de alta los parámetros de las transacciones <strong>116027</strong> y <strong>116018</strong></p>
-	</div>
-</div>
-
 <!-- botones que pueden existir -->
-
-<!-- <div *ngIf="flagObservaciones" class="container">
-	<p>Se debe dar de alta los parámetros de las transacciones <strong>116027</strong> y <strong>116018</strong></p>
-	<button (click)="createParameter()" type="button" class="btn btn-outline-success float-right" style="margin-bottom: 15px;">
-		Agregar
-	</button>
-</div> -->
 
 <!-- con data -->
 <div #buttEdit *ngIf="btnEditVisible" class="container">
@@ -160,12 +152,11 @@
 	</button>
 </div>
 
-<div #buttActualizar *ngIf="btnActualizarVisible" class="container">
-	<button type="button" class="btn btn-outline-success float-right" 
+<div *ngIf="btnActualizarVisible" class="container" #buttActualizar>
+	<button (click)="updateParameter()" type="button" class="btn btn-outline-success float-right"  data-toggle="modal" 
 	style="margin-bottom: 15px;">
 		Actualizar
 	</button>
-	<!-- (click)="updateParameter()" -->
 </div>
 
 <!-- aqui podemos activar el modal -->

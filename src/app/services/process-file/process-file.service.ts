@@ -3,8 +3,10 @@ import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { DataTypeOperation } from '../../components/models/models-parameters/dataTypeOperation';
-import { Parameter } from '../../components/models/models-parameters/parameter';
 import { TypeTransaction } from '../../components/models/models-parameters/typeTransaction';
+
+import { Parameter } from '../../components/models/models-parameters/parameter';
+import { GetParameter } from '../../components/models/models-parameters/getParameter';
 
 @Injectable()
 export class ProcessFileService {
@@ -315,50 +317,39 @@ export class ProcessFileService {
   }
   
   //this -> agregado
-  getDataForInitParameters(operationType: TypeTransaction){
-    console.log('en get data me dieron => ', operationType.typeTransaction);
-    
-    if(operationType.typeTransaction === '116027' || operationType.typeTransaction === 'T+1'){
-      operationType.typeTransaction = 'T+1';
-    }else{
-      operationType.typeTransaction = 'T+2';
-    }
-    console.log('Transformé en => ', operationType.typeTransaction);
-    
-    return this.http.post<DataTypeOperation>(environment.sipare_ms_parameters_by_type_transaction, operationType);
-  }
-
-  updateParameter (ngTypeOperation : string, ngPlace : string, ngFolio : string, ngCodeBank : string,
-    ngAccount : string,ngKeyEntity : string,ngTxt : string) : Observable<any> {
-      if (ngTypeOperation == '1' || ngTypeOperation == '116027') {
-        ngTypeOperation = 'T+1';
-      } else if (ngTypeOperation == '2' || ngTypeOperation == '116018') {
-        ngTypeOperation = 'T+2';
-      }
-      var dto = {
-        trxType : ngTypeOperation == '1' ? 'T+1' : 'T+2',
-        typeOperation : ngTypeOperation,
-        place :ngPlace,
-        folio : ngFolio,
-        codeBank : ngCodeBank,
-        account : ngAccount,
-        codeBankRecep : ngKeyEntity,
-        txt : ngTxt
-      };
-      
-      console.log('Para el PUT se enviará esto =>' , dto);
-
-      return this.http.put(environment.sipare_ms_updateParameter_url, JSON.stringify(dto), 
-            {headers: new HttpHeaders().set(environment.contentType,environment.appJson)}
-      );
-  }
   
   createParameter (parameter: Parameter):Observable<HttpResponse<Parameter>> {
     console.log('recibo', parameter);
     
     return this.http.post<any>(environment.addParameter, 
                                     parameter, 
-                                    { observe: 'response' })
-    ;
+                                    { observe: 'response' }
+    );
   }
+
+  getParameter (operationType: string) {
+    console.log('recibo operation type:', operationType);
+    let urlParameter: string = (operationType == '116027') ? 
+    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
+    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
+
+    return this.http.get<GetParameter>(urlParameter, 
+                            { observe: 'response' }
+    );
+  }
+
+  actualizarParametro (parameter: Parameter) {
+    console.log('Nueva data del parameter: ', parameter);
+    let urlUpdate: string = (parameter.operation_type == '116027') ? 
+    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
+    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
+
+    return this.http.put<GetParameter>(
+      urlUpdate,
+      parameter, 
+      { observe: 'response' }
+    );
+    
+  }
+  
 }
