@@ -83,7 +83,6 @@ export class ParametersComponent implements OnInit {
 		this.operation2 = '116018'; //t+2
 		this.globalOperation = '116027';
 		this.ngTypeOperation = '116027';
-		console.log('Inicializamos ngTypeOperation con => ', this.ngTypeOperation);
 		this.btnActualizarVisible = false;
 		this.btnEditVisible = false;
 
@@ -94,16 +93,12 @@ export class ParametersComponent implements OnInit {
 
 	/*this-> agregado */
 	seleccion(operationType: string){
-		console.log('En método selección recibimos =>', operationType);
 		this.typeOperationForService.typeTransaction = operationType;
 		this.globalOperation = operationType;
 		this.ngTypeOperation = operationType;
-		console.log('Dejamos ngTypeOperation con =>', this.ngTypeOperation);
-		console.log('Dejamos operationType con =>', operationType);
 
 		this.processFile.getParameter(operationType).subscribe(
 			data =>{
-				// console.log(data);
 				let headers;
 				const keys = data.headers.keys();
 					headers = keys.map(key =>
@@ -116,7 +111,6 @@ export class ParametersComponent implements OnInit {
 	}
 
 	renderForm (value: boolean){
-		console.log('entro', value);
 		this.render.setProperty(this.oficina.nativeElement, 'disabled', value);
 		this.render.setProperty(this.folio.nativeElement, 'disabled', value);
 		this.render.setProperty(this.clave.nativeElement, 'disabled', value);
@@ -126,7 +120,6 @@ export class ParametersComponent implements OnInit {
 	}
 	
 	editTrue(){
-		console.log('edición click');
 		this.flagObservaciones = false;    //botón de AGREGAR FALSE
 		this.btnEditVisible = false;	   //botón de EDITAR FALSE
 		this.btnActualizarVisible = true;  //botón de ACTUALIZAR mostrandose para hacer PUT
@@ -140,7 +133,6 @@ export class ParametersComponent implements OnInit {
 		}else if (data.status === 200){
 			this.renderButtons(false, true, false);
 			this.renderForm(true);
-			console.log(data.body);
 			
 			this.ngPlace = data.body.office;
 			this.ngFolio = data.body.sheet_number;
@@ -165,7 +157,6 @@ export class ParametersComponent implements OnInit {
 	}
 
 	refresh(){
-		// console.log('se hará refresh con este => ', this.typeOperationForService.typeTransaction);
 		this.seleccion(this.typeOperationForService.typeTransaction);
 		if (this.globalOperation == 'T+1' || this.globalOperation == '1') this.globalOperation = '116027';
 		else this.globalOperation = '116018';
@@ -187,8 +178,6 @@ export class ParametersComponent implements OnInit {
 		this.valdiateInputKeyEntity();
 
 		if(!this.errorPlace && !this.errorFolio && !this.errorCodeBank && !this.errorKeyEntity && !this.errorAccount){
-			// console.log('Enviaremos al servicio addParameter lo siguiente => ', 
-			// this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank, this.ngAccount, this.ngKeyEntity, this.ngTxt);
 			let headers: any;
 			let nameUser = localStorage.getItem('username');
 			this.parameter.operation_type = this.ngTypeOperation;
@@ -199,14 +188,11 @@ export class ParametersComponent implements OnInit {
 			this.parameter.receiving_bank_key = this.ngKeyEntity;
 			this.parameter.description = this.ngTxt;
 			this.parameter.created_by = nameUser;
-			console.log('Actualizatemos con =>>> : ', this.parameter);
 			this.processFile.actualizarParametro(this.parameter).subscribe(
 				resp => {
 					const keys = resp.headers.keys();
 					headers = keys.map(key =>
 						`${key}: ${resp.headers.get(key)}`);
-					console.log(resp.status);
-					console.log(resp.body);
 					if (resp.status === 201) {
 						this.isSuccess = true;
 						this.isError = false;
@@ -289,14 +275,11 @@ export class ParametersComponent implements OnInit {
 			this.parameter.receiving_bank_key = this.ngKeyEntity;
 			this.parameter.description = this.ngTxt;
 			this.parameter.created_by = nameUser;
-			console.log('Daremos de alta: ', this.parameter);
 			this.processFile.createParameter(this.parameter).subscribe(
 				resp => {
 					const keys = resp.headers.keys();
 					headers = keys.map(key =>
 						`${key}: ${resp.headers.get(key)}`);
-					console.log(resp.status);
-					console.log(resp.body);
 					if (resp.status === 201) {
 						this.isSuccess = true;
 						this.isError = false;
