@@ -25,18 +25,13 @@
 				<app-date-range [(dateRange)]="dateRange"></app-date-range>
 			</div>
 			<div style="margin-top: 2%; margin-left: 5px;">
-				<button class="btn btn-default" (click)="searchByDate();">
-					<font color=#286e9d>
-						Buscar por Fecha
-					</font>
+				<button (click)="searchByDate();" type="button" class="btn btn-outline-secondary">
+					Buscar por fecha
 				</button>
 			</div>
 			<div style="margin-left: 14.5%;">
-				<button class="btn btn-default" (click)="exportXLSWO();">
-					<font color=#286e9d>
-						EXPORTAR EXCEL
-					</font>
-					<!--<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAdVBMVEX///8AAAC7u7szMzObm5uTk5PX19efn5+np6evr68TExNvb29fX187Ozuzs7NDQ0N/f38bGxvz8/PPz89aWlpPT08tLS3h4eEMDAzHx8ft7e2Kiopra2tjY2MhISH4+PgmJiY2NjZ6enpTU1OGhoYWFhZISEjtIvicAAAD+0lEQVR4nO2ca5uqIBRGxy6mlVZqaVrZZer//8QzXkA4gZZnOm163vUpYduwni2K0PD1BQAAAAAAAAAAAAAAAAAAAAAAAAAAgFGkYY397pb0Jg+d821lMYbvbk8fYj+LNpaMYSLBdrTzppYCY0TKK+mgUjBHJHa/L39fSYaJxINsPky6HEiLpIOxpjMYI/LTn2eL6xMK9ES6+rMJIra7vBx7KhARif3vaPNYfyYsEnq/oEBBZPBbGh8mEjo9SAmKzPqcOIAIRCACEYj8o0joSix/imeuih1xEcW3T5R/dwQRiEAEIhCBCEToi2xHEsXQKxqriIiLfMygESIQ6SFyPd2i3TkbOb56sYGoSLLaeDepJGTnOOozCpFsI1FM7B+GKsQp/5eJrO04qGrXQumCn6NZhKP3HEkCVusKpa6qkLaIlbHavFm3OvBThuaIrHJWfb6X8zUeFEWsEau2WUnCp8xPJokceb1Xl+zbT6Aq0vTsSV3A772e+gSqIidWn1crcx473mo9aIo0X15NCTrscGGayI0FlCm45uKRUSJNpygW38/s4KYLpytyYRHfPwdx/Tls8ShFliuJYnSZTFWIi+IvHv2yxsfCMGutjbbIjn6tHQvx+NXRmhCyIvxZPuaDyIuRIryHx1H9wdbHkhaZskSwH/RG+ljSItZYDu1IiHbpzVchGr9c5CCHzh8QUXz7u58jBY4YGXd4UBY5iZF7g0WsbRPYmRDSIlkTaLTINRAid22RxEUyMdLgzt5MppR0pYSuyEgO7UoJWZFDnZCYjR47bsBkRVgLMpaZjpRQXXo7spAhf69qTwnVQSMbn4TSy6J5IkcWsRNuw60pISrCEhIklrVh0a0poSnC217eXvjcUFtKaIrwEXy5PMUnItpSUi69yQtsxZzY0VMh/qvKK0U2cv2UP+Nb3q5IPkf4bHw9ccJb0/K+S1Hkrnfz2fiWlFAU4QnhnZd3d31KCIrwhAR8ipavWOknhQiK8ISMeVGzhqhNCT2RpkXCTbJ5ydKlhJ6Iq6ps3rJ0KSEn0jRImrR21MWERZLj0Fuso/leHo807dSsLpAT0TFfjh1/a6e6lBgjwpmq/7NaM2h8+9Lb09Ac/UIEIhB5iYg/kyju095chfgjI4oiim8n/ByBCEQgAhGIQAQi7SKDpUQxLfn2pbdeIh8zaIQIJRHvU0QWEIHI60RSuwdBZyv/v8j7SB/e4ZO4SEFuO+d1320mKYlUlBt/PrN3KVWRiid2k6UtUtLvWiMoUvHstUZWpOLxa424SMUj15oRIiX6DcoNE6kod9X9BJGSPJzc7TZtpEhFOhD38zdYpCQPavLuWAAAAAAAAAAAAAAAAAAA0OQPtsZehKg8My8AAAAASUVORK5CYII=' style="width: 20px; height: 20px;">-->
+				<button (click)="exportXLSWO();" type="button" class="btn btn-outline-secondary">
+					EXPORTAR EXCEL
 				</button>
 				<!--<a [href]="fileUrlr" download="listaArchivosPROCESAR_BETA.xls">DownloadFile</a>-->
 			</div>

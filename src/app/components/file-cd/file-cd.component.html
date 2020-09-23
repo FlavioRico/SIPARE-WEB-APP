@@ -24,11 +24,9 @@
 						  /><!--(keyup)="searchFileName(); searchFileDate()" this-->
 	</div>
 	<div class="col-md-1" style="margin-top: 2%; margin-left: -23px;">
-		<button class="btn btn-default" (click)="onClickSendFilesToCdPath();">
-					<font color=#286e9d>
-						Grabar CD
-					</font>
-				</button>
+		<button (click)="onClickSendFilesToCdPath();" type="button" class="btn btn-outline-secondary" style="font-size: small;">
+			Grabar CD
+		</button>
 	</div>
 </div>
 <br>
