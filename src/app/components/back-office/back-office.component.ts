@@ -39,7 +39,10 @@ export class BackOfficeComponent implements OnInit {
 	public isSuccess : boolean;
 	public parameters : any;
 
-  constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
+	/*agregado*/
+	public activateServiceProveedor: boolean = true;
+
+  	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
 
   	ngOnInit() {
 	  	if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
@@ -51,58 +54,84 @@ export class BackOfficeComponent implements OnInit {
 						if(result.logged == 0){
 							this.router.navigate(['/']);
 						}else{
-							this.isError = false;
-							this.isSuccess = false;
-							this.processFile.getDataTransactionT1().subscribe(
-								result => {           
-					        		if(result.resultCode == msjscode.resultCodeOk){
-										this.isError= false;
-										this.parameters = result;
-										this.ngTypeOperation = result.resp.typeOperation;
-										this.ngPlace = result.resp.place;
-										this.ngFolio = result.resp.folio;
-										this.ngDateRegistry = result.resp.dateRegistrty;
-										this.ngCodeBank = result.resp.bankCode;
-										this.ngBankName = result.resp.orderingInstitution;
-										this.ngAccount = result.resp.account;
-										this.ngKeyEntity = result.resp.receivingEntity;
-										this.ngBankNameRecep = result.resp.receivingInstitution;
-										this.ngDateRep = result.resp.receivingDate;
-										this.ngIMSS = result.resp.imss;
-										this.ngViv = result.resp.viv;
-										this.ngAcv = result.resp.acv;
-										this.ngTxt = result.resp.text;
-										this.ngTotal = result.resp.total;
-								        this.isSuccess= false;
-								        $(document).ready(function(){
-						        			$("#btnAuthorized").prop('disabled', false); 
-										});
-						        	} else {
-						        		this.isError= true;
-						        		this.errorMsj = result.resultDescription;
-				        				this.errorCode = result.resultCode;
-				        				$(document).ready(function(){
-						        			$("#btnAuthorized").prop('disabled', true); 
-										});
-									}
-							    },error => {
-							    	this.isSuccess= false;
-					        		this.successrMsj = '';
-			        				this.successCode = '';
-			        				$(document).ready(function(){
-					        			$("#btnAuthorized").prop('disabled', true); 
-									});
-								    this.isError= true;
-								    this.errorCode = 'NOT-SRV';
-									this.errorMsj = 'Servicio no disponible';
-							    }
+
+							let operationType = "116027";
+							this.processFile.getParameter(operationType).subscribe(
+								data =>{
+									let headers;
+									const keys = data.headers.keys();
+										headers = keys.map(key =>
+											`${key}: ${data.headers.get(key)}`);
+									this.activateServiceProveedor = (data.status == 200) ? true: false;
+									this.serviceProveedor(data, this.activateServiceProveedor);
+								},error =>{
+									alert(`Error inesperado en los servicios ${error.resultCode}`);
+								}
 							);
+
 						}
 					}
 				}
 			);
 		}
 	}
+	/*agregado*/
+	serviceProveedor (parameter, activateServiceProveedor) {
+		console.log('debug',parameter, activateServiceProveedor);
+		
+		if (activateServiceProveedor) { 
+			this.isError = false;
+			this.isSuccess = false;
+	
+			this.processFile.getDataTransactionT1().subscribe(
+				result => {           
+					if(result.resultCode == msjscode.resultCodeOk){
+						this.isError= false;
+						this.parameters = result;						
+						this.ngDateRep = result.resp.receivingDate;
+						this.ngIMSS = result.resp.imss;
+						this.ngViv = result.resp.viv;
+						this.ngAcv = result.resp.acv;
+						this.ngDateRegistry = result.resp.dateRegistrty;
+						this.ngTotal = result.resp.total;
+
+						this.ngTxt =  parameter.body.description;
+						this.ngTypeOperation = parameter.body.operation_type;
+						this.ngPlace = parameter.body.office;
+						this.ngFolio = parameter.body.sheet_number;
+						this.ngCodeBank = parameter.body.issuing_bank_key;
+						this.ngBankName = parameter.body.issuing_bank_name;
+						this.ngAccount = parameter.body.account_number;
+						this.ngKeyEntity = parameter.body.receiving_bank_key;
+						this.ngBankNameRecep =  parameter.body.receiving_bank_name;
+						
+						this.isSuccess= false;
+						$(document).ready(function(){
+							$("#btnAuthorized").prop('disabled', false); 
+						});
+					} else {
+						this.isError= true;
+						this.errorMsj = result.resultDescription;
+						this.errorCode = result.resultCode;
+						$(document).ready(function(){
+							$("#btnAuthorized").prop('disabled', true); 
+						});
+					}
+				},error => {
+					this.isSuccess= false;
+					this.successrMsj = '';
+					this.successCode = '';
+					$(document).ready(function(){
+						$("#btnAuthorized").prop('disabled', true); 
+					});
+					this.isError= true;
+					this.errorCode = 'NOT-SRV';
+					this.errorMsj = 'Servicio no disponible';
+				}
+			);
+		}
+	}
+	/* */
 
 	clearInputs(){
 		this.ngTypeOperation = '';

@@ -1,6 +1,6 @@
 export class GetParameter {
-    office: number;
-    description: string;
+    office: number; //ngPlace
+    description: string;//ngTxt
     timestamp: string;
     operation_type: number;//typeOperation
     sheet_number: number; //folio
@@ -8,6 +8,6 @@ export class GetParameter {
     account_number: string; //Account
     receiving_bank_key: string; //KeyEntity
     created_by: string; //user
-    issuing_bank_name: string; //BankName
+    issuing_bank_name: string; //ngBankName
     receiving_bank_name: string; //ngBankNameRecep
 }

@@ -333,9 +333,7 @@ export class ProcessFileService {
     'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
     'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
 
-    return this.http.get<GetParameter>(urlParameter, 
-                            { observe: 'response' }
-    );
+    return this.http.get<GetParameter>(urlParameter, { observe: 'response' });
   }
 
   actualizarParametro (parameter: Parameter) {
