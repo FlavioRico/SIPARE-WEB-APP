@@ -56,6 +56,12 @@ export class BalanceProcesarComponent implements OnInit {
   totalArchivoformated: any;
   totalAuxiliaresformated: any;
 
+  /*Para comporbar Back Office*/
+  parameterT1: boolean = true;
+  parameterT2: boolean = true;
+  backOfficeCompleted: boolean = true;
+  err: boolean = false;
+
   constructor(
     private render: Renderer2,
     private serviceBalance: BalanceServiceService,
@@ -66,37 +72,89 @@ export class BalanceProcesarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.spinner.show();
-    this.serviceBalance.retrieveBalancePROCESAR().subscribe(
+    this.processFile.getParameter('116027').subscribe(
+
       data => {
-        if(data === null){
-          this.spinner.hide();
-          this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
-        }else{
-          this.balance = data;
-          this.setT24Amounts(this.balance.t24_amounts);
-          this.setFileAmounts(this.balance.file_amounts);
-          this.format();
-          let saldosEmpity = this.setMessageValidacion(
-            this.balance.balanced,
-            this.balance.t24_amounts,
-            this.balance.status
-          );
-          if (!saldosEmpity){
-            this.resourceBalance.validationChangeIcons(
-              this.balance.comparisons,
-              this.iconCompACV, 
-              this.iconCompRCV,
-              this.iconCompTotal
+        let headers;
+        const keys = data.headers.keys();
+          headers = keys.map(key =>
+            `${key}: ${data.headers.get(key)}`
+        );
+        this.parameterT1 = (data.status == 200) ? true : false;
+        // console.log('El servicio me respondió y dejó parameterT1 = ', this.parameterT1);
+
+        this.processFile.getParameter('116018').subscribe(
+          data => {
+            let headers;
+            const keys = data.headers.keys();
+              headers = keys.map(key =>
+                `${key}: ${data.headers.get(key)}`
             );
+            this.parameterT2 = (data.status == 200) ? true : false;
+            this.backOfficeCompleted = (this.parameterT1 && this.parameterT2) ? true : false;
+            // console.log('El servicio me respondió y dejó parameterT2 = ', this.parameterT2);
+
+            this.sendRequestBalance(this.backOfficeCompleted);
+
+          }, error => {
+            this.parameterT1 = true;
+            this.parameterT2 = true;
+            this.backOfficeCompleted = false;
+            this.err = true;
+            alert(`Ocurrió un error en el servicio getParameter.`);
+            this.spinner.hide();
           }
-        }
-        this.spinner.hide();  
-      }, error => {
-        alert(`Error inesperado en los servicios. ${error.message}`);
-        this.spinner.hide();  
+        );
+
+      },error => {
+        this.parameterT1 = true;
+        this.parameterT2 = true;
+        this.err = true;
+        alert(`Ocurrió un error en el servicio getParameter.`);
+        this.spinner.hide();
       }
     );
+  }
+
+
+  sendRequestBalance (backOfficeCompleted: boolean) {
+    if (backOfficeCompleted){
+      this.spinner.show();
+      this.serviceBalance.retrieveBalancePROCESAR().subscribe(
+        data => {
+          if(data === null){
+            this.spinner.hide();
+            this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+          }else{
+            this.balance = data;
+            this.setT24Amounts(this.balance.t24_amounts);
+            this.setFileAmounts(this.balance.file_amounts);
+            this.format();
+            let saldosEmpity = this.setMessageValidacion(
+              this.balance.balanced,
+              this.balance.t24_amounts,
+              this.balance.status
+            );
+            if (!saldosEmpity){
+              this.resourceBalance.validationChangeIcons(
+                this.balance.comparisons,
+                this.iconCompACV, 
+                this.iconCompRCV,
+                this.iconCompTotal
+              );
+            }
+          }
+          this.spinner.hide();  
+        }, error => {
+          alert(`Error inesperado en los servicios. ${error.message}`);
+          this.spinner.hide();  
+        }
+      );
+    } else {
+      this.spinner.hide();
+    }
   }
 
   setMessageValidacion (balanced: boolean, t24Amounts: Summary, status: number) {
@@ -107,7 +165,6 @@ export class BalanceProcesarComponent implements OnInit {
       if(status == 203){
         this.aprovedTrue(); 
       }else{
-        console.log('this: ',status);
         
         this.createMessage('alert-warning', 'Advertencia. No hay archivos de T-24 del día actual.');
         this.render.removeClass(this.btnAutorizar.nativeElement, 'btn-outline-success');
@@ -192,12 +249,10 @@ export class BalanceProcesarComponent implements OnInit {
   }  
 
   aproveBalancePROCESAR(){
-    console.log('debug aqui',this.balance);
     let a: any;
     this.serviceBalance.aproveBalancePROCESAR(this.balance).subscribe(
       data => {
         a = data;
-        console.log('thissss ->',a);
       }
     );
   }

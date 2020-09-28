@@ -5,9 +5,21 @@
 	<div class="alert alert-primary title-opc" role="alert">
 		<strong>PROCESAR</strong> - Liquidación Back Office
 	</div>
-	<div class="alert alert-info alert-dismissible">
+	<!-- <div class="alert alert-info alert-dismissible">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<strong>Atención: </strong> datos en modo "Sólo lectura".
+	</div> -->
+	<div class="alert alert-info alert-dismissible" *ngIf="balaceApproved">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>{{ message_liquidation }}</strong>
+	</div>
+	<div class="alert alert-info alert-dismissible" *ngIf="!balaceApproved">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>{{ message_liquidation }}</strong>
+	</div>
+	<div class="alert alert-warning alert-dismissible" *ngIf="liquidationErr">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>{{ message_liquidation_err }}</strong>
 	</div>
 </div>
 <div class="alert alert-info alert-dismissible" *ngIf="isInfo" style="width: 80%; margin-left: 10%; margin-top: 1%;">
@@ -21,7 +33,7 @@
 				Tipo de operación:
 				<div class="form-group input-info">
 					<input name="typeOperation" id="place" [(ngModel)]="ngTypeOperation" type="text" class="form-control" 
-					placeholder="Tipo de operación" aria-describedby="basic-addon1" readonly="readonly">
+					placeholder="" aria-describedby="basic-addon1" readonly="readonly">
 				</div>
 			</div>
 			<div class="col-sm"></div>
@@ -32,14 +44,14 @@
 			<div class="col-sm" style="margin-top: 10px;">
 				Oficina:
 				<div class="form-group input-info">
-					<input type="text" name="place" id="place" [(ngModel)]="ngPlace" class="form-control" placeholder="Oficina"
+					<input type="text" name="place" id="place" [(ngModel)]="ngPlace" class="form-control" placeholder=""
 					aria-describedby="basic-addon1" readonly="readonly">
 				</div>
 			</div>
 			<div class="col-sm" style="margin-top: 10px;">
 				Folio:
 				<div class="form-group input-info">
-					<input type="text" name="folio" id="folio" placeholder="Folio" [(ngModel)]="ngFolio" class="form-control"
+					<input type="text" name="folio" id="folio" placeholder="" [(ngModel)]="ngFolio" class="form-control"
 					aria-describedby="basic-addon1" readonly="readonly">
 				</div>
 			</div>
@@ -47,7 +59,7 @@
 				Fecha Registro:
 				<div class="form-group input-info">
 					<input [(ngModel)]="ngDateRegistry" type="text" name="dateRegistry" id="dateRegistry"  class="form-control" type="text"
-					placeholder="Folio" aria-label="" aria-describedby="basic-addon1" readonly="readonly">
+					placeholder="" aria-label="" aria-describedby="basic-addon1" readonly="readonly">
 				</div>
 			</div>
 		</div>
@@ -62,21 +74,21 @@
 				</div>
 			</div>
 			<div class="col-sm">
-				<div class="col-sm banco">
+				<div class="banco">
 					Banco:
 					<div class="form-group input-info">
 						<input name="bankName" id="bankName" [(ngModel)]="ngBankName" type="text" class="form-control" 
-						placeholder="Banco" aria-label="" aria-describedby="basic-addon1" readonly="readonly"
+						placeholder="" aria-label="" aria-describedby="basic-addon1" readonly="readonly"
 						style="font-size: small;">
 					</div>
 				</div>
 			</div>
 			<div class="col-sm">
-				<div class="col-sm banco">
+				<div class="banco">
 					Cuenta:
 					<div class="form-group input-info">
 						<input type="text" name="account" id="account" [(ngModel)]="ngAccount" type="text" class="form-control"
-						placeholder="Cuenta" aria-label="" aria-describedby="basic-addon1" readonly="readonly">
+						placeholder="" aria-label="" aria-describedby="basic-addon1" readonly="readonly">
 					</div>
 				</div>
 			</div>
@@ -88,24 +100,24 @@
 			<div class="form-group input-info">
 				Clave:
 				<input type="text" name="keyEntity" id="keyEntity"  class="form-control" [(ngModel)]="ngKeyEntity"
-				type="text" class="form-control" placeholder="Clave" aria-describedby="currentName" readonly="readonly">
+				type="text" class="form-control" placeholder="" aria-describedby="currentName" readonly="readonly">
 			</div>
 		</div>
 		<div class="col-sm">
-			<div class="col-sm banco">
+			<div class="banco">
 				Nombre de la institución:
 				<div class="form-group input-info">
 					<input style="font-size: small;" type="text" name="bankNameRecep" id="bankNameRecep" [(ngModel)]="ngBankNameRecep"
-					class="form-control" readonly="readonly" placeholder="Banco" aria-label="" aria-describedby="basic-addon1">
+					class="form-control" readonly="readonly" placeholder="" aria-label="" aria-describedby="basic-addon1">
 				</div>
 			</div>
 		</div>
 		<div class="col-sm">
-			<div class="col-sm banco">
+			<div class="banco">
 				Fecha de recepción de aportaciones:
 				<div class="form-group input-info">
 					<input type="text" name="dateRep" id="dateRep" [(ngModel)]="ngDateRep" class="form-control"
-					readonly="readonly" placeholder="Fecha de recepción" aria-label="" aria-describedby="basic-addon1">
+					readonly="readonly" placeholder="" aria-label="" aria-describedby="basic-addon1">
 				</div>
 			</div>
 		</div>
@@ -117,24 +129,24 @@
 			<div class="form-group input-info">
 				Tipo de deposito IMSS Cuatro Ramos:
 				<input type="text" name="imms" id="imms"  class="form-control" [(ngModel)]="ngIMSS"
-				type="text" class="form-control" placeholder="IMSS" aria-describedby="currentName" readonly="readonly">
+				type="text" class="form-control" placeholder="" aria-describedby="currentName" readonly="readonly">
 			</div>
 		</div>
 		<div class="col-sm">
-			<div class="col-sm banco">
+			<div class="banco">
 				INFONAVIT - VIVIENDA:
 				<div class="form-group input-info">
 					<input type="text" name="viv" id="viv"  class="form-control" [(ngModel)]="ngViv"
-					type="text" class="form-control" placeholder="INFONAVIT - VIVIENDA" aria-describedby="currentName" readonly="readonly">
+					type="text" class="form-control" placeholder="" aria-describedby="currentName" readonly="readonly">
 				</div>
 			</div>
 		</div>
 		<div class="col-sm">
-			<div class="col-sm banco">
+			<div class="banco">
 				INFONAVIT - ACV:
 				<div class="form-group input-info">
 					<input type="text" name="acv" id="acv"  class="form-control" [(ngModel)]="ngAcv"
-					type="INFONAVIT - ACV" class="form-control" placeholder="IMSS" aria-describedby="currentName" readonly="readonly">
+					type="INFONAVIT - ACV" class="form-control" placeholder="" aria-describedby="currentName" readonly="readonly">
 				</div>
 			</div>
 		</div>
@@ -144,7 +156,7 @@
 			<div class="form-group input-info">
 				Total:
 				<input #texto name="total" id="total" [(ngModel)]="ngTotal" type="text" class="form-control" 
-				placeholder="Total" aria-describedby="currentName" readonly>
+				placeholder="" aria-describedby="currentName" readonly>
 			</div>
 		</div>
 		<div class="col-md"></div>
@@ -154,7 +166,7 @@
 			<div class="form-group input-info">
 				Texto:
 				<input #texto name="txt" id="txt" [(ngModel)]="ngTxt" type="text" class="form-control" 
-				placeholder="Texto" aria-describedby="currentName" readonly>
+				placeholder="" aria-describedby="currentName" readonly>
 			</div>
 		</div>
 	</div>

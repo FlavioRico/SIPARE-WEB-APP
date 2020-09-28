@@ -7,6 +7,7 @@ import { TypeTransaction } from '../../components/models/models-parameters/typeT
 
 import { Parameter } from '../../components/models/models-parameters/parameter';
 import { GetParameter } from '../../components/models/models-parameters/getParameter';
+import { Liquidation } from '../../components/models/models-backOffice/liquidation';
 
 @Injectable()
 export class ProcessFileService {
@@ -90,8 +91,6 @@ export class ProcessFileService {
   addParameter(ngTypeOperation : string, ngPlace : string, ngFolio : string, ngCodeBank : string,
         ngAccount : string,ngKeyEntity : string,ngTxt : string) : Observable<any>{
 
-    console.log('se recibe esto en ngTypeOperation => ',ngTypeOperation);
-
     var dto = {
       trxType : ngTypeOperation == '1' ? 'T+1' : 'T+2',
       typeOperation : ngTypeOperation,
@@ -102,9 +101,7 @@ export class ProcessFileService {
       codeBankRecep : ngKeyEntity,
       txt : ngTxt
     };
-    
-    console.log('Esto vamos a enviar al servicio POST =>' , dto);
-    
+        
     return this.http.post(environment.sipare_ms_processFile_url.concat(environment.addParameterBackOfficeUrl), JSON.stringify(dto), 
           {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
@@ -319,25 +316,26 @@ export class ProcessFileService {
   //this -> agregado
   
   createParameter (parameter: Parameter):Observable<HttpResponse<Parameter>> {
-    console.log('recibo', parameter);
-    
+        
     return this.http.post<any>(environment.addParameter, 
                                     parameter, 
                                     { observe: 'response' }
     );
+
   }
 
   getParameter (operationType: string) {
-    console.log('recibo operation type:', operationType);
+
     let urlParameter: string = (operationType == '116027') ? 
     'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
     'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
 
     return this.http.get<GetParameter>(urlParameter, { observe: 'response' });
+
   }
 
   actualizarParametro (parameter: Parameter) {
-    console.log('Nueva data del parameter: ', parameter);
+
     let urlUpdate: string = (parameter.operation_type == '116027') ? 
     'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
     'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
@@ -347,7 +345,17 @@ export class ProcessFileService {
       parameter, 
       { observe: 'response' }
     );
-    
+
+  }
+
+  getLiquidation () {
+
+    let url_Liquidation = 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate';
+    return this.http.get<Liquidation>(
+      url_Liquidation,
+      {observe: 'response'}
+    ); 
+
   }
   
 }

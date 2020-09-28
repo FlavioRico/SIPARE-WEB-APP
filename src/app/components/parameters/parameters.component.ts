@@ -428,37 +428,3 @@ export class ParametersComponent implements OnInit {
 		}
 	}
 }
-
-
-// this.processFile.addParameter(this.ngTypeOperation, this.ngPlace,this.ngFolio, this.ngCodeBank,
-// 	this.ngAccount, this.ngKeyEntity, this.ngTxt).subscribe(
-// 	result => {           
-// 		if(result.resultCode == msjscode.resultCodeOk){
-// 			this.isSuccess = true;
-// 			this.isError = false;
-// 			this.successCode = 'SUCCESS';
-// 			this.successrMsj = 'Datos agregados con exito';
-// 			this.clear();
-// 			this.renderButtons(false, true, false);
-// 			// console.log('Dejamos ngTypeOperation así después de agregar => ', this.ngTypeOperation);
-// 		}else if(result.resultCode == '1'){
-// 			if(result.resultDescription.includes('Could not commit Hibernate transaction')){
-// 				this.clear();
-// 				this.isError = true;
-// 				   this.errorCode = result.resultCode;
-// 				this.errorMsj = 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible';
-// 			} else {
-// 				this.clear();
-// 				this.isError = true;
-// 				   this.errorCode = result.resultCode;
-// 				this.errorMsj = result.resultDescription;
-// 			}
-// 			this.renderButtons(true, false, false);
-// 		}
-// 	}, error => {
-// 		this.isError = true;
-// 		   this.errorCode = error.resultCode;
-// 		this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
-// 		this.renderButtons(true, false, false);
-// 	}
-// );

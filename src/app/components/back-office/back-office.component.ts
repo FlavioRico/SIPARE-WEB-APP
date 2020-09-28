@@ -4,6 +4,7 @@ import { ProcessFileService } from  '../../services/process-file/process-file.se
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { msjscode } from '../../../environments/msjsAndCodes';
+import { Liquidation } from '../models/models-backOffice/liquidation';
 
 @Component({
   selector: 'app-back-office',
@@ -41,6 +42,12 @@ export class BackOfficeComponent implements OnInit {
 
 	/*agregado*/
 	public activateServiceProveedor: boolean = true;
+	public message: string = '';
+	public liquidation_flag: boolean = false;
+	public message_liquidation: string = '';
+	public balaceApproved: boolean = false;
+	public message_liquidation_err: string = '';
+	public liquidationErr: boolean = false;
 
   	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
 
@@ -55,17 +62,28 @@ export class BackOfficeComponent implements OnInit {
 							this.router.navigate(['/']);
 						}else{
 
-							let operationType = "116027";
-							this.processFile.getParameter(operationType).subscribe(
-								data =>{
+							this.processFile.getLiquidation().subscribe(
+								data => {
+									this.balaceApproved = false;
+									this.liquidationErr = false;
 									let headers;
 									const keys = data.headers.keys();
 										headers = keys.map(key =>
-											`${key}: ${data.headers.get(key)}`);
-									this.activateServiceProveedor = (data.status == 200) ? true: false;
-									this.serviceProveedor(data, this.activateServiceProveedor);
+											`${key}: ${data.headers.get(key)}`
+									);
+									if (data.status == 200)
+										this.loadDataLiquidation (data.body);
+
 								},error =>{
-									alert(`Error inesperado en los servicios ${error.resultCode}`);
+									this.balaceApproved = false;
+									this.liquidationErr = false;
+									if (error.status == 424)
+										this.message = 'Fallo en servicios del proveedor.';
+									else if (error.status == 428)
+										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada';
+									else if (error.status == 500)
+										this.message = 'Fallo insesperado en BD';
+									this.message_liquidation_err = this.message;								
 								}
 							);
 
@@ -76,8 +94,42 @@ export class BackOfficeComponent implements OnInit {
 		}
 	}
 	/*agregado*/
+
+	loadDataLiquidation (result: Liquidation){
+		this.isError= false;
+		this.ngDateRep = result.receiving_date;
+		this.ngIMSS = result.imss.toString();
+		this.ngViv = result.viv.toString();
+		this.ngAcv = result.acv.toString();
+		this.ngDateRegistry = result.registry_date;
+		this.ngTotal = result.total.toString();
+
+		this.ngTxt =  result.description;
+		this.ngTypeOperation = result.operation_type;
+		this.ngPlace = result.office;
+		this.ngFolio = result.sheet_number;
+		this.ngCodeBank = result.issuing_bank_key;
+		this.ngBankName = result.issuing_bank_name;
+		this.ngAccount = result.account_number;
+		this.ngKeyEntity = result.receiving_bank_key;
+		this.ngBankNameRecep =  result.receiving_bank_name;
+		
+		if (result.transaction_flag == 'S'){
+			this.message_liquidation = 'La transacción ya fue realizada.';
+			this.liquidation_flag = true;
+			$(document).ready(function(){
+				$("#btnAuthorized").prop('disabled', true); 
+			});
+		}else {
+			this.message_liquidation = 'La transacción aún no ha sido autorizada.';
+			this.liquidation_flag = false;
+			$(document).ready(function(){
+				$("#btnAuthorized").prop('disabled', false); 
+			});
+		}		
+	}
+
 	serviceProveedor (parameter, activateServiceProveedor) {
-		console.log('debug',parameter, activateServiceProveedor);
 		
 		if (activateServiceProveedor) { 
 			this.isError = false;

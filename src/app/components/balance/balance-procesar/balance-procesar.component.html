@@ -9,7 +9,9 @@
         {{ fechaCompleta }}
     </span>
 
-    <button type="button" class="btn btn-outline-success float-right" (click)="exportXLSConciliation()">Exportar a EXCEL</button>
+    <button *ngIf="backOfficeCompleted" type="button" class="btn btn-outline-success float-right"
+        (click)="exportXLSConciliation()">Exportar a EXCEL
+    </button>
 
     <div class="row title-short">
         <div class="col-12">
@@ -27,74 +29,93 @@
     <p style="font-size: 20px; color: white">Cargando...</p>
 </ngx-spinner>
 
-<div class="container"> <!--*ngIf="loadComplete"-->
-    <div class="row justify-content-between table-titles">
-        <div class="col-sm-3 title-table">Archivo</div>
-        <div class="col-sm-3 title-table">T24 Auxiliares</div>
-        <div class="col-sm-3 title-table">Comparación</div>
-    </div>
-
-    <div class="row justify-content-between table-data">
-        <div class="col-sm-3"><strong>{{ textRCV }}</strong>{{ RCVformated }}</div>
-        <div class="col-sm-3"><strong>{{ textT2RCV }}</strong>{{ T2RCVformated }}</div>
-        <div #contentIcon class="col-sm-3 table-titles">
-            <svg #iconVerifyRCV width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle  " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
-            </svg>
+<div class="content-balance" *ngIf="backOfficeCompleted">
+    <div class="container"> <!--*ngIf="loadComplete"-->
+        <div class="row justify-content-between table-titles">
+            <div class="col-sm-3 title-table">Archivo</div>
+            <div class="col-sm-3 title-table">T24 Auxiliares</div>
+            <div class="col-sm-3 title-table">Comparación</div>
+        </div>
+    
+        <div class="row justify-content-between table-data">
+            <div class="col-sm-3"><strong>{{ textRCV }}</strong>{{ RCVformated }}</div>
+            <div class="col-sm-3"><strong>{{ textT2RCV }}</strong>{{ T2RCVformated }}</div>
+            <div #contentIcon class="col-sm-3 table-titles">
+                <svg #iconVerifyRCV width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle  " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                </svg>
+            </div>
+        </div>
+    
+        <div class="row justify-content-between table-data">
+            <div class="col-sm-3"><strong>{{ textIMSSACV }}</strong>{{ IMSSACVformated }}</div>
+            <div class="col-sm-3"><strong>{{ textT1ACV }}</strong>{{ T1ACVformated }}</div>
+            <div class="col-sm-3 table-titles">
+                <svg #iconVerifyACV width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle  " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                </svg>
+            </div>
+        </div>
+    
+        <div class="row justify-content-between">
+            <div class="col-sm-3 dropdown-divider"></div>
+            <div class="col-sm-3 dropdown-divider"></div>
+            <div class="col-sm-3"></div>
+        </div>
+    
+        <div class="row justify-content-between table-data">
+            <div class="col-sm-3"><strong>{{ textTotal }}</strong>{{ totalArchivoformated }}</div>
+            <div class="col-sm-3"><strong>{{ textTotal }}</strong>{{ totalAuxiliaresformated }}</div>
+            <div class="col-sm-3 table-titles">
+                <svg #iconVerifyTotal width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle  " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                </svg>
+            </div>
         </div>
     </div>
-
-    <div class="row justify-content-between table-data">
-        <div class="col-sm-3"><strong>{{ textIMSSACV }}</strong>{{ IMSSACVformated }}</div>
-        <div class="col-sm-3"><strong>{{ textT1ACV }}</strong>{{ T1ACVformated }}</div>
-        <div class="col-sm-3 table-titles">
-            <svg #iconVerifyACV width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle  " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
-            </svg>
+    
+    <div class="container">
+        <div #msjValidacion class="alert menssage-to-user" role="alert"></div>
+        
+        <div class="button-autorizar">
+            <button id="btnAuthorized" #buttonValidacion (click)="sendFileToConnectDirect()" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
+                Autorizar
+            </button>
+            <!-- (click)="aproveBalancePROCESAR()" (click)="this.resourceBalance.authSucess(
+                btnAutorizar, messageValidacion)"  -->
         </div>
-    </div>
-
-    <div class="row justify-content-between">
-        <div class="col-sm-3 dropdown-divider"></div>
-        <div class="col-sm-3 dropdown-divider"></div>
-        <div class="col-sm-3"></div>
-    </div>
-
-    <div class="row justify-content-between table-data">
-        <div class="col-sm-3"><strong>{{ textTotal }}</strong>{{ totalArchivoformated }}</div>
-        <div class="col-sm-3"><strong>{{ textTotal }}</strong>{{ totalAuxiliaresformated }}</div>
-        <div class="col-sm-3 table-titles">
-            <svg #iconVerifyTotal width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle  " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
-            </svg>
+        <div class="alert alert-danger alert-dismissible" *ngIf="isError">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{errorCode}}</strong> - {{errorMsj}}.
+        </div>
+        <div class="alert alert-success alert-dismissible" *ngIf="isSuccess">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{successCode}}</strong> - {{successrMsj}}.
+        </div>
+        <div class="alert alert-info alert-dismissible" *ngIf="isInfo">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{infoCode}}</strong> - {{infoMsj}}.
         </div>
     </div>
 </div>
 
-<div class="container">
-    <div #msjValidacion class="alert menssage-to-user" role="alert"></div>
-    
-    <div class="button-autorizar">
-        <button id="btnAuthorized" #buttonValidacion (click)="sendFileToConnectDirect()" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
-            Autorizar
-        </button>
-        <!-- (click)="aproveBalancePROCESAR()" (click)="this.resourceBalance.authSucess(
-            btnAutorizar, messageValidacion)"  -->
-    </div>
-    <div class="alert alert-danger alert-dismissible" *ngIf="isError">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>{{errorCode}}</strong> - {{errorMsj}}.
-    </div>
-    <div class="alert alert-success alert-dismissible" *ngIf="isSuccess">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>{{successCode}}</strong> - {{successrMsj}}.
-    </div>
-    <div class="alert alert-info alert-dismissible" *ngIf="isInfo">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>{{infoCode}}</strong> - {{infoMsj}}.
+<div class="message container" *ngIf="!backOfficeCompleted">
+    <div class="alert alert-danger" role="alert">
+        <strong>Atención: </strong>Contenido de Balance PROCESAR <strong>no disponible</strong>.
+        Se requiere: 
+        <br><br>
+        <div class="116027" *ngIf="!parameterT1">
+            - Dar de alta los parametros Back Office <strong>116027</strong>.
+        </div>
+        <div class="116018" *ngIf="!parameterT2">
+            - Dar de alta los parametros Back Office <strong>116018</strong>.
+        </div>
+        <div class="116018" *ngIf="err">
+            Error inesperado en los servicios.
+        </div>
     </div>
 </div>
 
