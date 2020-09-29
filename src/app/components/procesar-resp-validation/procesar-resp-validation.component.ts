@@ -42,12 +42,17 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public ngBalanceTotal : string;
 	/*this agregado para funcionamiento*/
 	public p: number;
+	public globalResp: string;
+	public notAutorized: boolean;
 	/*termina*/
 
   constructor(public authServ : AuthenticationService, public processFile : ProcessFileService,
   	private router : Router) { }
 
   ngOnInit() {
+	this.globalResp = '1 Corrección ER.';
+	this.notAutorized = true;
+
   	this.isContentTableFull = false;
   	this.isContentTable = false;
   	this.tableListRegisterByCode = false;
@@ -119,7 +124,11 @@ export class ProcesarRespValidationComponent implements OnInit {
   		this.tableListRegisterByCode = false;
   	}
 
- 	updateRegistry(line, oid){
+ 	updateRegistry(line, oid, code: any){
+		console.log('debug function = ', code);
+		
+		this.notAutorized = (code == '01') ? false : true;
+
  		this.lineCap = line;
  		this.processFile.getContentDataT24ByResponseProcesar(oid).subscribe(
   			result => {           
@@ -135,7 +144,9 @@ export class ProcesarRespValidationComponent implements OnInit {
  					if(result.accountNumber == 'EFECTIVO')
  						this.inputAccountFlag = false;
  					else
- 						this.inputAccountFlag = true;
+						 this.inputAccountFlag = true;
+					console.log('debug', result);
+					
 		        }
 		    },error => {
 			    this.isError= true;
@@ -157,6 +168,7 @@ export class ProcesarRespValidationComponent implements OnInit {
  	}
 
  	updateConfirmRegistry(row, imss, rcv, viv, acv, total) {
+		//this agregar el nuevo campo
     	this.dataRowT24 = row;
     	console.log('RCV:', rcv);
     	this.dataRowT24.patronRegistry = this.patronRegistryInput;

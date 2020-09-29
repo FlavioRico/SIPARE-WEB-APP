@@ -35,7 +35,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let row of rows | paginate: { itemsPerPage: 9, currentPage: p }">
+			<tr class="pointer" *ngFor="let row of rows | paginate: { itemsPerPage: 9, currentPage: p }" (click)="listRegisterByCodeAndFileResponseProcesar(row.oid, row.clave);">
 				<td style="padding: 0rem; width: 120px; border-top: 0px;">
 					<div class="col-md-9" style="width: 120px;">
 						<p style="text-align: left; font-size: 13px; margin-left: 10px;width: 135px;">
@@ -45,8 +45,8 @@
 				</td>
 				<td style="padding: 0rem; width: 54px; border-top: 0px;">
 					<div class="col-md-9" style="width: 54px;">
-						<p (click)="listRegisterByCodeAndFileResponseProcesar(row.oid, row.clave);" style="text-align: left; font-size: 12px; margin-left: 10px;width: 135px;">
-							<b class="pointer">{{row.clave}}</b>
+						<p style="text-align: left; font-size: 12px; margin-left: 10px;width: 135px;">
+							<b>{{row.clave}}</b>
 						</p>
 					</div>
 				</td>
@@ -125,6 +125,16 @@
 						</div>
 					</div>
 				</th>
+				<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(6)"-->
+					<div class="row" style="width: 165px;">
+						<div class="col-md-1">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
+						</div>
+						<div class="col-md-9">
+							<p style="text-align: center; font-size: 13px">Clave de estatus</p>
+						</div>
+					</div>
+				</th>
 				<th style="padding: 0.4em; vertical-align: baseline;"><!--this (click)="sortTable(1)"-->
 					<div class="row" style="width: 160px;">
 						<div class="col-md-1" style="margin-bottom: 20px">
@@ -181,16 +191,6 @@
 						</div>
 					</div>
 				</th>
-				<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(6)"-->
-					<div class="row" style="width: 165px;">
-						<div class="col-md-1">
-							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
-						</div>
-						<div class="col-md-9">
-							<p style="text-align: center; font-size: 13px">Clave de estatus</p>
-						</div>
-					</div>
-				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -200,9 +200,14 @@
 						<a> 
 							<i class="glyphicon glyphicon-align-justify" style="color: blue; left: -75px; top: 15px;"></i>
 						</a>
-						<p (click)="updateRegistry(fileContent.lineCapture, fileContent.oid);" style="text-align: left; font-family: andale mono; font-size: 13px; margin-left: 10px;width: 135px;">
+						<p (click)="updateRegistry(fileContent.lineCapture, fileContent.oid, fileContent.code);" style="text-align: left; font-family: andale mono; font-size: 13px; margin-left: 10px;width: 135px;">
 							<b class="pointer">{{fileContent.lineCapture}}</b>
 						</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px; background: beige;">
+					<div class="col-md-9" style="width: 155px;">
+						<p style="text-align: left; font-size: 13px;">{{fileContent.code}}</p>
 					</div>
 				</td>
 				<td style="padding: 0rem; width: 140px; border-top: 0px;">
@@ -232,11 +237,6 @@
 						<p style="text-align: left; font-size: 13px;">$ {{fileContent.amount}}</p>
 					</div>
 				</td>
-				<td style="padding: 0rem; width: 140px; border-top: 0px;">
-					<div class="col-md-9" style="width: 155px;">
-						<p style="text-align: left; font-size: 13px;">{{fileContent.code}}</p>
-					</div>
-				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -257,8 +257,31 @@
 		</div>
 	</div>
 </div>
+
 <div *ngIf="isContentTable" class="mce-container row" style="width: 100%; margin-left: 0.1%; margin-bottom: 2%; overflow-y: scroll; height: 550px;">
 	<div class="row" style="margin-left: 17%; margin-top: 8px;">
+
+		<div class="container">
+			<!-- <div class="row"> -->
+				<div class="col-sm">
+					<strong class="dropBox">Tipo de respuesta: </strong>
+					<div class="input-group" style="margin-top: 5px;">
+						<div class="input-group-prepend btn-dprdwn">
+							<button class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
+							<div class="opciones">
+								<button type="button" class="btn btn-light opc dropBox">1<br>Corrección ER</button>
+								<div class="dropdown-divider"></div>
+								<button type="button" class="btn btn-light opc dropBox">2<br>Confirmación positiva</button>
+								<div class="dropdown-divider"></div>
+								<button type="button" class="btn btn-light opc dropBox">3<br>Confirmación negativa ER</button>
+							</div>
+						</div>
+						<input [ngModel]="globalResp" class="dropBox" type="text" style="min-width: 20px;" readonly="readonly">
+					</div>
+				</div>
+			<!-- </div> -->
+		</div>
+
 		<div class="col-md-2.5">
 			Fecha y Hora de Recepci&oacute;n:
 			<input style="width: 175px; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
@@ -432,16 +455,17 @@
 <div *ngIf="isContentTable" class="row" style="margin-left: 10%; margin-top: 8px; width: 80%;">
 		<div class="col-md-4"></div>
 		<div class="col-md-4">
-			<button class="btn btn-success" (click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
+			<button *ngIf="notAutorized" class="btn btn-success" (click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
 			<font color=#fff>
 				Actualizar
 			</font>
-		</button>
-			<button class="btn btn-success" (click)="hideContentFileT24Resp();">
-			<font color=#fff>
-				Regresar
-			</font>
-		</button>
+			</button>
 		</div>
-		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<button class="btn btn-success" (click)="hideContentFileT24Resp();">
+				<font color=#fff>
+					Regresar
+				</font>
+			</button>
+		</div>
 </div>
