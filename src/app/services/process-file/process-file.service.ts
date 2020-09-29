@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { DataTypeOperation } from '../../components/models/models-parameters/dataTypeOperation';
-import { TypeTransaction } from '../../components/models/models-parameters/typeTransaction';
 
 import { Parameter } from '../../components/models/models-parameters/parameter';
 import { GetParameter } from '../../components/models/models-parameters/getParameter';
 import { Liquidation } from '../../components/models/models-backOffice/liquidation';
+import { DataCaptureLineUpdate } from '../../components/models/models-procesarRespValidation/DataCaptureLineUpdate';
+
 
 @Injectable()
 export class ProcessFileService {
@@ -356,6 +356,13 @@ export class ProcessFileService {
       {observe: 'response'}
     ); 
 
+  }
+
+  /*PROCESAR-RESP-VALIDATION*/
+  updateCaptureLine (data: DataCaptureLineUpdate) {
+    let url_captureLine = 'PENDIENTE';
+    return this.http.post<number>(url_captureLine, data, {observe: 'response'}
+    );
   }
   
 }
