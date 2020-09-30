@@ -1,0 +1,194 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+        <strong>PROCESAR</strong> - Parametros Back Office
+	</div>
+	<div class="alert alert-danger alert-dismissible" *ngIf="isError">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>{{errorCode}}</strong> - {{errorMsj}}.
+	  </div>
+	<div *ngIf="flagObservaciones" class="alert alert-warning title-opc" role="alert">
+		<div class="container">
+			<strong>Observaciones:</strong>
+			<p>Se debe dar de alta los parámetros de las transacciones <strong>116027</strong> y <strong>116018</strong></p>
+		</div>
+	</div>
+	<!--this, tipo de operacion-->
+	<div class="row">
+		<div class="col-sm">
+			<strong>Tipo de operación: </strong>
+			<div class="input-group" style="margin-top: 5px;">
+				<div class="input-group-prepend btn-dprdwn">
+					<button class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
+					<div class="opciones">
+						<button type="button" class="btn btn-light opc" (click)="seleccion(operation1)">{{ operation1 }}</button>
+						<div class="dropdown-divider"></div>
+						<button type="button" class="btn btn-light opc" (click)="seleccion(operation2)">{{ operation2 }}</button>
+					</div>
+				</div>
+				<input [ngModel]="globalOperation" type="text" style="min-width: 20px;" readonly="readonly">
+			</div>
+		</div>
+	</div>
+
+	<div class="row end-element"> <!--end-element al último elemento para realizar separación-->
+		<div class="col-sm" style="margin-top: 10px;">
+			Oficina:
+			<div class="form-group input-info">
+				<input #oficina name="place" id="place" [(ngModel)]="ngPlace" type="text" class="form-control" 
+				placeholder="Oficina" aria-describedby="basic-addon1" (keypress)="validatedInputOnlyNumbers($event)" required maxlength="3">
+			</div>
+		</div>
+		<div class="col-sm" style="margin-top: 10px;">
+			Folio:
+			<div class="form-group input-info">
+				<input #folio name="folio" id="folio" [(ngModel)]="ngFolio" type="text" class="form-control" 
+				placeholder="Folio" aria-label="" aria-describedby="basic-addon1" (keypress)="validatedInputOnlyNumbers($event)" required maxlength="3">
+			</div>
+		</div>
+		<div class="col-sm"></div>
+	</div>
+
+	<!--this, Institución ordernante-->
+	<strong>Institución ordenante:</strong>
+	<div class="row">
+		<div class="col-sm">
+			<div class="form-group input-info">
+				Clave:
+				<input #clave name="codeBank" id="codeBank" [(ngModel)]="ngCodeBank" 
+				type="text" class="form-control" placeholder="Clave ordenante" aria-describedby="currentName" 
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6">
+				<small id="currentName" class="form-text text-primary">Campo numérico</small>				
+			</div>
+		</div>
+		<div class="col-1 icon-search">
+			<button (click)="searchBankOrder()" type="button" class="btn btn-outline-success">
+				<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+					<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+				</svg>
+			</button>
+		</div>
+		<div class="col-sm">
+			<div class="col-sm banco">
+				Banco:
+				<div class="form-group input-info">
+					<input name="bankName" id="bankName" [(ngModel)]="ngBankName" type="text" class="form-control" 
+					placeholder="Banco" aria-label="" aria-describedby="basic-addon1" readonly="readonly"
+					style="font-size: small;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row end-element">
+		<div class="col-md">
+			<div class="form-group input-info">
+				Cuenta:
+				<input #cuenta name="account" id="account" [(ngModel)]="ngAccount" type="text"
+				class="form-control" placeholder="Cuenta" aria-describedby="currentName" 
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="16">
+				<!-- <input type="text" id="sessionNo" name="sessionNum"/>  -->
+				<!-- (keypress)="longitud()" -->
+				<!-- (keypress)="longitud()" -->
+				<small id="currentName" class="form-text text-primary">Campo numérico (16 posiciones)</small>				
+			</div>
+		</div>
+		<div class="col-md"></div>
+	</div>
+
+	<!--this, institución receptora-->
+	<strong>Institución receptora:</strong>
+	<div class="row">
+		<div class="col-sm">
+			<div class="form-group input-info">
+				Clave:
+				<input #claveReceptora name="keyEntity" id="keyEntity" [(ngModel)]="ngKeyEntity" 
+				type="text" class="form-control" placeholder="Clave" aria-describedby="currentName"
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6">
+				<small id="currentName" class="form-text text-primary">Campo numérico</small>				
+			</div>
+		</div>
+
+		<div class="col-1 icon-search">
+			<button (click)="searchBankReceptor()" type="button" class="btn btn-outline-success">
+				<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+					<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+				</svg>
+			</button>
+		</div>
+
+		<div class="col-sm">
+			<div class="col-sm banco">
+				Nombre de la institución:
+				<div class="form-group input-info">
+					<input name="bankNameRecep" id="bankNameRecep" [(ngModel)]="ngBankNameRecep" 
+					type="text" class="form-control" placeholder="Banco" aria-label="" aria-describedby="basic-addon1" readonly="readonly"
+					style="font-size: small;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row end-element">
+		<div class="col-lg">
+			<div class="form-group input-info">
+				Texto:
+				<input #texto name="txt" id="txt" [(ngModel)]="ngTxt" type="text" class="form-control" 
+				placeholder="Texto" aria-describedby="currentName" maxlength="120">
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- botones que pueden existir -->
+
+<!-- con data -->
+<div #buttEdit *ngIf="btnEditVisible" class="container">
+	<button (click)="renderForm(false)" (click)="editTrue()"
+	type="button" class="btn btn-outline-success float-right" 
+	style="margin-bottom: 15px;">
+		Editar
+	</button>
+</div>
+
+<div *ngIf="btnActualizarVisible" class="container" #buttActualizar>
+	<button (click)="updateParameter()" type="button" class="btn btn-outline-success float-right"  data-toggle="modal" 
+	style="margin-bottom: 15px;">
+		Actualizar
+	</button>
+</div>
+
+<!-- aqui podemos activar el modal -->
+<div *ngIf="flagObservaciones" class="container">
+	<button (click)="createParameter()" type="button" class="btn btn-outline-success float-right"  data-toggle="modal" 
+	data-target="#exampleModal" style="margin-bottom: 15px;">
+		Agregar
+	</button>
+</div>
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false"> 
+	<div class="modal-dialog">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Atención.</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="alert alert-danger" role="alert" *ngIf="isError">
+				<strong>{{errorCode}}</strong> - {{errorMsj}}.
+			</div>
+
+			<div class="alert alert-success alert-dismissible" *ngIf="isSuccess">
+				<button type="button" class="close" data-dismiss="alert"></button>
+				<strong>{{successCode}}</strong> - {{successrMsj}}.
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button (click)="refresh()" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+		</div>
+		</div>
+	</div>
+</div>

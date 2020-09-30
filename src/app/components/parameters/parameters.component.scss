@@ -1,0 +1,76 @@
+.opciones {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+  
+.btn-dprdwn:hover .opciones {
+    display: block;
+}
+
+.opc {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &::before{
+        content: "";
+        display: block;
+        width: 0;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        position: absolute;
+        transition: all .5s;
+    }
+}
+
+.opc:hover::before {
+    width: 100%;
+    background: red;
+}
+
+.btn-dprdwn {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    align-items: center;
+}
+
+.end-element {
+    margin-bottom: 25px;
+}
+
+.form-control {
+    border-radius: 0%;
+    border: 1px solid rgb(141, 135, 135);
+    border-top: none;
+    border-right: none;
+    border-left: none;
+}
+
+.form-control {
+    border-radius: 0%;
+    border: 1px solid rgb(141, 135, 135);
+    border-top: none;
+    border-right: none;
+    border-left: none;
+}
+
+.icon-search {
+    text-align: center;
+    align-items: center;
+    display: flex;
+}
+
+.banco {
+    padding-left: 0;
+}
+
+.end-element {
+    margin-bottom: 25px;
+}

@@ -1,0 +1,42 @@
+input[type=text] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	height: 30px;
+	width: 400px;
+	background: #f7f7f7;
+	color: #969696;
+	margin-top: 36px;
+	/* 	margin: 30px auto; */
+}
+
+.bar {
+	background: #eaf1f9;
+	margin-top: 3%;
+	margin-left: 10%;
+	margin-right: 10%;
+	width: 80%;
+}
+
+.barranombre {
+	background: #eaf1f9;
+	width: 80%;
+}
+
+.tbody-scroll {
+	height: 470px;
+	display: inline-block;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+.thead-tbody-display { 
+	display: block; 
+}
+
+.tbody-class {
+	width: 153%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

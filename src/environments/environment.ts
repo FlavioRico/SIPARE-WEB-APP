@@ -1,16 +1,56 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
+// The file contents for the current environment will overwrite these during build.
+// The build system defaults to the dev environment which uses `environment.ts`, but if you do
+// `ng build --env=prod` then `environment.prod.ts` will be used instead.
+// The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  contentType : 'Content-Type',
+  appJson : 'application/json',
+  //sipare_ms_processFile_url : 'http://192.168.0.249:8083/sipareMSProcessFileApp/multiva/sipare/',
+  //sipare_ms_authenticate_url : 'http://192.168.0.249:8081/sipareMSAuthenticationApp/multiva/sipare/',
+  sipare_ms_processFile_url : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
+  sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
+  sipare_ms_authenticate_url : 'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/',
+  sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
+  sipare_api : 'http://127.0.0.1:8765/api/v1/sipare/',
+  //sipare_ms_processFile_url : 'http://10.160.81.68:8083/sipareMSProcessFileApp/multiva/sipare/',
+  //sipare_ms_authenticate_url : 'http://10.160.81.68:8081/sipareMSAuthenticationApp/multiva/sipare/',
+  //add
+  addParameter: 'http://10.160.188.123:8765/sipare-procesar-parameters/parameters',
+  genetateListAllFilesUrl : 'genetateListAllFiles',
+  genetateListAllFilesByDateRangeUrl : 'generateListAllFilesByDateRange',
+  genetateListXlsUrl : 'genetateListXls',
+  genetateListAllFilesToT24Url : 'genetateListAllFilesToT24',
+  genetateListAllFilesToT2ByDateRange4Url : 'generateListAllFilesToT24ToRangeDate',
+  getContentByFileT24Url : 'getContentByFileT24',
+  getBalanceT24Url : 'getAccountBalanceT24',
+  loginUrl : 'login',
+  logoutUrl : 'logout',
+  searchUserUrl : 'searchUser',
+  sendFileToConnectDirectUrl : 'generateFileToPROCESAR',
+  getListFilesToSendConnectDirectUrl : 'getContentByFileToSendProcesar',
+  getContentFileToSendConnectDirectUrl : 'getContentFileToSendProcesar',
+  searchFileToSendCdUrl : 'searchFileToSendCd',
+  filesToSendCdUrl : 'filesToSendCd',
+  getRespProcesarUrl : 'getContentDataFileT24WithRespProcesar',
+  getLastFileRespToProcesarUrl : 'getLastFileRespToProcesar',
+  getDataByLineCaptureByRespProcesarUrl : 'getDataByLineCaptureByRespProcesar',
+  updateRegistryRespUrl : 'updateRegistryResp',
+  genetateListXLSConciliationUrl : 'generateXLSConciliation',
+  searchFileToValidUrl : 'searchFileToValid',
+  sendValidatedFileToPROCESAR : 'sendValidatedFile',
+  getContentFileEditUrl : 'getContentFile',
+  editFiletUrl : 'editFile',
+  validTwoFileUrl : 'validatedEditFile',
+  addParameterBackOfficeUrl : 'addParametersBackOffice',
+  getBankByCodeUrl : 'getBankByCode',
+  getParameterByTypeTransactionURL : 'getParameterByTypeTransaction',
+  paymentTransactionAndSendNotificationURL : 'paymentTransactionAndSendNotification',
+  listTrxsFailedURL : 'getListTrxsFailed',
+  trxReProcessUrl : 'paymentTransactionAndSendNotificationReProcess',
+  trxReProcessProgrammedUrl : 'getUpdateDateProgrammedTrxsFailed',
+  /* SIPARE REST API*/
+  generateSummaryReportByDate : 'conciliation/daily/summaries',
+  generateSummaryReportByMonth : 'conciliation/monthly/summaries',
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

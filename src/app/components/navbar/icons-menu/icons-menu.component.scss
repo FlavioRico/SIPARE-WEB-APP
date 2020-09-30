@@ -1,0 +1,32 @@
+.icons-user { 
+    text-align: center;
+}
+
+.dependencia {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    &::before{
+        content: "";
+        display: block;
+        width: 0;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        position: absolute;
+        transition: all .5s;
+    }
+}
+
+.dependencia:hover::before {
+    width: 100%;
+    background: red;
+}
+
+// .dependencia:hover{
+//     border-bottom: 1px solid red;
+// }
+
+.navbar-text {
+    padding: 10px;
+}
