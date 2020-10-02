@@ -269,11 +269,11 @@
 						<div class="input-group-prepend btn-dprdwn">
 							<button class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
 							<div class="opciones">
-								<button type="button" class="btn btn-light opc dropBox">1<br>Corrección ER</button>
+								<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(1)">1<br>Corrección ER</button>
 								<div class="dropdown-divider"></div>
-								<button type="button" class="btn btn-light opc dropBox">2<br>Confirmación positiva</button>
+								<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(2)">2<br>Confirmación positiva</button>
 								<div class="dropdown-divider"></div>
-								<button type="button" class="btn btn-light opc dropBox">3<br>Confirmación negativa ER</button>
+								<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(3)">3<br>Confirmación negativa ER</button>
 							</div>
 						</div>
 						<input [ngModel]="globalResp" class="dropBox" type="text" style="min-width: 20px;" readonly="readonly">
@@ -456,6 +456,7 @@
 		<div class="col-md-4"></div>
 		<div class="col-md-4">
 			<button *ngIf="notAutorized" class="btn btn-success" (click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
+			<!-- <button *ngIf="notAutorized" class="btn btn-success" (click)="updateTwo()"> -->
 			<font color=#fff>
 				Actualizar
 			</font>

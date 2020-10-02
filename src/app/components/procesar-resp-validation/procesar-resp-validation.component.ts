@@ -3,6 +3,8 @@ import { ProcessFileService } from  '../../services/process-file/process-file.se
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import * as $ from 'jquery';
+import { DataCaptureLineUpdate } from '../models/models-procesarRespValidation/DataCaptureLineUpdate';
+import { LineCap } from '../models/models-procesarRespValidation/lineCap';
 
 @Component({
   selector: 'app-procesar-resp-validation',
@@ -43,14 +45,17 @@ export class ProcesarRespValidationComponent implements OnInit {
 	/*this agregado para funcionamiento*/
 	public p: number;
 	public globalResp: string;
+	public responseType: number;
 	public notAutorized: boolean;
+	public dataCaptureLine: DataCaptureLineUpdate = new DataCaptureLineUpdate();
+	public capLine: LineCap = new LineCap();
 	/*termina*/
 
   constructor(public authServ : AuthenticationService, public processFile : ProcessFileService,
   	private router : Router) { }
 
   ngOnInit() {
-	this.globalResp = '1 Corrección ER.';
+	this.globalResp = '1';
 	this.notAutorized = true;
 
   	this.isContentTableFull = false;
@@ -103,6 +108,8 @@ export class ProcesarRespValidationComponent implements OnInit {
 				        this.errorCode = 'Emp-001';
 				        this.errorMsj = 'Sin registros por el momento.';
 		        	} else {
+						console.log('Debug', result.listContent);
+						
 		        		this.isError = false;
 		        		this.tableListRegisterByCode = true;
 		        		this.tableStatusProcesar = false;
@@ -125,11 +132,12 @@ export class ProcesarRespValidationComponent implements OnInit {
   	}
 
  	updateRegistry(line, oid, code: any){
-		console.log('debug function = ', code);
+		console.log('debug function = ', line);
 		
 		this.notAutorized = (code == '01') ? false : true;
 
- 		this.lineCap = line;
+		this.lineCap = line;
+		this.capLine.capture_line = line; 
  		this.processFile.getContentDataT24ByResponseProcesar(oid).subscribe(
   			result => {           
         		if(result.resultCode == 0){
@@ -144,9 +152,26 @@ export class ProcesarRespValidationComponent implements OnInit {
  					if(result.accountNumber == 'EFECTIVO')
  						this.inputAccountFlag = false;
  					else
-						 this.inputAccountFlag = true;
+						this.inputAccountFlag = true;
 					console.log('debug', result);
-					
+
+					this.processFile.getDataComplementary(this.capLine).subscribe(
+						data => {
+							console.log('Service Angel complementary = ', data);
+							let headers;
+							const keys = data.headers.keys();
+							headers = keys.map(key =>
+								`${key}: ${data.headers.get(key)}`);
+							this.globalResp = data.body.responseType.toString();
+							this.dataCaptureLine.response_type = data.body.responseType;
+							console.log('dejaré response this.dataCaptureLine.response_type en', 
+							this.dataCaptureLine.response_type, 'en la otra hay', data.body.responseType);
+							
+						}, error => {
+							alert(`Ocurrió un error en el servicio getDataComplementary ${error}`);
+						}
+					);
+
 		        }
 		    },error => {
 			    this.isError= true;
@@ -182,7 +207,10 @@ export class ProcesarRespValidationComponent implements OnInit {
         		if(result.resultCode == 0){
 	        		this.tableListRegisterByCode = false;
  					this.isContentTable = false;
- 					this.tableStatusProcesar = true;
+					this.tableStatusProcesar = true;
+
+					this.updateTwo();
+
 		        }
 		    },error => {
 			    this.isError= true;
@@ -190,6 +218,28 @@ export class ProcesarRespValidationComponent implements OnInit {
 				this.errorMsj = error.resultDescription;
 		    }
     	);
-  	}
+	}
+	  
+		/*this Agregado */
+	seleccion(operationType: number){
+		this.globalResp = operationType.toString();
+		this.responseType = operationType;
+	}
+
+	updateTwo () {
+		// this.dataCaptureLine.response_type = this.globalResp;
+		this.dataCaptureLine.capture_line = this.lineCap;
+		console.log("vamos a enviar esto => ",this.dataCaptureLine);
+		
+		this.processFile.updateCaptureLine(this.dataCaptureLine).subscribe(
+			dta => {
+				if (dta.body.response == 0) alert('Actualización realizada con exito');
+				console.log(dta,'aqui cumplo');
+				
+			}, err => {
+				alert(`Error en servicio de actualización updateCaptureLine`);
+			}
+		);
+	}
 
 }
