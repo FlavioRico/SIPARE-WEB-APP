@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { BalanceConsar } from 'src/app/components/models/models-balance/balance-consar';
 import { BalanceProcesar } from 'src/app/components/models/models-balance/balance-procesar';
 import { Observable } from 'rxjs';
+import { Liquidation } from 'src/app/components/models/models-backOffice/liquidation';
 
 @Injectable({
   providedIn: 'root'
@@ -22,24 +23,52 @@ export class BalanceServiceService {
 
 
   retrieveBalanceCONSAR(){
+
     return this.http.get<BalanceConsar>(this.urlBalanceCONSAR);
+
   }
 
   retrieveBalancePROCESAR(){
+
     return this.http.get<BalanceProcesar>(this.urlBalancePROCESAR);
+
   }
 
   configUrl = 'assets/config.json';
   getConfigResponse(): Observable<HttpResponse<any>> {
+
     return this.http.get(
-      this.configUrl, { observe: 'response' });
+      this.configUrl, { observe: 'response' }
+    );
+
   }
 
   aproveBalancePROCESAR(balance: BalanceProcesar){
+
     balance.status = 203;
     balance.approved_by = localStorage.getItem('username');
-    console.log(balance);
     return this.http.put<BalanceProcesar>(this.urlAproveBalancePROCESAR, balance);
+
+  }
+
+  createLiquidation () {
+
+    let url_Liquidation = 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations';
+
+    return this.http.post<any>(url_Liquidation, 
+      { observe: 'response' }
+    );
+  
+  }
+
+  createPreNotice () {
+
+    let url_PreNotice = 'http://10.160.188.123:8765/sipare-procesar-pre-notice/preaviso';
+
+    return this.http.post<any>(url_PreNotice, 
+      { observe: 'response' }
+    );
+  
   }
 
 }

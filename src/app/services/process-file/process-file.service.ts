@@ -7,6 +7,9 @@ import { Parameter } from '../../components/models/models-parameters/parameter';
 import { GetParameter } from '../../components/models/models-parameters/getParameter';
 import { Liquidation } from '../../components/models/models-backOffice/liquidation';
 import { DataCaptureLineUpdate } from '../../components/models/models-procesarRespValidation/DataCaptureLineUpdate';
+import { DataComplementary } from '../../components/models/models-procesarRespValidation/dataComplementary';
+import { LineCap } from '../../components/models/models-procesarRespValidation/lineCap';
+import { LiquidationPreAviso } from 'src/app/components/models/models-preaviso/liquidationPreAviso';
 
 
 @Injectable()
@@ -296,6 +299,8 @@ export class ProcessFileService {
       code : status,
       oid : oid
     };
+    console.log(dto);
+    
     return this.http.post(environment.sipare_ms_processFile_url.concat(environment.getRespProcesarUrl), 
       JSON.stringify(dto), {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
@@ -316,10 +321,10 @@ export class ProcessFileService {
   //this -> agregado
   
   createParameter (parameter: Parameter):Observable<HttpResponse<Parameter>> {
-        
+
     return this.http.post<any>(environment.addParameter, 
-                                    parameter, 
-                                    { observe: 'response' }
+                              parameter, 
+                              { observe: 'response' }
     );
 
   }
@@ -357,12 +362,33 @@ export class ProcessFileService {
     ); 
 
   }
+  
+  getPreNotice () {
+
+    let url_Liquidation = 'http://10.160.188.123:8765/sipare-procesar-prenotice/prenotice/findByCurrentDate';
+    return this.http.get<LiquidationPreAviso>(
+      url_Liquidation,
+      {observe: 'response'}
+    ); 
+
+  }
 
   /*PROCESAR-RESP-VALIDATION*/
+  getDataComplementary (capLine: LineCap) {
+
+    let url_Data = 'http://localhost:9027/multiva/sipare/responseTypeCaptureLine';
+    return this.http.post<DataComplementary>(url_Data, capLine, {observe: 'response'});
+
+  }
+
   updateCaptureLine (data: DataCaptureLineUpdate) {
-    let url_captureLine = 'PENDIENTE';
-    return this.http.post<number>(url_captureLine, data, {observe: 'response'}
+
+    console.log("recibo esto => ", data.response_type, data.capture_line);
+    
+    let url_captureLine = 'http://localhost:9027/multiva/sipare/responseTypeCaptureLine';
+    return this.http.put<any>(url_captureLine, data, {observe: 'response'}
     );
+
   }
   
 }

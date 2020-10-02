@@ -101,8 +101,8 @@ export class ParametersComponent implements OnInit {
 			data =>{
 				let headers;
 				const keys = data.headers.keys();
-					headers = keys.map(key =>
-						`${key}: ${data.headers.get(key)}`);
+				headers = keys.map(key =>
+					`${key}: ${data.headers.get(key)}`);
 				this.loadNewData(data);
 			},error =>{
 				alert(`Error inesperado en los servicios ${error.resultCode}`);
@@ -158,7 +158,9 @@ export class ParametersComponent implements OnInit {
 
 	refresh(){
 		this.seleccion(this.typeOperationForService.typeTransaction);
-		if (this.globalOperation == 'T+1' || this.globalOperation == '1') this.globalOperation = '116027';
+		console.log('global operation en => ', this.globalOperation);
+		
+		if (this.globalOperation == 'T+1' || this.globalOperation == '1' || this.globalOperation == '116027') this.globalOperation = '116027';
 		else this.globalOperation = '116018';
 		this.isSuccess = false;
 	}
@@ -275,6 +277,7 @@ export class ParametersComponent implements OnInit {
 			this.parameter.receiving_bank_key = this.ngKeyEntity;
 			this.parameter.description = this.ngTxt;
 			this.parameter.created_by = nameUser;
+
 			this.processFile.createParameter(this.parameter).subscribe(
 				resp => {
 					const keys = resp.headers.keys();
@@ -302,7 +305,8 @@ export class ParametersComponent implements OnInit {
 					this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
 					this.renderButtons(true, false, false);
 				}
-			)
+			);
+
 		} else {
 			this.isError = true;
 			this.errorCode = 'Error ';

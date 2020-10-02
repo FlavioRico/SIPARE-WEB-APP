@@ -52,15 +52,15 @@ export class BackOfficeComponent implements OnInit {
   	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
 
   	ngOnInit() {
-	  	// if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
-		// 		this.router.navigate(['/']);
-		// }else{
-			// this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
-				// result => {
-					// if(result.resultCode == 0){
-						// if(result.logged == 0){
-							// this.router.navigate(['/']);
-						// }else{
+	  	if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
+				this.router.navigate(['/']);
+		}else{
+			this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
+				result => {
+					if(result.resultCode == 0){
+						if(result.logged == 0){
+							this.router.navigate(['/']);
+						}else{
 
 							this.processFile.getLiquidation().subscribe(
 								data => {
@@ -90,11 +90,11 @@ export class BackOfficeComponent implements OnInit {
 								}
 							);
 
-			// 			}
-			// 		}
-			// 	}
-			// );
-		// }
+						}
+					}
+				}
+			);
+		}
 	}
 	/*agregado*/
 

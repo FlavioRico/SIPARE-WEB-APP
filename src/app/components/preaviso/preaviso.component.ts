@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { msjscode } from '../../../environments/msjsAndCodes';
 import * as $ from 'jquery';
 
+import { LiquidationPreAviso } from '../models/models-preaviso/liquidationPreAviso';
+
 @Component({
   selector: 'app-preaviso',
   templateUrl: './preaviso.component.html',
@@ -32,6 +34,14 @@ export class PreavisoComponent implements OnInit {
 	public isSuccess : boolean;
 	public parameters : any;
 
+	/*agregado */
+	public message: string = '';
+	public liquidation_flag: boolean = false;
+	public message_liquidation: string = '';
+	public balaceApproved: boolean = false;
+	public message_liquidation_err: string = '';
+	public liquidationErr: boolean = false;
+
 	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
 
 	ngOnInit() {
@@ -44,7 +54,116 @@ export class PreavisoComponent implements OnInit {
 						if(result.logged == 0){
 							this.router.navigate(['/']);
 						}else{
-							this.isError = false;
+							
+							this.processFile.getPreNotice().subscribe(
+								data => {
+									this.balaceApproved = false;
+									this.liquidationErr = false;
+									let headers;
+									const keys = data.headers.keys();
+										headers = keys.map(key =>
+											`${key}: ${data.headers.get(key)}`
+									);
+									if (data.status == 200)
+										this.loadDataPreNotice (data.body);
+
+								}, error => {
+									this.balaceApproved = false;
+									this.liquidationErr = true;
+									if (error.status == 424)
+										this.message = 'Fallo en servicios del proveedor.';
+									else if (error.status == 428)
+										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada';
+									else if (error.status == 500)
+										this.message = 'Fallo insesperado en BD';
+									else 
+										alert('Error inesperado');
+									this.message_liquidation_err = this.message;
+								}
+							);
+
+						}
+					}
+				}
+			);
+		}
+	}
+
+	loadDataPreNotice (result: LiquidationPreAviso){
+		/*
+		this.ngTypeOperation = result.resp.typeOperation;
+		this.ngPlace = result.resp.place;
+		this.ngFolio = result.resp.folio;
+		this.ngDateRegistry = result.resp.dateRegistrty;
+		this.ngCodeBank = result.resp.bankCode;
+		this.ngBankName = result.resp.orderingInstitution;
+		this.ngAccount = result.resp.account;
+		this.ngKeyEntity = result.resp.receivingEntity;
+		this.ngBankNameRecep = result.resp.receivingInstitution;
+		this.ngDateRep = result.resp.receivingDate;
+		this.ngRcv = result.resp.rcv;
+		this.ngTxt = result.resp.text;
+		*/
+
+		this.isError= false;
+
+		this.ngDateRep = result.receiving_date;
+		this.ngRcv = result.rcv.toString(); //ACV
+		this.ngDateRegistry = result.registry_date;
+
+		this.ngTxt =  result.description;
+		this.ngTypeOperation = result.operation_type;
+		this.ngPlace = result.office;
+		this.ngFolio = result.sheet_number;
+		this.ngCodeBank = result.issuing_bank_key;
+		this.ngBankName = result.issuing_bank_name;
+		this.ngAccount = result.account_number;
+		this.ngKeyEntity = result.receiving_bank_key;
+		this.ngBankNameRecep =  result.receiving_bank_name;
+		
+		if (result.transaction_flag == 'S'){
+			this.message_liquidation = 'La transacción ya fue realizada.';
+			this.liquidation_flag = true;
+			$(document).ready(function(){
+				$("#btnAuthorized").prop('disabled', true); 
+			});
+		}else {
+			this.message_liquidation = 'La transacción aún no ha sido autorizada.';
+			this.liquidation_flag = false;
+			$(document).ready(function(){
+				$("#btnAuthorized").prop('disabled', false); 
+			});
+		}		
+	}
+
+	clearInputs(){
+		this.ngTypeOperation = '';
+		this.ngPlace = '';
+		this.ngFolio = '';
+		this.ngDateRegistry = '';
+		this.ngCodeBank = '';
+		this.ngBankName = '';
+		this.ngAccount = '';
+		this.ngKeyEntity = '';
+		this.ngBankNameRecep = '';
+		this.ngDateRep = '';
+		this.ngRcv = '';
+		this.ngTxt = '';
+	}
+
+	paymentTransaction(){
+        this.isSuccess= true;
+        this.successrMsj = 'Transacción T+2 programada con exito';
+		this.successCode = 'SUCCESS';
+		this.clearInputs();   
+  	}
+
+}
+
+
+/*
+
+this.isError = false;
 							this.isSuccess= false;
 							this.processFile.getDataTransactionT2().subscribe(
 								result => {           
@@ -87,33 +206,5 @@ export class PreavisoComponent implements OnInit {
 									});
 							    }
 							);
-						}
-					}
-				}
-			);
-		}
-	}
 
-	clearInputs(){
-		this.ngTypeOperation = '';
-		this.ngPlace = '';
-		this.ngFolio = '';
-		this.ngDateRegistry = '';
-		this.ngCodeBank = '';
-		this.ngBankName = '';
-		this.ngAccount = '';
-		this.ngKeyEntity = '';
-		this.ngBankNameRecep = '';
-		this.ngDateRep = '';
-		this.ngRcv = '';
-		this.ngTxt = '';
-	}
-
-	paymentTransaction(){
-        this.isSuccess= true;
-        this.successrMsj = 'Transacción T+2 programada con exito';
-		this.successCode = 'SUCCESS';
-		this.clearInputs();   
-  	}
-
-}
+*/
