@@ -52,18 +52,19 @@ export class BackOfficeComponent implements OnInit {
   	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
 
   	ngOnInit() {
-	  	if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
-				this.router.navigate(['/']);
-		}else{
-			this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
-				result => {
-					if(result.resultCode == 0){
-						if(result.logged == 0){
-							this.router.navigate(['/']);
-						}else{
+	  	// if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
+		// 		this.router.navigate(['/']);
+		// }else{
+			// this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
+				// result => {
+					// if(result.resultCode == 0){
+						// if(result.logged == 0){
+							// this.router.navigate(['/']);
+						// }else{
 
 							this.processFile.getLiquidation().subscribe(
 								data => {
+									
 									this.balaceApproved = false;
 									this.liquidationErr = false;
 									let headers;
@@ -76,22 +77,24 @@ export class BackOfficeComponent implements OnInit {
 
 								},error =>{
 									this.balaceApproved = false;
-									this.liquidationErr = false;
+									this.liquidationErr = true;
 									if (error.status == 424)
 										this.message = 'Fallo en servicios del proveedor.';
 									else if (error.status == 428)
 										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada';
 									else if (error.status == 500)
 										this.message = 'Fallo insesperado en BD';
+									else 
+										alert('Error inesperado');
 									this.message_liquidation_err = this.message;								
 								}
 							);
 
-						}
-					}
-				}
-			);
-		}
+			// 			}
+			// 		}
+			// 	}
+			// );
+		// }
 	}
 	/*agregado*/
 

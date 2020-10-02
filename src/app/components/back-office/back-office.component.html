@@ -9,13 +9,15 @@
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<strong>Atención: </strong> datos en modo "Sólo lectura".
 	</div> -->
-	<div class="alert alert-info alert-dismissible" *ngIf="balaceApproved">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ message_liquidation }}</strong>
-	</div>
-	<div class="alert alert-info alert-dismissible" *ngIf="!balaceApproved">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ message_liquidation }}</strong>
+	<div *ngIf="!liquidationErr">
+		<div class="alert alert-info alert-dismissible" *ngIf="balaceApproved">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>{{ message_liquidation }}</strong>
+		</div>
+		<div class="alert alert-info alert-dismissible" *ngIf="!balaceApproved">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>{{ message_liquidation }}</strong>
+		</div>
 	</div>
 	<div class="alert alert-warning alert-dismissible" *ngIf="liquidationErr">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -70,7 +72,7 @@
 				<div class="form-group input-info">
 					Clave:
 					<input type="text" name="codeBank" id="codeBank" [(ngModel)]="ngCodeBank" type="text" class="form-control"
-					placeholder="Clave ordenante" aria-describedby="currentName" readonly="readonly">
+					placeholder="" aria-describedby="currentName" readonly="readonly">
 				</div>
 			</div>
 			<div class="col-sm">
@@ -151,6 +153,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="row">
 		<div class="col-md">
 			<div class="form-group input-info">
@@ -161,6 +164,7 @@
 		</div>
 		<div class="col-md"></div>
 	</div>
+	
 	<div class="row end-element">
 		<div class="col-md">
 			<div class="form-group input-info">
