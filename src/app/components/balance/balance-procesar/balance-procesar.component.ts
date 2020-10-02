@@ -249,12 +249,41 @@ export class BalanceProcesarComponent implements OnInit {
   }  
 
   aproveBalancePROCESAR(){
+
     let a: any;
     this.serviceBalance.aproveBalancePROCESAR(this.balance).subscribe(
       data => {
-        a = data;
+        this.generateLiquidation(); 
+      }, error => {
+        alert(`Error inesperado en servicio balance procesar al aprobar. ${error}`);
       }
     );
+
+  }
+
+  generateLiquidation () {
+
+    this.serviceBalance.createLiquidation().subscribe(
+      data2 => {
+        // this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+        this.generatePreNotice();
+      },error =>{
+        alert(`Error inesperado en los servicios ${error.resultCode}`);
+      }
+    );
+    
+  }
+
+  generatePreNotice () {
+
+    this.serviceBalance.createPreNotice().subscribe(
+      data => {
+        this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+      },error =>{
+        alert(`Error inesperado en los servicios ${error.resultCode}`);
+      }
+    );
+    
   }
 
   /*Agregado proveedor*/
@@ -337,7 +366,8 @@ export class BalanceProcesarComponent implements OnInit {
 						this.isInfo = false;
 						this.infoMsj = '';
 						this.infoCode = '';
-						this.isProgressBar = false;
+            this.isProgressBar = false;
+            
 						this.processFile.sendFileToConnectDirect(localStorage.getItem('username')).subscribe(
 							result => {           
 				        		if(result.resultCode == msjscode.resultCodeOk){
@@ -351,8 +381,7 @@ export class BalanceProcesarComponent implements OnInit {
 							        	this.isError = false;
 							        	this.successCode = 'SUCCESS';
                         this.successrMsj = result.resultDescription;
-                        this.aproveBalancePROCESAR();
-                        this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+                        this.aproveBalancePROCESAR();                                                                       
 				        			}
 						        	this.successrMsj = result.resultDescription;
 						        	this.isProgressBar = false;
@@ -367,7 +396,8 @@ export class BalanceProcesarComponent implements OnInit {
 						       	this.errorCode = error.resultCode;
 						        this.errorMsj = error.resultDescription;
 						    }
-						);
+            );
+            
 					}
 				}
 			});
