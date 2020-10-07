@@ -4,19 +4,15 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
+  name: 'oldDev',
   production: false,
   contentType : 'Content-Type',
-  appJson : 'application/json',
-  //sipare_ms_processFile_url : 'http://192.168.0.249:8083/sipareMSProcessFileApp/multiva/sipare/',
-  //sipare_ms_authenticate_url : 'http://192.168.0.249:8081/sipareMSAuthenticationApp/multiva/sipare/',
+  appJson : 'application/json', //8083 UAT - 8085 DEV
   sipare_ms_processFile_url : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
-  sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
-  sipare_ms_authenticate_url : 'http://10.160.14.213:8085/sipareMSAuthenticationApp/multiva/sipare/',
-  // sipare_ms_authenticate_url : 'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/',
+  sipare_ms_authenticate_url : 'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/', //este no cambia en ninguno
   sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
+  sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
   sipare_api : 'http://127.0.0.1:8765/api/v1/sipare/',
-  //sipare_ms_processFile_url : 'http://10.160.81.68:8083/sipareMSProcessFileApp/multiva/sipare/',
-  //sipare_ms_authenticate_url : 'http://10.160.81.68:8081/sipareMSAuthenticationApp/multiva/sipare/',
   //add
   addParameter: 'http://10.160.188.123:8765/sipare-procesar-parameters/parameters',
   addParameterT2: 'http://10.160.188.123:8765/sipare-procesar-pre-notice/preaviso',
@@ -52,7 +48,23 @@ export const environment = {
   listTrxsFailedURL : 'getListTrxsFailed',
   trxReProcessUrl : 'paymentTransactionAndSendNotificationReProcess',
   trxReProcessProgrammedUrl : 'getUpdateDateProgrammedTrxsFailed',
+  
   /* SIPARE REST API*/
   generateSummaryReportByDate : 'conciliation/daily/summaries',
   generateSummaryReportByMonth : 'conciliation/monthly/summaries',
+
+  /*ADDs */
+  //8766 DEV 8765 UAT EN LO DE NOSOTROS 
+  urlBalanceCONSAR : 'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR',
+  urlBalancePROCESAR : 'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR',
+  urlAproveBalancePROCESAR : 'http://10.160.188.123:8765/sipare-approve-balance/balances',
+  url_Liquidation : 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations',
+  url_PreNotice : 'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices',
+  urlFileStatus : 'http://localhost:8765/sipare-consar-file-status/status',
+  urlFileWorklog : 'http://localhost:8765/sipare-consar-file-worklog/worklogs/',
+  urlParameter1: 'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027',
+  urlParameter2: 'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018',
+  url_Get_Liquidation : 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate',
+  url_Get_PreNotice : 'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices/findByCurrentDate',
+  url_Data_Complementary : 'http://localhost:9027/multiva/sipare/responseTypeCaptureLine'
 };
