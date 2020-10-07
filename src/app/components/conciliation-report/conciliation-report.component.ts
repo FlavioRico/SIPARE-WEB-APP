@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { SipareApiService } from '../../services/conciliation-report/sipare-api.service';
 
 @Component({
@@ -14,6 +14,10 @@ export class ConciliationReportComponent implements OnInit {
   public month : any;
   public monthType : any;
 
+  public fechaStart;
+  public fechaEnd;
+  public fechaDefault;
+
   /* Response values */ 
   public parameters : any;
   public rows : [any];
@@ -28,6 +32,16 @@ export class ConciliationReportComponent implements OnInit {
   constructor(public apiClient: SipareApiService) { }
 
   ngOnInit(): void {
+    let valueInicial: any = document.getElementById("fechaStart");
+    this.fechaStart = valueInicial.value;
+
+    let valueFinal: any = document.getElementById("fechaEnd");
+    this.fechaEnd = valueFinal.value;
+  }
+
+  clicked () {
+    console.log(`Debug = ${this.fechaStart} to ${this.fechaEnd}`);
+    
   }
 
   private buildDate(date : Date) : string {

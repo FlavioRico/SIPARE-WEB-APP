@@ -12,17 +12,33 @@
                 <div style="margin-left: 3%; margin-top: 2%;">
                     <app-date-range [(dateRange)]="dateRange"></app-date-range>
                 </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <input [ngModel]="fechaStart" #startDate type="date" id="fechaStart">
+        </div>
+        <div class="col-md">
+            <input [ngModel]="fechaEnd" #endDate type="date" id="fechaEnd">
+        </div>
+        <div class="col-md">
+            <!-- <button (click)="searchByDate();" type="button" class="btn btn-outline-primary">
+                Buscar mediante intervalo de fechas
+            </button> -->
+            <button (click)="clicked();" type="button" class="btn btn-outline-primary">
+                Test
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container">
                 <div style="margin-top: 2%; margin-left: 5px;">
                     <select [(ngModel)]="dateType" class="browser-default custom-select">
                         <option selected disabled>Tipo de fecha</option>
                         <option value="PROCESAR">Resultados PROCESAR</option>
                         <option value="PAYMENT">Pago de Líneas de Captura</option>
                     </select>
-                </div>
-                <div style="margin-top: 2%; margin-left: 5px;">
-                    <button (click)="searchByDate();" type="button" class="btn btn-outline-primary">
-                        Buscar
-                    </button>
                 </div>
     
                 <!-- Search by Month -->
