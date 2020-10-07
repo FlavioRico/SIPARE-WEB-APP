@@ -3,8 +3,8 @@ import { ProcessFileService } from  '../../services/process-file/process-file.se
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import * as $ from 'jquery';
-import { DataCaptureLineUpdate } from '../models/models-procesarRespValidation/DataCaptureLineUpdate';
 import { LineCap } from '../models/models-procesarRespValidation/lineCap';
+import { DataCaptureLineUpdate } from '../models/models-procesarRespValidation/dataCaptureLineUpdate';
 
 @Component({
   selector: 'app-procesar-resp-validation',

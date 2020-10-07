@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Parameter } from '../../components/models/models-parameters/parameter';
 import { GetParameter } from '../../components/models/models-parameters/getParameter';
 import { Liquidation } from '../../components/models/models-backOffice/liquidation';
-import { DataCaptureLineUpdate } from '../../components/models/models-procesarRespValidation/DataCaptureLineUpdate';
+import { DataCaptureLineUpdate } from '../../components/models/models-procesarRespValidation/dataCaptureLineUpdate';
 import { DataComplementary } from '../../components/models/models-procesarRespValidation/dataComplementary';
 import { LineCap } from '../../components/models/models-procesarRespValidation/lineCap';
 import { LiquidationPreAviso } from 'src/app/components/models/models-preaviso/liquidationPreAviso';
@@ -332,8 +332,7 @@ export class ProcessFileService {
   getParameter (operationType: string) {
 
     let urlParameter: string = (operationType == '116027') ? 
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
+    environment.urlParameter1 : environment.urlParameter2;
 
     return this.http.get<GetParameter>(urlParameter, { observe: 'response' });
 
@@ -342,8 +341,7 @@ export class ProcessFileService {
   actualizarParametro (parameter: Parameter) {
 
     let urlUpdate: string = (parameter.operation_type == '116027') ? 
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
+    environment.urlParameter1 : environment.urlParameter2;
 
     return this.http.put<GetParameter>(
       urlUpdate,
@@ -355,9 +353,8 @@ export class ProcessFileService {
 
   getLiquidation () {
 
-    let url_Liquidation = 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate';
     return this.http.get<Liquidation>(
-      url_Liquidation,
+      environment.url_Get_Liquidation,
       {observe: 'response'}
     ); 
 
@@ -365,9 +362,8 @@ export class ProcessFileService {
   
   getPreNotice () {
 
-    let url_Liquidation = 'http://10.160.188.123:8765/sipare-procesar-prenotice/prenotice/findByCurrentDate';
     return this.http.get<LiquidationPreAviso>(
-      url_Liquidation,
+      environment.url_Get_PreNotice,
       {observe: 'response'}
     ); 
 
@@ -376,17 +372,18 @@ export class ProcessFileService {
   /*PROCESAR-RESP-VALIDATION*/
   getDataComplementary (capLine: LineCap) {
 
-    let url_Data = 'http://localhost:9027/multiva/sipare/responseTypeCaptureLine';
-    return this.http.post<DataComplementary>(url_Data, capLine, {observe: 'response'});
+    return this.http.post<DataComplementary>(
+      environment.url_Data_Complementary, 
+      capLine, {observe: 'response'}
+    );
 
   }
 
   updateCaptureLine (data: DataCaptureLineUpdate) {
-
-    console.log("recibo esto => ", data.response_type, data.capture_line);
     
-    let url_captureLine = 'http://localhost:9027/multiva/sipare/responseTypeCaptureLine';
-    return this.http.put<any>(url_captureLine, data, {observe: 'response'}
+    return this.http.put<any>(
+      environment.url_Data_Complementary,
+      data, {observe: 'response'}
     );
 
   }
