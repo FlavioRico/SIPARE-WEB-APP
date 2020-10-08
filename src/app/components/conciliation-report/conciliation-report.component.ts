@@ -32,16 +32,24 @@ export class ConciliationReportComponent implements OnInit {
   constructor(public apiClient: SipareApiService) { }
 
   ngOnInit(): void {
+    this.fechaStart = this.fechaEnd = "0000-00-00";
+    console.log('this', this.fechaEnd, this.fechaStart);
+
     let valueInicial: any = document.getElementById("fechaStart");
     this.fechaStart = valueInicial.value;
 
     let valueFinal: any = document.getElementById("fechaEnd");
     this.fechaEnd = valueFinal.value;
+    
   }
 
   clicked () {
-    console.log(`Debug = ${this.fechaStart} to ${this.fechaEnd}`);
-    
+    var valueFinal = document.getElementById("fechaEnd");
+    console.log(`Debug = ${this.fechaStart} to ${this.fechaEnd} and ${valueFinal}`);
+    var dateControl: any = document.querySelector('input[type="date"]');
+    dateControl.value = '2017-06-01';
+    console.log(dateControl.value); // prints "2017-06-01"
+    console.log(dateControl.valueAsNumber); // prints 1496275200000, a JavaScript timestamp (ms)
   }
 
   private buildDate(date : Date) : string {
