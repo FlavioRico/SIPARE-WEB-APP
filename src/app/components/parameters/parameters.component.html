@@ -37,14 +37,16 @@
 			Oficina:
 			<div class="form-group input-info">
 				<input #oficina name="place" id="place" [(ngModel)]="ngPlace" type="text" class="form-control" 
-				placeholder="Oficina" aria-describedby="basic-addon1" (keypress)="validatedInputOnlyNumbers($event)" required maxlength="3">
+				placeholder="Oficina" aria-describedby="basic-addon1" required maxlength="15"
+				autocomplete="off" (paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()">
 			</div>
 		</div>
 		<div class="col-sm" style="margin-top: 10px;">
 			Folio:
 			<div class="form-group input-info">
 				<input #folio name="folio" id="folio" [(ngModel)]="ngFolio" type="text" class="form-control" 
-				placeholder="Folio" aria-label="" aria-describedby="basic-addon1" (keypress)="validatedInputOnlyNumbers($event)" required maxlength="3">
+				placeholder="Folio" aria-label="" aria-describedby="basic-addon1" (keypress)="validatedInputOnlyNumbers($event)"
+				required maxlength="15" autocomplete="off" (paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()">
 			</div>
 		</div>
 		<div class="col-sm"></div>
@@ -58,7 +60,8 @@
 				Clave:
 				<input #clave name="codeBank" id="codeBank" [(ngModel)]="ngCodeBank" 
 				type="text" class="form-control" placeholder="Clave ordenante" aria-describedby="currentName" 
-				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6">
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6" autocomplete="off"
+				(paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()">
 				<small id="currentName" class="form-text text-primary">Campo numérico</small>				
 			</div>
 		</div>
@@ -87,7 +90,8 @@
 				Cuenta:
 				<input #cuenta name="account" id="account" [(ngModel)]="ngAccount" type="text"
 				class="form-control" placeholder="Cuenta" aria-describedby="currentName" 
-				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="16">
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="16" autocomplete="off"
+				(paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()">
 				<!-- <input type="text" id="sessionNo" name="sessionNum"/>  -->
 				<!-- (keypress)="longitud()" -->
 				<!-- (keypress)="longitud()" -->
@@ -105,7 +109,8 @@
 				Clave:
 				<input #claveReceptora name="keyEntity" id="keyEntity" [(ngModel)]="ngKeyEntity" 
 				type="text" class="form-control" placeholder="Clave" aria-describedby="currentName"
-				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6">
+				(keypress)="validatedInputOnlyNumbers($event)" required maxlength="6" autocomplete="off"
+				(paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()">
 				<small id="currentName" class="form-text text-primary">Campo numérico</small>				
 			</div>
 		</div>
@@ -135,7 +140,8 @@
 			<div class="form-group input-info">
 				Texto:
 				<input #texto name="txt" id="txt" [(ngModel)]="ngTxt" type="text" class="form-control" 
-				placeholder="Texto" aria-describedby="currentName" maxlength="120">
+				placeholder="Texto" aria-describedby="currentName" maxlength="120" autocomplete="off"
+				(paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()">
 			</div>
 		</div>
 	</div>

@@ -12,6 +12,7 @@ import { GetParameter } from '../models/models-parameters/getParameter';
   templateUrl: './parameters.component.html',
   styleUrls: ['./parameters.component.scss']
 })
+
 export class ParametersComponent implements OnInit {
 
 	public ngTypeOperation : string;
@@ -89,6 +90,11 @@ export class ParametersComponent implements OnInit {
 		this.typeOperationForService.typeTransaction = this.operation1;
 		
 		this.seleccion(this.typeOperationForService.typeTransaction);
+	}
+
+	prt() {
+		console.error("jejejeje");
+		
 	}
 
 	/*this-> agregado */

@@ -139,7 +139,7 @@
 		</div>
 
 		<div>
-			<button (click)="paymentTransaction();"
+			<button *ngIf="!liquidationErr" (click)="paymentTransaction();"
 			type="button" class="btn btn-outline-success float-right" 
 			style="margin-bottom: 15px;" id="btnAuthorized">
 				Aceptar y Firmar
