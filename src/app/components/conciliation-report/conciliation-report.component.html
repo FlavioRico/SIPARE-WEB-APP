@@ -1,13 +1,42 @@
 <app-navbar></app-navbar>
 
 <div class="container">
+<!-- 
     <div class="alert alert-primary title-opc" role="alert">
         <strong>PROCESAR</strong> - Reporte Conciliación
-    </div>
-    <div class="busquedIntervalo" style="margin-bottom: 10px;">
-        <strong>Busqueda por intervalo de fechas:</strong><br>
+    </div> -->
+
+    <div class="alert alert-primary" role="alert">
+        <p><strong>PROCESAR</strong> - Reporte Conciliación</p>
+        <hr>
+       <strong><p class="mb-0">{{ descriptionTypeSearch }}</p></strong>
+      </div>
+
+    <div class="row">
+		<div class="col-sm">
+			<strong>Tipo de busqueda: </strong>
+			<div class="input-group" style="margin-top: 5px;">
+				<div class="input-group-prepend btn-dprdwn">
+					<button class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
+					<div class="opciones">
+						<button (click)="selectOpcSearch('Intervalo')" type="button" class="btn btn-light opc">
+                            Intervalo
+                        </button><!--(click)="seleccion(operation1)"-->
+						<div class="dropdown-divider"></div>
+						<button (click)="selectOpcSearch('Mes')" type="button" class="btn btn-light opc">
+                            Mes
+                        </button>
+					</div>
+				</div>
+				<input [ngModel]="typeSearchGlobal" type="text" style="min-width: 20px;" readonly="readonly">
+			</div>
+		</div>
+	</div><br>
+
+    <div class="busquedaPorIntervalo" *ngIf="flagIntervalo" style="margin-bottom: 10px;">
+        <!-- <strong>Busqueda por intervalo de fechas:</strong><br> -->
         <div class="row">
-            <div class="col-sm" style="text-align: center;">
+            <div class="col-sm">
                 <input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
             </div>
             <div class="col-sm" style="text-align: center;">
@@ -21,18 +50,18 @@
                 </select>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm">
-            <button (click)="clicked();" type="button" class="btn btn-outline-primary float-right" style="margin: 10px 0px 10px 30px;">
-                Buscar
-            </button>
+        <div class="row">
+            <div class="col-sm">
+                <button (click)="searchByDate();" type="button" class="btn btn-outline-primary float-right" style="margin: 10px 0px 10px 30px;">
+                    Buscar
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="busquedaPersonalizada">
-        <strong>Busqueda personalizada:</strong><br>
+
+    <div class="busquedaPorMes" *ngIf="flagMes">
+        <!-- <strong>Busqueda por mes:</strong><br> -->
         <div class="row">
             <div class="col-md">
                 Tipo de fecha:

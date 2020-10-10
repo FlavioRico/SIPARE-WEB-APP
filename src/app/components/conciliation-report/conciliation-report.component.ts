@@ -1,4 +1,5 @@
 import { Component, OnInit} from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedComponent } from 'src/app/shared/shared/shared.component';
 import { SipareApiService } from '../../services/conciliation-report/sipare-api.service';
 
@@ -32,8 +33,16 @@ export class ConciliationReportComponent implements OnInit {
   public url : string;
 
   shared = new SharedComponent();
-  
-  constructor(public apiClient: SipareApiService) { }
+
+  public typeSearchGlobal: string;
+  public flagIntervalo: boolean;
+  public flagMes: boolean;
+  public descriptionTypeSearch: string;
+
+  constructor(
+    public apiClient: SipareApiService,
+    private spinner: NgxSpinnerService) 
+  { }
 
   ngOnInit(): void {
 
@@ -41,21 +50,37 @@ export class ConciliationReportComponent implements OnInit {
     this.fechaStart = this.fechaDefault;
     this.fechaEnd = this.fechaDefault;
     
+    this.typeSearchGlobal = "Intervalo";
+    this.flagIntervalo = true;
+    this.flagMes = false;
+    this.descriptionTypeSearch = "Busqueda por intervalo de fechas.";
   }
 
-  clicked () {
+  selectOpcSearch (typeSearch: string) {
+    this.typeSearchGlobal = typeSearch;
+    if (this.typeSearchGlobal == "Intervalo") {
+      this.flagIntervalo = true;
+      this.flagMes = false;
+      this.descriptionTypeSearch = "Busqueda por intervalo de fechas.";
+    }else{
+      this.flagIntervalo = false;
+      this.flagMes = true;
+      this.descriptionTypeSearch = "Busqueda por mes.";
+    }
+  }
+
+  searchByDate () {
     var dateControlStart: any = document.getElementById('fechaStart');
     var dateControlEnd: any = document.getElementById('fechaEnd');
-    console.log(dateControlStart.value);
     this.fechaStart = dateControlStart.value;
     this.fechaEnd = dateControlEnd.value;
 
     if(!(this.dateType === undefined || this.dateType === null)) {
-      
+
+      this.spinner.show();
       this.incompleteForm = false;
 
       this.apiClient.retrieveSummaryReportByDate(
-        
         this.fechaStart,
         this.fechaEnd,
         this.dateType
@@ -79,9 +104,11 @@ export class ConciliationReportComponent implements OnInit {
               + this.dateType + "/download?" 
               + "from=" + this.fechaStart 
               + "&to=" + this.fechaEnd;
+            this.spinner.hide();
           }
         },error => {
           alert('Ocurrió un error en los servicios');
+          this.spinner.hide();
         }
       );
 
@@ -89,66 +116,13 @@ export class ConciliationReportComponent implements OnInit {
 
       this.incompleteForm = true;
     }
-  }
-
-  private buildDate(date : Date) : string {
-
-    var formattedDate : string = 
-      date.getUTCFullYear() + "-"
-      + (date.getUTCMonth() + 1) + "-"
-      + date.getUTCDate();
-
-    return formattedDate;
-  }
-
-  searchByDate() : void {
-
-    if(!(this.dateRange === undefined || this.dateRange === null)
-    && !(this.dateTypePersonalizado === undefined || this.dateTypePersonalizado === null)) {
-      
-      this.incompleteForm = false;
-
-      this.apiClient.retrieveSummaryReportByDate(
-        
-        this.buildDate(this.dateRange.from),
-        this.buildDate(this.dateRange.to),
-        this.dateTypePersonalizado
-
-      ).subscribe(
-        
-        data => {
-            
-          if(data.rows.length === 0) {
-
-            this.noContentAvailable = true;
-            this.contentAvailable = false;
-
-          }else {
-
-            this.parameters = data.parameters;
-            this.rows = data.rows;
-            this.contentAvailable = true;
-            this.noContentAvailable = false;
-            this.url = "http://localhost:9091/sipare/api/v1/reports/conciliation/date_types/"
-              + this.dateTypePersonalizado + "/download?" 
-              + "from=" + this.buildDate(this.dateRange.from) 
-              + "&to=" + this.buildDate(this.dateRange.to);
-          }
-        }
-      );
-
-    }else {
-
-      this.incompleteForm = true;
-    }
-
   }
 
   searchByMonth() : void {
 
     if(!(this.month === undefined || this.month === null)
     && !(this.monthType === undefined || this.monthType === null)) {
-      
+      this.spinner.show();
       this.incompleteForm = false;
 
       this.apiClient.retrieveSummaryReportByMonth(
@@ -173,8 +147,11 @@ export class ConciliationReportComponent implements OnInit {
             this.noContentAvailable = false;
             this.url = "http://localhost:9091/sipare/api/v1/reports/conciliation/date_types/"
               + this.monthType + "/months/" + this.month +"/download";
-
+            this.spinner.hide();
           }
+        }, error => {
+          this.spinner.hide();
+          alert('Ocurrió un error con los servicios.');
         }
       );
 

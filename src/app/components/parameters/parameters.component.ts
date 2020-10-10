@@ -92,11 +92,6 @@ export class ParametersComponent implements OnInit {
 		this.seleccion(this.typeOperationForService.typeTransaction);
 	}
 
-	prt() {
-		console.error("jejejeje");
-		
-	}
-
 	/*this-> agregado */
 	seleccion(operationType: string){
 		this.typeOperationForService.typeTransaction = operationType;
