@@ -14,7 +14,7 @@
 
     <div class="row">
 		<div class="col-sm">
-			<strong>Tipo de busqueda: </strong>
+			<strong>Tipo de búsqueda: </strong>
 			<div class="input-group" style="margin-top: 5px;">
 				<div class="input-group-prepend btn-dprdwn">
 					<button class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
@@ -35,6 +35,11 @@
 
     <div class="busquedaPorIntervalo" *ngIf="flagIntervalo" style="margin-bottom: 10px;">
         <!-- <strong>Busqueda por intervalo de fechas:</strong><br> -->
+        <div class="row">
+            <label class="col-sm">Fecha de inicio:</label>
+            <label class="col-sm">Fecha Final:</label>
+            <label class="col-sm">Tipo de fecha:</label>
+        </div>
         <div class="row">
             <div class="col-sm">
                 <input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
@@ -63,18 +68,13 @@
     <div class="busquedaPorMes" *ngIf="flagMes">
         <!-- <strong>Busqueda por mes:</strong><br> -->
         <div class="row">
-            <div class="col-md">
-                Tipo de fecha:
-                <select [(ngModel)]="dateTypePersonalizado" class="browser-default custom-select">
-                    <option selected disabled>Tipo de fecha</option>
-                    <option value="PROCESAR">Resultados PROCESAR</option>
-                    <option value="PAYMENT">Pago de Líneas de Captura</option>
-                </select>
-            </div>
-            
+            <label class="col-md">Mes:</label>
+            <label class="col-md">Concepto:</label>
+            <label class="col-md"></label>
+        </div>
+        <div class="row">            
             <!-- Search by Month -->
             <div class="col-md">
-                Mes:
                 <select [(ngModel)]="month" class="browser-default custom-select">
                     <option selected disabled>Mes</option>
                     <option value="1">Enero</option>
@@ -93,18 +93,18 @@
             </div>
     
             <div class="col-md">
-                Concepto:
                 <select [(ngModel)]="monthType" class="browser-default custom-select">
                     <option selected disabled>Concepto</option>
                     <option value="PROCESAR">Resultados PROCESAR</option>
                     <option value="PAYMENT">Pago de Líneas de Captura</option>
                 </select>
             </div>
+            <div class="col-md"></div>
         </div>
         <div class="row">
             <div class="col-sm">
                 <button (click)="searchByMonth();" type="button" class="btn btn-outline-primary float-right" style="margin: 10px 0px 10px 10px">
-                    Buscar
+                    Búscar
                 </button>
             </div>
         </div>
@@ -112,14 +112,14 @@
     </div>
 
     <div *ngIf="incompleteForm" class="alert alert-primary alert-dismissible fade show" role="alert">
-        <strong>Completa el formulario de búsqueda</strong>
+        <strong>Completa el formulario de búsqueda.</strong>
     </div>
     <div *ngIf="noContentAvailable" class="alert alert-info alert-dismissible fade show" role="alert">
-        <strong>No se encontraron registros</strong>
+        <strong>No se encontraron registros.</strong>
     </div>
     <div *ngIf="contentAvailable">
         <p>
-            Reporte : {{parameters.start_date}} {{parameters.end_date}} {{parameters.month}}
+            Reporte: {{parameters.start_date}} {{parameters.end_date}} {{parameters.month}}
         </p>
         <table class="table">
             <thead class="thead-light">

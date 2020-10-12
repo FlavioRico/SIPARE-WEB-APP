@@ -157,6 +157,19 @@ export class ParametersComponent implements OnInit {
 		}
 	}
 
+	validatedInputNumbersAndStrings(evt){
+		let keynum;
+		if(window.Event) keynum = evt.keyCode;
+		else keynum = evt.which;
+		let conditionNumbers = (keynum > 47 && keynum <58);
+		let conditionStrings = (keynum > 64 && keynum < 91);
+		if(conditionNumbers || conditionStrings || keynum == 8 || keynum == 13) return true;
+		else {
+			alert('Sólo se admiten números y letras.');
+			return false;
+		}
+	}
+
 	refresh(){
 		this.seleccion(this.typeOperationForService.typeTransaction);
 		console.log('global operation en => ', this.globalOperation);
@@ -205,7 +218,7 @@ export class ParametersComponent implements OnInit {
 						this.renderButtons(false, true, false);
 						this.refresh();
 					}else {
-						this.clear();
+						// this.clear();
 						this.isSuccess = false;
 						this.isError = true;
 						this.errorCode = 'ERROR';
@@ -223,7 +236,7 @@ export class ParametersComponent implements OnInit {
 		} else {
 			this.isError = true;
 			this.errorCode = 'Error ';
-			this.errorMsj = 'Existen campos vacios, por favor incluya toda la información solicitada.';
+			this.errorMsj = 'Existen campos vacíos, por favor incluya toda la información solicitada';
 		}
 	}
 	/* */

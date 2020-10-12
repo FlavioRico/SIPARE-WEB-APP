@@ -53,7 +53,7 @@ export class ConciliationReportComponent implements OnInit {
     this.typeSearchGlobal = "Intervalo";
     this.flagIntervalo = true;
     this.flagMes = false;
-    this.descriptionTypeSearch = "Busqueda por intervalo de fechas.";
+    this.descriptionTypeSearch = "Búsqueda por intervalo de fechas.";
   }
 
   selectOpcSearch (typeSearch: string) {
@@ -61,11 +61,11 @@ export class ConciliationReportComponent implements OnInit {
     if (this.typeSearchGlobal == "Intervalo") {
       this.flagIntervalo = true;
       this.flagMes = false;
-      this.descriptionTypeSearch = "Busqueda por intervalo de fechas.";
+      this.descriptionTypeSearch = "Búsqueda por intervalo de fechas.";
     }else{
       this.flagIntervalo = false;
       this.flagMes = true;
-      this.descriptionTypeSearch = "Busqueda por mes.";
+      this.descriptionTypeSearch = "Búsqueda por mes.";
     }
   }
 

@@ -2,7 +2,7 @@
 
 <div class="container">
 	<div class="alert alert-primary title-opc" role="alert">
-        <strong>PROCESAR</strong> - Parametros Back Office
+        <strong>PROCESAR</strong> - Parámetros Back Office
 	</div>
 	<div class="alert alert-danger alert-dismissible" *ngIf="isError">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -38,7 +38,8 @@
 			<div class="form-group input-info">
 				<input #oficina name="place" id="place" [(ngModel)]="ngPlace" type="text" class="form-control" 
 				placeholder="Oficina" aria-describedby="basic-addon1" required maxlength="15"
-				autocomplete="off" (paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()">
+				autocomplete="off" (paste)="$event.preventDefault()" (copy)="$event.preventDefault()" (cut)="$event.preventDefault()"
+				(keypress)="validatedInputNumbersAndStrings($event)">
 			</div>
 		</div>
 		<div class="col-sm" style="margin-top: 10px;">
