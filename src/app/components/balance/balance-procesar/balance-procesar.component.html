@@ -9,7 +9,7 @@
         {{ fechaCompleta }}
     </span>
 
-    <button *ngIf="backOfficeCompleted" type="button" class="btn btn-outline-success float-right"
+    <button #exportExcel *ngIf="backOfficeCompleted" type="button" class="btn btn-outline-success float-right"
         (click)="exportXLSConciliation()">Exportar a EXCEL
     </button>
 

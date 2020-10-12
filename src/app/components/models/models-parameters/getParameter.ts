@@ -1,9 +1,9 @@
 export class GetParameter {
-    office: number; //ngPlace
+    office: string; //ngPlace
     description: string;//ngTxt
     timestamp: string;
     operation_type: number;//typeOperation
-    sheet_number: number; //folio
+    sheet_number: string; //folio
     issuing_bank_key: string; //codeBank
     account_number: string; //Account
     receiving_bank_key: string; //KeyEntity

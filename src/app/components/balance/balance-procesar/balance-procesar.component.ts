@@ -27,6 +27,7 @@ export class BalanceProcesarComponent implements OnInit {
   @ViewChild('iconVerifyACV') iconCompACV: ElementRef;
   @ViewChild('iconVerifyRCV') iconCompRCV: ElementRef;
   @ViewChild('iconVerifyTotal') iconCompTotal: ElementRef;
+  @ViewChild('exportExcel') exportExcel: ElementRef;
 
   /*Others*/
   shared = new SharedComponent();
@@ -103,6 +104,8 @@ export class BalanceProcesarComponent implements OnInit {
             this.parameterT2 = true;
             this.backOfficeCompleted = false;
             this.err = true;
+            this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+            this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
             alert(`Ocurrió un error en el servicio getParameter.`);
             this.spinner.hide();
           }
@@ -112,6 +115,8 @@ export class BalanceProcesarComponent implements OnInit {
         this.parameterT1 = true;
         this.parameterT2 = true;
         this.err = true;
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
         alert(`Ocurrió un error en el servicio getParameter.`);
         this.spinner.hide();
       }
@@ -261,7 +266,7 @@ export class BalanceProcesarComponent implements OnInit {
 
   }
 
-  generateLiquidation () {
+  generateLiquidation() {
 
     this.serviceBalance.createLiquidation().subscribe(
       data2 => {
@@ -274,7 +279,7 @@ export class BalanceProcesarComponent implements OnInit {
     
   }
 
-  generatePreNotice () {
+  generatePreNotice() {
 
     this.serviceBalance.createPreNotice().subscribe(
       data => {
@@ -393,9 +398,9 @@ export class BalanceProcesarComponent implements OnInit {
 						        }
 						    },error => {
 							    this.isError = true;
-						       	this.errorCode = error.resultCode;
-						        this.errorMsj = error.resultDescription;
-						    }
+                  this.errorCode = error.resultCode;
+                  this.errorMsj = error.resultDescription;
+                }
             );
             
 					}
