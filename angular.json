@@ -82,19 +82,11 @@
                 }
               ]
             },
-            "DEVMICROSERVICES": {
+            "CUSTOM": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.microservices.ts"
-                }
-              ]
-            },
-            "UATMICROSERVICES": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.uat.microservices.ts"
+                  "with": "src/environments/environment.custom.ts"
                 }
               ]
             }
@@ -115,11 +107,8 @@
             "UAT": {
               "browserTarget": "V2Sipare:build:UAT"
             },
-            "DEVMICROSERVICES": {
-              "browserTarget": "V2Sipare:build:DEVMICROSERVICES"
-            },
-            "UATMICROSERVICES": {
-              "browserTarget": "V2Sipare:build:UATMICROSERVICES"
+            "CUSTOM": {
+              "browserTarget": "V2Sipare:build:CUSTOM"
             }
           }
         },

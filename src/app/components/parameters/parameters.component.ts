@@ -3,9 +3,7 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 import { ProcessFileService } from  '../../services/process-file/process-file.service';
 import { msjscode } from '../../../environments/msjsAndCodes';
 import { TypeTransaction } from '../models/models-parameters/typeTransaction';
-import { DataTypeOperation } from '../models/models-parameters/dataTypeOperation';
 import { Parameter } from '../models/models-parameters/parameter';
-import { GetParameter } from '../models/models-parameters/getParameter';
 
 @Component({
   selector: 'app-parameters',
@@ -162,8 +160,9 @@ export class ParametersComponent implements OnInit {
 		if(window.Event) keynum = evt.keyCode;
 		else keynum = evt.which;
 		let conditionNumbers = (keynum > 47 && keynum <58);
-		let conditionStrings = (keynum > 64 && keynum < 91);
-		if(conditionNumbers || conditionStrings || keynum == 8 || keynum == 13) return true;
+		let conditionStringsUpper = (keynum > 64 && keynum < 91);
+		let conditionStringsLower = (keynum > 96 && keynum < 123);
+		if(conditionNumbers || conditionStringsUpper || conditionStringsLower || keynum == 8 || keynum == 13) return true;
 		else {
 			alert('Sólo se admiten números y letras.');
 			return false;
