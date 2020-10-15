@@ -12,6 +12,10 @@
         </div>
     </div>
 
+    <div class="alert alert-danger" *ngIf="isError">
+        <strong>{{errorCode}}</strong> - {{errorMsj}}
+    </div>
+
     <div class="modal-dialog text-center">
         <div class="col-sm-12">
             <div class="modal-content">

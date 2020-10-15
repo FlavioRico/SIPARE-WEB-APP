@@ -5,6 +5,7 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 import * as $ from 'jquery';
 import { LineCap } from '../models/models-procesarRespValidation/lineCap';
 import { DataCaptureLineUpdate } from '../models/models-procesarRespValidation/dataCaptureLineUpdate';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-procesar-resp-validation',
@@ -49,10 +50,13 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public notAutorized: boolean;
 	public dataCaptureLine: DataCaptureLineUpdate = new DataCaptureLineUpdate();
 	public capLine: LineCap = new LineCap();
+	public messageErrService: string = '';
+	public errService: boolean = false;
 	/*termina*/
 
   constructor(public authServ : AuthenticationService, public processFile : ProcessFileService,
-  	private router : Router) { }
+	  private router : Router,
+	  private spinner: NgxSpinnerService,) { }
 
   ngOnInit() {
 	this.globalResp = '1';
@@ -95,6 +99,13 @@ export class ProcesarRespValidationComponent implements OnInit {
 		);
 	}
   }
+		
+	errServices(valueBolean: boolean, message: string) {
+
+		this.errService = valueBolean;
+		this.messageErrService = message;
+		
+	}
 
   	listRegisterByCodeAndFileResponseProcesar(oid, status){
   		this.oidRequest = oid;
@@ -139,7 +150,8 @@ export class ProcesarRespValidationComponent implements OnInit {
 		this.lineCap = line;
 		this.capLine.capture_line = line; 
  		this.processFile.getContentDataT24ByResponseProcesar(oid).subscribe(
-  			result => {           
+  			result => {  
+				this.spinner.show();         
         		if(result.resultCode == 0){
 	        		this.dataRowT24 = result;
 	        		this.ngBalanceImss = this.format2(result.imss, '$');
@@ -153,11 +165,10 @@ export class ProcesarRespValidationComponent implements OnInit {
  						this.inputAccountFlag = false;
  					else
 						this.inputAccountFlag = true;
-					console.log('debug', result);
-
+					// console.log('debug', result);
 					this.processFile.getDataComplementary(this.capLine).subscribe(
 						data => {
-							console.log('Service Angel complementary = ', data);
+							this.errServices(false, '');
 							let headers;
 							const keys = data.headers.keys();
 							headers = keys.map(key =>
@@ -166,9 +177,10 @@ export class ProcesarRespValidationComponent implements OnInit {
 							this.dataCaptureLine.response_type = data.body.responseType;
 							console.log('dejaré response this.dataCaptureLine.response_type en', 
 							this.dataCaptureLine.response_type, 'en la otra hay', data.body.responseType);
-							
+							this.spinner.hide();
 						}, error => {
-							alert(`Ocurrió un error en el servicio getDataComplementary ${error}`);
+							this.spinner.hide();
+							this.errServices(true, `Ocurrió un error en el servicio getDataComplementary ${error}`);
 						}
 					);
 

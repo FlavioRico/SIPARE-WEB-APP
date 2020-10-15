@@ -4,6 +4,14 @@
 	<div class="alert alert-primary title-opc" role="alert">
         <strong>PROCESAR</strong> - Parámetros Back Office
 	</div>
+
+	<div *ngIf="errService" class="alert alert-danger" role="alert">
+		<h4 class="alert-heading">Error inesperado.</h4>
+		<p>Error en servicios.</p>
+		<hr>
+		<p class="mb-0">{{ messageErrService }}</p>
+	</div>
+
 	<div class="alert alert-danger alert-dismissible" *ngIf="isError">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<strong>{{errorCode}}</strong> - {{errorMsj}}.

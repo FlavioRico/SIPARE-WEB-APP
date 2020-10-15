@@ -1,16 +1,19 @@
 <app-navbar></app-navbar>
 
 <div class="container">
-<!-- 
-    <div class="alert alert-primary title-opc" role="alert">
-        <strong>PROCESAR</strong> - Reporte Conciliación
-    </div> -->
 
     <div class="alert alert-primary" role="alert">
         <p><strong>PROCESAR</strong> - Reporte Conciliación</p>
         <hr>
        <strong><p class="mb-0">{{ descriptionTypeSearch }}</p></strong>
-      </div>
+    </div>
+
+    <div *ngIf="errService" class="alert alert-danger" role="alert">
+		<h4 class="alert-heading">Error inesperado.</h4>
+		<p>Error en servicios.</p>
+		<hr>
+		<p class="mb-0">{{ messageErrService }}</p>
+	</div>
 
     <div class="row">
 		<div class="col-sm">

@@ -50,8 +50,8 @@ export class LoginComponent implements OnInit {
     this.isError= false;
 	  this.authServ.loginService(this.userName, this.password).subscribe(
       result => {     
-        console.log('this');
-              
+        console.log('this', result);
+        
         if(result.resultCode == 0){
           localStorage.setItem('user', result.nameUser);
           localStorage.setItem('pass', this.password);
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
           this.password = '';
         }
       },error => {
-        this.router.navigate(['/']);
+          this.router.navigate(['/']);
           this.userName = '';
           this.password = '';
           this.isError= true;
@@ -75,8 +75,7 @@ export class LoginComponent implements OnInit {
           this.errorMsj = 'Servicio no se encuentra disponible por el momento.';
       }
     );
-    console.log('deb', this.userName, this.password);
-    
+    console.log('deb', this.userName, this.password);    
 	}
 
 }

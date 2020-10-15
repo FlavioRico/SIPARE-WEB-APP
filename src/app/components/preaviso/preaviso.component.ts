@@ -42,6 +42,9 @@ export class PreavisoComponent implements OnInit {
 	public message_liquidation_err: string = '';
 	public liquidationErr: boolean = false;
 
+	public messageErrService: string = '';
+	public errService: boolean = false;
+
 	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
 
 	ngOnInit() {
@@ -57,6 +60,7 @@ export class PreavisoComponent implements OnInit {
 							
 							this.processFile.getPreNotice().subscribe(
 								data => {
+									this.errServices(false, '');
 									this.balaceApproved = false;
 									this.liquidationErr = false;
 									let headers;
@@ -77,7 +81,7 @@ export class PreavisoComponent implements OnInit {
 									else if (error.status == 500)
 										this.message = 'Fallo insesperado en BD';
 									else 
-										alert('Error inesperado');
+										this.errServices(true, 'Fallo en servicio getPreNotice.');
 									this.message_liquidation_err = this.message;
 								}
 							);
@@ -89,21 +93,14 @@ export class PreavisoComponent implements OnInit {
 		}
 	}
 
+	errServices(valueBolean: boolean, message: string) {
+
+		this.errService = valueBolean;
+		this.messageErrService = message;
+		
+	}
+
 	loadDataPreNotice (result: LiquidationPreAviso){
-		/*
-		this.ngTypeOperation = result.resp.typeOperation;
-		this.ngPlace = result.resp.place;
-		this.ngFolio = result.resp.folio;
-		this.ngDateRegistry = result.resp.dateRegistrty;
-		this.ngCodeBank = result.resp.bankCode;
-		this.ngBankName = result.resp.orderingInstitution;
-		this.ngAccount = result.resp.account;
-		this.ngKeyEntity = result.resp.receivingEntity;
-		this.ngBankNameRecep = result.resp.receivingInstitution;
-		this.ngDateRep = result.resp.receivingDate;
-		this.ngRcv = result.resp.rcv;
-		this.ngTxt = result.resp.text;
-		*/
 
 		this.isError= false;
 
@@ -159,52 +156,3 @@ export class PreavisoComponent implements OnInit {
   	}
 
 }
-
-
-/*
-
-this.isError = false;
-							this.isSuccess= false;
-							this.processFile.getDataTransactionT2().subscribe(
-								result => {           
-					        		if(result.resultCode == msjscode.resultCodeOk){
-										this.isError= false;
-										this.parameters = result;
-										this.ngTypeOperation = result.resp.typeOperation;
-										this.ngPlace = result.resp.place;
-										this.ngFolio = result.resp.folio;
-										this.ngDateRegistry = result.resp.dateRegistrty;
-										this.ngCodeBank = result.resp.bankCode;
-										this.ngBankName = result.resp.orderingInstitution;
-										this.ngAccount = result.resp.account;
-										this.ngKeyEntity = result.resp.receivingEntity;
-										this.ngBankNameRecep = result.resp.receivingInstitution;
-										this.ngDateRep = result.resp.receivingDate;
-										this.ngRcv = result.resp.rcv;
-										this.ngTxt = result.resp.text;
-								        this.isSuccess= false;
-								        $(document).ready(function(){
-						        			$("#btnAuthorized").prop('disabled', false); 
-										});
-						        	} else {
-						        		this.isError= true;
-						        		this.errorMsj = result.resultDescription;
-				        				this.errorCode = result.resultCode;
-				        				$(document).ready(function(){
-						        			$("#btnAuthorized").prop('disabled', true); 
-										});
-									}
-							    },error => {
-							    	this.isSuccess= false;
-					        		this.successrMsj = '';
-			        				this.successCode = '';
-								    this.isError= true;
-								    this.errorCode = 'NOT-SRV';
-									this.errorMsj = 'Servicio no disponible';
-									$(document).ready(function(){
-					        			$("#btnAuthorized").prop('disabled', true); 
-									});
-							    }
-							);
-
-*/

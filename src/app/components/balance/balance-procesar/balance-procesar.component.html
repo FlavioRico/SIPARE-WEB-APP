@@ -4,6 +4,14 @@
     <div class="alert alert-primary title-opc" role="alert">
         <strong>PROCESAR</strong> - Conciliación de cifras
     </div>
+
+    <div *ngIf="errService" class="alert alert-danger" role="alert">
+		<h4 class="alert-heading">Error inesperado.</h4>
+		<p>Error en servicios.</p>
+		<hr>
+		<p class="mb-0">{{ messageErrService }}</p>
+	</div>
+
     <strong>Fecha: </strong> 
     <span class="border border-light date">
         {{ fechaCompleta }}

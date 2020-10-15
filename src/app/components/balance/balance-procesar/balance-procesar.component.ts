@@ -32,7 +32,7 @@ export class BalanceProcesarComponent implements OnInit {
   /*Others*/
   shared = new SharedComponent();
   balance: BalanceProcesar;
-  fechaCompleta = this.shared.getDateFormated();
+  fechaCompleta = '';
   public loadComplete: boolean = false;
   resourceBalance: ResourceBalance = new ResourceBalance(this.render);
 
@@ -63,6 +63,10 @@ export class BalanceProcesarComponent implements OnInit {
   backOfficeCompleted: boolean = true;
   err: boolean = false;
 
+  /*Agregado*/
+  public messageErrService: string = '';
+	public errService: boolean = false;
+
   constructor(
     private render: Renderer2,
     private serviceBalance: BalanceServiceService,
@@ -78,6 +82,8 @@ export class BalanceProcesarComponent implements OnInit {
     this.processFile.getParameter('116027').subscribe(
 
       data => {
+        this.errService = false;
+        this.messageErrService = '';
         let headers;
         const keys = data.headers.keys();
           headers = keys.map(key =>
@@ -89,6 +95,8 @@ export class BalanceProcesarComponent implements OnInit {
         this.processFile.getParameter('116018').subscribe(
           data => {
             let headers;
+            this.errService = false;
+            this.messageErrService = '';
             const keys = data.headers.keys();
               headers = keys.map(key =>
                 `${key}: ${data.headers.get(key)}`
@@ -100,13 +108,14 @@ export class BalanceProcesarComponent implements OnInit {
             this.sendRequestBalance(this.backOfficeCompleted);
 
           }, error => {
+            this.errService = true;
+            this.messageErrService = 'Ocurrió un error en el servicio getParameter (116018).';
             this.parameterT1 = true;
             this.parameterT2 = true;
             this.backOfficeCompleted = false;
             this.err = true;
             this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
             this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
-            alert(`Ocurrió un error en el servicio getParameter.`);
             this.spinner.hide();
           }
         );
@@ -117,7 +126,8 @@ export class BalanceProcesarComponent implements OnInit {
         this.err = true;
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
         this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
-        alert(`Ocurrió un error en el servicio getParameter.`);
+        this.errService = true;
+        this.messageErrService = 'Ocurrió un error en el servicio getParameter (116027).';
         this.spinner.hide();
       }
     );
@@ -129,6 +139,9 @@ export class BalanceProcesarComponent implements OnInit {
       this.spinner.show();
       this.serviceBalance.retrieveBalancePROCESAR().subscribe(
         data => {
+          this.errService = false;
+          this.messageErrService = '';
+          this.fechaCompleta = data.dispatch_date;
           if(data === null){
             this.spinner.hide();
             this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
@@ -153,7 +166,11 @@ export class BalanceProcesarComponent implements OnInit {
           }
           this.spinner.hide();  
         }, error => {
-          alert(`Error inesperado en los servicios. ${error.message}`);
+          this.errService = true;
+          this.messageErrService = 'Fallo en el servicio retrieveBalancePROCESAR.';
+          alert(``);
+          this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+          this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
           this.spinner.hide();  
         }
       );
@@ -258,9 +275,12 @@ export class BalanceProcesarComponent implements OnInit {
     let a: any;
     this.serviceBalance.aproveBalancePROCESAR(this.balance).subscribe(
       data => {
+        this.errService = false;
+        this.messageErrService = '';
         this.generateLiquidation(); 
       }, error => {
-        alert(`Error inesperado en servicio balance procesar al aprobar. ${error}`);
+        this.errService = true;
+        this.messageErrService = `Error inesperado en servicio balance procesar al aprobar. ${error}`;
       }
     );
 
@@ -271,9 +291,13 @@ export class BalanceProcesarComponent implements OnInit {
     this.serviceBalance.createLiquidation().subscribe(
       data2 => {
         // this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+        this.errService = false;
+        this.messageErrService = '';
         this.generatePreNotice();
       },error =>{
-        alert(`Error inesperado en los servicios ${error.resultCode}`);
+        this.errService = true;
+        this.messageErrService = `Error inesperado en servicio de generación de liquidación. ${error.resultCode}`;
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       }
     );
     
@@ -283,9 +307,13 @@ export class BalanceProcesarComponent implements OnInit {
 
     this.serviceBalance.createPreNotice().subscribe(
       data => {
+        this.errService = false;
+        this.messageErrService = '';
         this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
       },error =>{
-        alert(`Error inesperado en los servicios ${error.resultCode}`);
+        this.errService = false;
+        this.messageErrService = `Error inesperado en servicio de generación de preaviso. ${error.resultCode}`;
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       }
     );
     

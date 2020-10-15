@@ -48,6 +48,8 @@ export class BackOfficeComponent implements OnInit {
 	public balaceApproved: boolean = false;
 	public message_liquidation_err: string = '';
 	public liquidationErr: boolean = false;
+	public messageErrService: string = '';
+	public errService: boolean = false;
 
   	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
 
@@ -67,6 +69,7 @@ export class BackOfficeComponent implements OnInit {
 									
 									this.balaceApproved = false;
 									this.liquidationErr = false;
+									this.errService = false;
 									let headers;
 									const keys = data.headers.keys();
 										headers = keys.map(key =>
@@ -85,7 +88,8 @@ export class BackOfficeComponent implements OnInit {
 									else if (error.status == 500)
 										this.message = 'Fallo insesperado en BD';
 									else 
-										alert('Error inesperado');
+										this.errService = true;
+										this.messageErrService = 'Error en el servicio getLiquidation().';
 									this.message_liquidation_err = this.message;								
 								}
 							);

@@ -39,6 +39,10 @@ export class ConciliationReportComponent implements OnInit {
   public flagMes: boolean;
   public descriptionTypeSearch: string;
 
+  /*Agregado*/
+  public messageErrService: string = '';
+	public errService: boolean = false;
+
   constructor(
     public apiClient: SipareApiService,
     private spinner: NgxSpinnerService) 
@@ -88,6 +92,9 @@ export class ConciliationReportComponent implements OnInit {
       ).subscribe(
         
         data => {
+
+          this.errService = false;
+          this.messageErrService = '';
             
           if(data.rows.length === 0) {
 
@@ -107,13 +114,13 @@ export class ConciliationReportComponent implements OnInit {
             this.spinner.hide();
           }
         },error => {
-          alert('Ocurrió un error en los servicios');
+          this.errService = true;
+          this.messageErrService = 'Fallo en el servicio en el servicio apiClient.';
           this.spinner.hide();
         }
       );
 
     }else {
-
       this.incompleteForm = true;
     }
   }
@@ -133,6 +140,9 @@ export class ConciliationReportComponent implements OnInit {
       ).subscribe(
         
         data => {
+
+          this.errService = false;
+          this.messageErrService = '';
             
           if(data.rows.length === 0) {
 
@@ -150,8 +160,9 @@ export class ConciliationReportComponent implements OnInit {
             this.spinner.hide();
           }
         }, error => {
+          this.errService = true;
+          this.messageErrService = 'Ocurrió un error en el servicio retrieveSummaryReportByMonth.';
           this.spinner.hide();
-          alert('Ocurrió un error con los servicios.');
         }
       );
 

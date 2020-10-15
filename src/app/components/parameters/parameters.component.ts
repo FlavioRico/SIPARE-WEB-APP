@@ -62,6 +62,10 @@ export class ParametersComponent implements OnInit {
 	@ViewChild('texto') texto: ElementRef;
 	/* */
 
+	 /*Agregado*/
+	 public messageErrService: string = '';
+	 public errService: boolean = false;
+
 	constructor(public processFile : ProcessFileService,
 				public authServ : AuthenticationService,
 				private render: Renderer2) { }
@@ -91,6 +95,11 @@ export class ParametersComponent implements OnInit {
 	}
 
 	/*this-> agregado */
+	errServices(valueBolean: boolean, message: string) {
+		this.errService = valueBolean;
+        this.messageErrService = message;
+	}
+
 	seleccion(operationType: string){
 		this.typeOperationForService.typeTransaction = operationType;
 		this.globalOperation = operationType;
@@ -98,13 +107,14 @@ export class ParametersComponent implements OnInit {
 
 		this.processFile.getParameter(operationType).subscribe(
 			data =>{
+				this.errServices(false, '');
 				let headers;
 				const keys = data.headers.keys();
 				headers = keys.map(key =>
 					`${key}: ${data.headers.get(key)}`);
 				this.loadNewData(data);
 			},error =>{
-				alert(`Error inesperado en los servicios ${error.resultCode}`);
+				this.errServices(true, `Fallo en servicio getParameter(${operationType})`);
 			}
 		);
 	}
@@ -205,6 +215,7 @@ export class ParametersComponent implements OnInit {
 			this.parameter.created_by = nameUser;
 			this.processFile.actualizarParametro(this.parameter).subscribe(
 				resp => {
+					this.errServices(false, ``);
 					const keys = resp.headers.keys();
 					headers = keys.map(key =>
 						`${key}: ${resp.headers.get(key)}`);
@@ -225,7 +236,7 @@ export class ParametersComponent implements OnInit {
 						this.renderButtons(true, false, false);
 					}
 				}, error => {
-					alert(`Error inesperado en servicio ${error.message}`);
+					this.errServices(true, `Fallo en servicio actualizarParametro.`);
 					this.isError = true;
 					this.errorCode = error.resultCode;
 					this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
@@ -293,6 +304,7 @@ export class ParametersComponent implements OnInit {
 
 			this.processFile.createParameter(this.parameter).subscribe(
 				resp => {
+					this.errServices(false, '');
 					const keys = resp.headers.keys();
 					headers = keys.map(key =>
 						`${key}: ${resp.headers.get(key)}`);
@@ -312,7 +324,7 @@ export class ParametersComponent implements OnInit {
 						this.renderButtons(true, false, false);
 					}
 				}, error => {
-					alert(`Error inesperado en servicio ${error.message}`);
+					this.errServices(true, 'Fallo en servicio createParameter.');
 					this.isError = true;
 					this.errorCode = error.resultCode;
 					this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
@@ -337,7 +349,8 @@ export class ParametersComponent implements OnInit {
         	this.errorMsj = 'No hay código para realizar la búsqueda del banco ordenante';
 		} else {
 			this.processFile.searchBankReceptorByCode(this.ngCodeBank).subscribe(
-			result => {           
+			result => {    
+				this.errServices(false, '');       
         		if(result.resultCode == msjscode.resultCodeOk){
 					this.ngBankName = result.bank;
 					this.searchSucces = true;
@@ -350,6 +363,7 @@ export class ParametersComponent implements OnInit {
 		        	this.errorMsj = result.resultDescription;
 		        }
 		    },error => {
+				this.errServices(true, 'Fallo en servicio searchBankReceptorByCode.');       
 			    this.isError = true;
 			    this.ngBankName = '';
 		       	this.errorCode = error.resultCode;
@@ -369,7 +383,8 @@ export class ParametersComponent implements OnInit {
         	this.errorMsj = 'No hay código para realizar la búsqueda del banco receptor';
 		} else {
 			this.processFile.searchBankReceptorByCode(this.ngKeyEntity).subscribe(
-			result => {           
+			result => {   
+				this.errServices(false, '');               
         		if(result.resultCode == msjscode.resultCodeOk){
 					this.ngBankNameRecep = result.bank;
 					this.searchSucces = true;
@@ -382,6 +397,7 @@ export class ParametersComponent implements OnInit {
 		        	this.errorMsj = result.resultDescription;
 		        }
 		    },error => {
+				this.errServices(true, 'Fallo en servicio searchBankReceptorByCode.');       
 			    this.isError = true;
 			    this.ngBankNameRecep = '';
 		       	this.errorCode = error.resultCode;
