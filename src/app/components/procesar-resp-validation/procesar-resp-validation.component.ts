@@ -59,6 +59,9 @@ export class ProcesarRespValidationComponent implements OnInit {
 	  private spinner: NgxSpinnerService,) { }
 
   ngOnInit() {
+
+	this.spinner.show();
+
 	this.globalResp = '1';
 	this.notAutorized = true;
 
@@ -66,31 +69,37 @@ export class ProcesarRespValidationComponent implements OnInit {
   	this.isContentTable = false;
   	this.tableListRegisterByCode = false;
   	if(localStorage.getItem('username') === '' || localStorage.getItem('username') == null){
-			this.router.navigate(['/']);
+		this.spinner.hide();
+		this.router.navigate(['/']);
 	}else{
 		this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 			result => {
 				if(result.resultCode == 0){
 					if(result.logged == 0){
+						this.spinner.hide();
 						this.router.navigate(['/']);
 					}else{
 						this.isLogin = true;
 						this.processFile.getLastFileToResponseProcesarService().subscribe(
-							result => {           
+							result => {  
 				        		if(result.resultCode == 0){
 						        	if (result.listSize == 0){
+										this.isError= true;
 						        		this.tableStatusProcesar = false;
 								        this.errorCode = 'Emp-001';
-								        this.errorMsj = 'Sin registros por el momento.';
+										this.errorMsj = 'Sin registros por el momento.';
+										this.spinner.hide();
 						        	} else {
 						        		this.tableStatusProcesar = true;
 										this.rows = result.listContent;
+										this.spinner.hide();
 									}
 						        }
 						    },error => {
 							    this.isError= true;
 							    this.errorCode = error.resultCode;
 								this.errorMsj = error.resultDescription;
+								this.spinner.hide();
 						    }
 						);
 					}

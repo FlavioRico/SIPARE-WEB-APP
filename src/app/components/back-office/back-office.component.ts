@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { msjscode } from '../../../environments/msjsAndCodes';
 import { Liquidation } from '../models/models-backOffice/liquidation';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-back-office',
@@ -51,16 +52,20 @@ export class BackOfficeComponent implements OnInit {
 	public messageErrService: string = '';
 	public errService: boolean = false;
 
-  	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
+	  constructor(public processFile : ProcessFileService, public authServ : AuthenticationService,
+		private router : Router, private spinner: NgxSpinnerService) { }
 
   	ngOnInit() {
+		this.spinner.show();
 	  	if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
+				this.spinner.hide();
 				this.router.navigate(['/']);
 		}else{
 			this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 				result => {
 					if(result.resultCode == 0){
 						if(result.logged == 0){
+							this.spinner.hide();
 							this.router.navigate(['/']);
 						}else{
 
@@ -75,8 +80,10 @@ export class BackOfficeComponent implements OnInit {
 										headers = keys.map(key =>
 											`${key}: ${data.headers.get(key)}`
 									);
-									if (data.status == 200)
+									if (data.status == 200){
 										this.loadDataLiquidation (data.body);
+									}
+									this.spinner.hide();
 
 								},error =>{
 									this.balaceApproved = false;
@@ -84,13 +91,14 @@ export class BackOfficeComponent implements OnInit {
 									if (error.status == 424)
 										this.message = 'Fallo en servicios del proveedor.';
 									else if (error.status == 428)
-										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada';
+										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada.';
 									else if (error.status == 500)
 										this.message = 'Fallo insesperado en BD';
 									else 
 										this.errService = true;
 										this.messageErrService = 'Error en el servicio getLiquidation().';
-									this.message_liquidation_err = this.message;								
+									this.message_liquidation_err = this.message;
+									this.spinner.hide();						
 								}
 							);
 
@@ -125,7 +133,8 @@ export class BackOfficeComponent implements OnInit {
 			this.message_liquidation = 'La transacción ya fue realizada.';
 			this.liquidation_flag = true;
 			$(document).ready(function(){
-				$("#btnAuthorized").prop('disabled', true); 
+				$("#btnAuthorized").prop('disabled', false); 
+				$("#btnAuthorized").hide();
 			});
 		}else {
 			this.message_liquidation = 'La transacción aún no ha sido autorizada.';
@@ -212,6 +221,8 @@ export class BackOfficeComponent implements OnInit {
 
 
   	paymentTransaction(){
+		this.spinner.show();
+
   		this.isInfo = true;
   		this.infoCode  = 'INFO';
   		this.infoMsj  = 'Se esta realizando la petición';
@@ -221,13 +232,22 @@ export class BackOfficeComponent implements OnInit {
   		this.processFile.sendTransactionWS().subscribe(
 			result => {           
         		if(result.resultCode == msjscode.resultCodeOk){
-			        this.isSuccess= true;
+					this.isSuccess= true;
+
+					this.balaceApproved = true;
+					this.liquidationErr = false;
+
 			        this.successrMsj = 'Transacción T+1 realizada con exito';
 					this.successCode = 'SUCCESS';
 					this.isInfo = false;
   					this.infoCode  = '';
   					this.infoMsj  = '';
 					this.clearInputs();
+					$(document).ready(function(){
+						$("#btnAuthorized").prop('disabled', false); 
+						$("#btnAuthorized").hide();
+					});
+					this.spinner.hide();
 	        	} else {
 	        		this.isError= true;
 	        		this.errorMsj = result.resultDescription;
@@ -237,7 +257,8 @@ export class BackOfficeComponent implements OnInit {
 						$("#btnAuthorized").prop('disabled', false); 
 					});
   					this.infoCode  = '';
-  					this.infoMsj  = '';
+					this.infoMsj  = '';
+					this.spinner.hide();
 				}
 		    },error => {
 		    	this.isSuccess= false;
@@ -249,9 +270,11 @@ export class BackOfficeComponent implements OnInit {
 			    this.isError= true;
 			    $(document).ready(function(){
 					$("#btnAuthorized").prop('disabled', false); 
+					$("#btnAuthorized").hide();
 				});
 			    this.errorCode = 'NOT-SRV';
 				this.errorMsj = 'Servicio no disponible';
+				this.spinner.hide();
 		    }
 		);
   	}

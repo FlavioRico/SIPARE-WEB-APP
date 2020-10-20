@@ -6,8 +6,8 @@
     </div>
 
     <div *ngIf="errService" class="alert alert-danger" role="alert">
-		<h4 class="alert-heading">Error inesperado.</h4>
-		<p>Error en servicios.</p>
+		<h4 class="alert-heading">Error en servicios.</h4>
+		<p>Ups algo salio mal..</p>
 		<hr>
 		<p class="mb-0">{{ messageErrService }}</p>
 	</div>
@@ -92,6 +92,9 @@
             <button id="btnAuthorized" #buttonValidacion (click)="sendFileToConnectDirect()" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
                 Autorizar
             </button>
+            <!-- <button id="btnAuthorized" #buttonValidacion (click)="aproveBalancePROCESAR()" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
+                Autorizar
+            </button> -->
             <!-- (click)="aproveBalancePROCESAR()" (click)="this.resourceBalance.authSucess(
                 btnAutorizar, messageValidacion)"  -->
         </div>
@@ -127,4 +130,4 @@
     </div>
 </div>
 
-<app-modal-auth></app-modal-auth>
+<app-modal-auth *ngIf="!errService"></app-modal-auth>

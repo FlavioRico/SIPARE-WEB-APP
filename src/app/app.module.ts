@@ -45,6 +45,7 @@ import { BalanceServiceService } from './services/balance/balance-service.servic
 import { AuthenticationService } from './services/authentication/authentication.service';
 import { ProcessFileService } from  './services/process-file/process-file.service';
 import { SipareApiService } from  './services/conciliation-report/sipare-api.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -84,7 +85,8 @@ import { SipareApiService } from  './services/conciliation-report/sipare-api.ser
     HttpClientModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgbModule
   ],
   providers: [
     BitacoraServiceService,

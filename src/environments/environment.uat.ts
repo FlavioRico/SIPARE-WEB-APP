@@ -9,6 +9,7 @@ export const environment = {
 
     //YAXCHE
     sipare_ms_processFile_url :                'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
+    sipare_generate_processFile :              'http://10.160.14.213:8084/multiva/sipare/generateFileToPROCESAR',
     sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
     //Este no cambia
     sipare_ms_authenticate_url :               'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/',
@@ -58,7 +59,8 @@ export const environment = {
     addParameter:                   'http://10.160.188.123:8765/sipare-procesar-parameters/parameters',
     addParameterT2:                 'http://10.160.188.123:8765/sipare-procesar-pre-notice/preaviso',
     sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
-    urlBalancePROCESAR :            'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR',
+    // urlBalancePROCESAR :            'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR',
+    urlBalancePROCESAR :            'http://10.160.188.123:8765/sipare-retrieve-procesar-balance/balances/findByTypeAndDate?type=PROCESAR',
     urlAproveBalancePROCESAR :      'http://10.160.188.123:8765/sipare-approve-balance/balances',
     url_Liquidation :               'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations',
     url_PreNotice :                 'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices',

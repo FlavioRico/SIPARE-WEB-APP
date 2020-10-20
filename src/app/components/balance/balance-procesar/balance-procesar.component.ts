@@ -109,7 +109,7 @@ export class BalanceProcesarComponent implements OnInit {
 
           }, error => {
             this.errService = true;
-            this.messageErrService = 'Ocurrió un error en el servicio getParameter (116018).';
+            this.messageErrService = 'Contacta a soporte por favor. (getParameter - 116018).';
             this.parameterT1 = true;
             this.parameterT2 = true;
             this.backOfficeCompleted = false;
@@ -127,7 +127,7 @@ export class BalanceProcesarComponent implements OnInit {
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
         this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
         this.errService = true;
-        this.messageErrService = 'Ocurrió un error en el servicio getParameter (116027).';
+        this.messageErrService = 'Contacta a soporte por favor. (getParameter - 116027).';
         this.spinner.hide();
       }
     );
@@ -167,8 +167,7 @@ export class BalanceProcesarComponent implements OnInit {
           this.spinner.hide();  
         }, error => {
           this.errService = true;
-          this.messageErrService = 'Fallo en el servicio retrieveBalancePROCESAR.';
-          alert(``);
+          this.messageErrService = 'Contacta a soporte por favor (retrieveBalancePROCESAR).';
           this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
           this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
           this.spinner.hide();  
@@ -197,7 +196,7 @@ export class BalanceProcesarComponent implements OnInit {
     }
     
     if (!balanced || status === 201) {
-      this.createMessage('alert-danger', 'Error. Inconsistencia en los saldos.');
+      this.createMessage('alert-danger', 'Atención. Inconsistencia en los saldos.');
       this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       return 0;
     }
@@ -277,13 +276,13 @@ export class BalanceProcesarComponent implements OnInit {
       data => {
         this.errService = false;
         this.messageErrService = '';
-        this.generateLiquidation(); 
+        // this.generateLiquidation(); 
       }, error => {
         this.errService = true;
-        this.messageErrService = `Error inesperado en servicio balance procesar al aprobar. ${error}`;
+        this.messageErrService = `Contacta a soporte por favor (aproveBalancePROCESAR).`;
       }
     );
-
+    this.generateLiquidation(); 
   }
 
   generateLiquidation() {
@@ -296,7 +295,7 @@ export class BalanceProcesarComponent implements OnInit {
         this.generatePreNotice();
       },error =>{
         this.errService = true;
-        this.messageErrService = `Error inesperado en servicio de generación de liquidación. ${error.resultCode}`;
+        this.messageErrService = `Contacta a soporte por favor (createLiquidation).`;
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       }
     );
@@ -312,7 +311,7 @@ export class BalanceProcesarComponent implements OnInit {
         this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
       },error =>{
         this.errService = false;
-        this.messageErrService = `Error inesperado en servicio de generación de preaviso. ${error.resultCode}`;
+        this.messageErrService = `Contacta a soporte por favor (createPreNotice).`;
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       }
     );
@@ -400,9 +399,11 @@ export class BalanceProcesarComponent implements OnInit {
 						this.infoMsj = '';
 						this.infoCode = '';
             this.isProgressBar = false;
-            
+            console.error('DEBB',localStorage.getItem('username'));
 						this.processFile.sendFileToConnectDirect(localStorage.getItem('username')).subscribe(
-							result => {           
+							result => { 
+                  console.log('this', result);
+                            
 				        		if(result.resultCode == msjscode.resultCodeOk){
 				        			if(result.descriptionOrReject != null ){  
 										    this.isError = true;
@@ -414,7 +415,7 @@ export class BalanceProcesarComponent implements OnInit {
 							        	this.isError = false;
 							        	this.successCode = 'SUCCESS';
                         this.successrMsj = result.resultDescription;
-                        this.aproveBalancePROCESAR();                                                                       
+                        // this.aproveBalancePROCESAR();                                                                       
 				        			}
 						        	this.successrMsj = result.resultDescription;
 						        	this.isProgressBar = false;
@@ -423,14 +424,14 @@ export class BalanceProcesarComponent implements OnInit {
 						        	this.isProgressBar = false;
 						       		this.errorCode = result.resultCode;
 						        	this.errorMsj = result.resultDescription;
-						        }
+                    }
 						    },error => {
 							    this.isError = true;
                   this.errorCode = error.resultCode;
                   this.errorMsj = error.resultDescription;
                 }
             );
-            
+            this.aproveBalancePROCESAR();                                                                       
 					}
 				}
 			});

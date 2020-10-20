@@ -6,6 +6,7 @@ import { msjscode } from '../../../environments/msjsAndCodes';
 import * as $ from 'jquery';
 
 import { LiquidationPreAviso } from '../models/models-preaviso/liquidationPreAviso';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-preaviso',
@@ -45,16 +46,20 @@ export class PreavisoComponent implements OnInit {
 	public messageErrService: string = '';
 	public errService: boolean = false;
 
-	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
+	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService,
+		private router : Router, private spinner: NgxSpinnerService) { }
 
 	ngOnInit() {
+	this.spinner.show();
   	if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
-			this.router.navigate(['/']);
+		this.spinner.hide();
+		this.router.navigate(['/']);
 		}else{
 			this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 				result => {
 					if(result.resultCode == 0){
 						if(result.logged == 0){
+							this.spinner.hide();
 							this.router.navigate(['/']);
 						}else{
 							
@@ -68,8 +73,10 @@ export class PreavisoComponent implements OnInit {
 										headers = keys.map(key =>
 											`${key}: ${data.headers.get(key)}`
 									);
-									if (data.status == 200)
+									if (data.status == 200){
 										this.loadDataPreNotice (data.body);
+									}
+									this.spinner.hide();
 
 								}, error => {
 									this.balaceApproved = false;
@@ -77,12 +84,13 @@ export class PreavisoComponent implements OnInit {
 									if (error.status == 424)
 										this.message = 'Fallo en servicios del proveedor.';
 									else if (error.status == 428)
-										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada';
+										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada.';
 									else if (error.status == 500)
 										this.message = 'Fallo insesperado en BD';
 									else 
 										this.errServices(true, 'Fallo en servicio getPreNotice.');
 									this.message_liquidation_err = this.message;
+									this.spinner.hide();
 								}
 							);
 

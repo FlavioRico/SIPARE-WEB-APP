@@ -8,7 +8,8 @@ export const environment = {
   production: false,
   contentType : 'Content-Type',
   appJson : 'application/json', //8083 UAT - 8085 DEV
-  sipare_ms_processFile_url : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
+  sipare_ms_processFile_url :                'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
+  sipare_generate_processFile :              'http://10.160.14.213:8084/multiva/sipare/generateFileToPROCESAR',
   sipare_ms_authenticate_url : 'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/', //este no cambia en ninguno
   sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
   sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
@@ -56,7 +57,8 @@ export const environment = {
   /*ADDs */
   //8766 DEV 8765 UAT EN LO DE NOSOTROS 
   urlBalanceCONSAR : 'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR',
-  urlBalancePROCESAR : 'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR',
+  // urlBalancePROCESAR : 'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR',
+  urlBalancePROCESAR : 'http://10.160.188.123:8765/sipare-retrieve-procesar-balance/balances/findByTypeAndDate?type=PROCESAR',
   urlAproveBalancePROCESAR : 'http://10.160.188.123:8765/sipare-approve-balance/balances',
   url_Liquidation : 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations',
   url_PreNotice : 'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices',

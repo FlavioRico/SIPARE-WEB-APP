@@ -1,17 +1,12 @@
 <!-- this -->
 <app-navbar></app-navbar>
 
-<div class="container-fluid barranombre" style="margin-top: 1%">
-	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
-		<ul class="nav navbar-nav col-md-12">
-			<h4>
-				<font color=#0c3a6b style="font-size: 12px;">Reporte Validaciones PROCESAR</font> <font
-					color=#0c3a6b></font>
-			</h4>
-		</ul>
-	</div>
-
+<div class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+        <strong>PROCESAR</strong> - Reporte validaciones.
+    </div>
 </div>
+
 <div *ngIf="errService" class="container alert alert-danger" role="alert">
 	<h4 class="alert-heading">Error inesperado.</h4>
 	<p>Error en servicios.</p>
@@ -27,6 +22,17 @@
 >
     <p style="font-size: 20px; color: white">Cargando...</p>
 </ngx-spinner>
+
+<div class="container" style="margin-top: 1%">
+	<div class="alert alert-warning alert-dismissible" *ngIf="isError">
+	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  	<strong>{{errorCode}}</strong> - {{errorMsj}}.
+	</div>
+	<div class="alert alert-info alert-dismissible" *ngIf="isInfo">
+	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  	<strong>{{infoMsj}}</strong>.
+	</div>
+</div>
 
 <!-- Tabla de cambio -->
  <div *ngIf="tableStatusProcesar" class="mce-container row" style="width: 80%; height: 458px; margin-left: 20%; margin-top: 1%;">

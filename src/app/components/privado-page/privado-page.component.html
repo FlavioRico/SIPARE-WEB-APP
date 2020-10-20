@@ -1,7 +1,37 @@
 <!-- this -->
 <app-navbar></app-navbar>
 
-<div class="container-fluid barranombre">
+<div class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+		<strong>PROCESAR</strong> - Archivos Mensuales
+	</div>
+
+	<div class="row" style="padding-left: 15px; padding-bottom: 2%;">
+		<div class="row">
+			<div class="col-sm">
+				<input type="text" class="form-control" placeholder="Buscar Archivo" id="buscadosar"/>
+			</div>
+            <div class="col-sm">
+				<input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
+            </div>
+            <div class="col-sm">
+				<input #endDate type="date" [ngModel]="fechaEnd" id="fechaEnd" style="min-height: 100%; min-width: 95%;">
+			</div>
+			<div class="col-sm">
+				<button type="button" class="btn btn-outline-success" id="buttSearchByDate"
+					(click)="searchByDate()">Buscar por fecha
+				</button>
+			</div>
+			<div class="col-sm">
+				<button type="button" class="btn btn-outline-success"
+					(click)="exportXLSWO()">Exportar a EXCEL
+				</button>
+			</div>
+        </div>
+	</div>
+</div>
+
+<!-- <div class="container-fluid barranombre">
 	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
 		<ul class="nav navbar-nav col-md-12">
 			<h4>
@@ -10,15 +40,16 @@
 			</h4>
 		</ul>
 	</div>
-</div>
-<div class="row" class="divOptions">
+</div> -->
+<!--this (keyup)="searchFileName(); searchFileDate()"-->
+<!-- <div class="row" class="divOptions">
 	<div class="col-md-10" style="margin-left: 9.8%;">
 		<div class="mce-container row" style="margin-top: 1%;">
 			<div class="col-md-3">
 				<div class="input-group divSearchInput">
 					<input type="text"
 						class="form-control" placeholder="Buscar Archivo" id="buscador"
-						style="margin-top: 9%; height: 32px; width: 120%;" /> <!--this (keyup)="searchFileName(); searchFileDate()"-->
+						style="margin-top: 9%; height: 32px; width: 120%;" /> 
 						<span class="input-group-append" style="margin-top: -32px; margin-left: 100%;">
                   			<div class="input-group-text divIconSearch">
 								<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -44,85 +75,88 @@
 			</div>
 		</div>
 	</div>
-</div>
-<div *ngIf="!tableHidden" class="mce-container row scrollme divTableSipare" >
-	<table class="table table-hover" id="tabla">
-		<thead  class="thead-tbody-display">
-			<tr>
-				<th (click)="sortTable(0)" style="padding: 0.4em;">
-					<div class="row">
-						<div style="margin-bottom: 25px; cursor: pointer;">
-							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" style="margin-left: 30px;">
+</div> -->
+
+<div class="container">
+	<div *ngIf="!tableHidden" class="mce-container row scrollme divTableSipare" >
+		<table class="table table-hover" id="tabla">
+			<thead  class="thead-tbody-display">
+				<tr>
+					<th (click)="sortTable(0)" style="padding: 0.4em;">
+						<div class="row">
+							<div style="margin-bottom: 25px; cursor: pointer;">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" style="margin-left: 30px;">
+							</div>
+							<div class="col-md-7" style="width: 150px;">
+								<p
+									style="margin-left: 15px; text-align: center; font-size: 13px; width: 150px;">Nombre
+									del archivo</p>
+							</div>
 						</div>
-						<div class="col-md-7" style="width: 150px;">
-							<p
-								style="margin-left: 15px; text-align: center; font-size: 13px; width: 150px;">Nombre
-								del archivo</p>
+					</th>
+					<th (click)="sortTable(1)" style="padding: 0.4em;">
+						<div class="row contenido">
+							<div style="margin-bottom: 25px; cursor: pointer;">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC"
+									style="margin-left: 30px;">
+							</div>
+							<div class="col-md-8">
+								<p style="text-align: center; font-size: 13px">No. de
+									registro</p>
+							</div>
 						</div>
-					</div>
-				</th>
-				<th (click)="sortTable(1)" style="padding: 0.4em;">
-					<div class="row contenido">
-						<div style="margin-bottom: 25px; cursor: pointer;">
-							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC"
-								style="margin-left: 30px;">
+					</th>
+					<th (click)="sortTable(2)" style="padding: 0.4em;">
+						<div class="row contenido">
+							<div style="margin-bottom: 25px; cursor: pointer;">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC"
+									style="margin-left: 30px;">
+							</div>
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">Estado del
+									proceso</p>
+							</div>
 						</div>
-						<div class="col-md-8">
-							<p style="text-align: center; font-size: 13px">No. de
-								registro</p>
+					</th>
+					<th (click)="sortTable(3)" style="padding: 0.4em;">
+						<div class="row contenido">
+							<div style="margin-bottom: 25px; cursor: pointer;">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC"
+									style="margin-left: 30px; margin-left: -15px;">
+							</div>
+							<div>
+								<p style="text-align: center; font-size: 13px">Fecha y
+									Hora de procesamiento</p>
+							</div>
 						</div>
-					</div>
-				</th>
-				<th (click)="sortTable(2)" style="padding: 0.4em;">
-					<div class="row contenido">
-						<div style="margin-bottom: 25px; cursor: pointer;">
-							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC"
-								style="margin-left: 30px;">
-						</div>
-						<div class="col-md-9">
-							<p style="text-align: center; font-size: 13px">Estado del
-								proceso</p>
-						</div>
-					</div>
-				</th>
-				<th (click)="sortTable(3)" style="padding: 0.4em;">
-					<div class="row contenido">
-						<div style="margin-bottom: 25px; cursor: pointer;">
-							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC"
-								style="margin-left: 30px; margin-left: -15px;">
-						</div>
-						<div>
-							<p style="text-align: center; font-size: 13px">Fecha y
-								Hora de procesamiento</p>
-						</div>
-					</div>
-				</th>
-			</tr>
-		</thead>
-		<tbody id="tableFile" class="tbody-class">
-			<tr *ngFor="let file of files | paginate: { itemsPerPage: 7, currentPage: p }" class="trTableArchivosMensualesProcesar">
-				<td data-label="Nombre del archivo" style="padding: 0;"><p class="pTdFileName">{{file.fileName}}</p></td>
-				<td data-label="No. de registro" style="padding: 0;"><p class="pTdCountRegistry">{{file.countRegistry}}</p></td>
-				<td data-label="Estado del proceso" style="padding: 0;"><p class="pTdStatusFile">{{file.statusFile}}</p></td>
-				<td data-label="Fecha y Hora de procesamiento" style="padding: 0;"><p class="pTdDateProcess">{{file.dateProcess}}</p></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div *ngIf="!tableHidden" class="row divPaginationFather">
-	<div class="divPaginationSon">
-		<pagination-controls (pageChange)="p = $event" directionLinks="true" responsive="true" screenReaderPaginationLabel="Pagination" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+					</th>
+				</tr>
+			</thead>
+			<tbody id="tableFile" class="tbody-class">
+				<tr *ngFor="let file of files | paginate: { itemsPerPage: 7, currentPage: p }" class="trTableArchivosMensualesProcesar">
+					<td data-label="Nombre del archivo" style="padding: 0;"><p class="pTdFileName">{{file.fileName}}</p></td>
+					<td data-label="No. de registro" style="padding: 0;"><p class="pTdCountRegistry">{{file.countRegistry}}</p></td>
+					<td data-label="Estado del proceso" style="padding: 0;"><p class="pTdStatusFile">{{file.statusFile}}</p></td>
+					<td data-label="Fecha y Hora de procesamiento" style="padding: 0;"><p class="pTdDateProcess">{{file.dateProcess}}</p></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
-</div>
-<div *ngIf="isInfo" class="divInfoShow">
-	<div class="alert alert-info alert-dismissible">
-	  	<button type="button" class="close" data-dismiss="alert"></button>
-	  	<strong>{{infoCode}}</strong> - {{infoMsj}}.
+	<div *ngIf="!tableHidden" class="row divPaginationFather">
+		<div class="divPaginationSon">
+			<pagination-controls (pageChange)="p = $event" directionLinks="true" responsive="true" screenReaderPaginationLabel="Pagination" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+		</div>
 	</div>
-</div>
-<div *ngIf="isError" class="divErrorShow">
-	<div class="alert alert-danger alert-dismissible">
-	  	<button type="button" class="close" data-dismiss="alert"></button>
-	  	<strong>{{errorCode}}</strong> - {{errorMsj}}.
+	<div *ngIf="isInfo" class="divInfoShow">
+		<div class="alert alert-info alert-dismissible">
+			  <button type="button" class="close" data-dismiss="alert"></button>
+			  <strong>{{infoCode}}</strong> - {{infoMsj}}.
+		</div>
+	</div>
+	<div *ngIf="isError" class="divErrorShow">
+		<div class="alert alert-danger alert-dismissible">
+			  <button type="button" class="close" data-dismiss="alert"></button>
+			  <strong>{{errorCode}}</strong> - {{errorMsj}}.
+		</div>
 	</div>
 </div>

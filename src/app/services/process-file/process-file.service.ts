@@ -163,8 +163,11 @@ export class ProcessFileService {
     var fileDTO = {
       fileName : fileName,
     };
-    return this.http.post(environment.sipare_ms_processFile_url.concat(environment.sendValidatedFileToPROCESAR), fileDTO, 
+    let url: string = 'http://10.160.14.213:8085/sipareMSProcessFileApp/multiva/sipare/sendValidatedFile';
+    return this.http.post(url, fileDTO, 
           {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
+    // return this.http.post(environment.sipare_ms_processFile_url.concat(environment.sendValidatedFileToPROCESAR), fileDTO, 
+    //       {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
 
   getContentFileEdit(fileName : string) : Observable<any>{
@@ -254,7 +257,7 @@ export class ProcessFileService {
     var request = {
       username : username
     };
-    return this.http.post(environment.sipare_ms_processFile_url.concat(environment.sendFileToConnectDirectUrl), 
+    return this.http.post(environment.sipare_generate_processFile, 
       JSON.stringify(request), {headers: new HttpHeaders().set(environment.contentType,environment.appJson)})
   }
 

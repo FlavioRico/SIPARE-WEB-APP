@@ -1,50 +1,37 @@
 <app-navbar></app-navbar>
-<div *ngIf="isContentTableFull" class="container-fluid barranombre" style="margin-top: 1%;margin-left: 14%;">
-	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
-		<ul class="nav navbar-nav col-md-12">
-			<h4>
-				<font color=#0c3a6b style="font-size: 12px;">Reporte Recaudaci&oacute;n</font> <font
-					color=#0c3a6b></font>
-			</h4>
-		</ul>
+
+<div *ngIf="isContentTableFull" class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+		<strong>PROCESAR</strong> - Reporte Recaudación
 	</div>
-</div>
-<div *ngIf="isContentTableFull" class="row" style="width: 74%;margin-left: 17%;margin-top: 1%;">
-	<div class="col-md-10" style="margin-left: 9.8%;">
-		<div class="mce-container row">
-			<div class="col-md-3">
-				<div class="input-group">
-						<input *ngIf="!isContentTable" type="text"
-							class="form-control" placeholder="Buscar Archivo" id="buscadosar"  style="margin-top: 9%; height: 32px; width: 120%;" />
-						<span class="input-group-append" style="margin-top: -32px; margin-left: 100%;">
-                  			<div class="input-group-text">
-								<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-									<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-								  </svg>
-							  </div>
-            			</span>
-				</div>
+
+	<div class="row" style="padding-left: 15px;">
+		<div class="row">
+			<div class="col-sm">
+				<input *ngIf="!isContentTable" type="text" class="form-control" placeholder="Buscar Archivo" id="buscadosar"/>
 			</div>
-			<div style="margin-left: 10%; margin-top: 2%;">
-				<app-date-range [(dateRange)]="dateRange"></app-date-range>
+            <div class="col-sm">
+				<input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
+            </div>
+            <div class="col-sm">
+				<input #endDate type="date" [ngModel]="fechaEnd" id="fechaEnd" style="min-height: 100%; min-width: 95%;">
 			</div>
-			<div style="margin-top: 2%; margin-left: 5px;">
-				<button (click)="searchByDate();" type="button" class="btn btn-outline-secondary">
-					Buscar por fecha
+			<div class="col-sm">
+				<button type="button" class="btn btn-outline-success" id="buttSearchByDate"
+					(click)="searchByDate()">Buscar por fecha
 				</button>
 			</div>
-			<div style="margin-left: 14.5%;">
-				<button (click)="exportXLSWO();" type="button" class="btn btn-outline-secondary">
-					EXPORTAR EXCEL
+			<div class="col-sm">
+				<button type="button" class="btn btn-outline-success"
+					(click)="exportXLSWO()">Exportar a EXCEL
 				</button>
-				<!--<a [href]="fileUrlr" download="listaArchivosPROCESAR_BETA.xls">DownloadFile</a>-->
 			</div>
-		</div>
+        </div>
 	</div>
 </div>
-<div *ngIf="!tableHidden" style="margin-left: 5.5%;">
-	<div *ngIf="isContentTableFull" class="mce-container row scrollme" style="width: 85%;margin-left: 10%;margin-top: 1%; overflow-x: hidden;">
+
+<div *ngIf="!tableHidden" class="container">
+	<div *ngIf="isContentTableFull" class="mce-container row scrollme" style="margin-top: 1%; overflow-x: hidden;">
 	<table class="table table-hover" id="tablafull">
 		<thead>
 			<tr>
@@ -173,6 +160,8 @@
 		</tbody>
 	</table>
 </div>
+
+
 <div *ngIf="isContentTableFull" style="width: 80%;margin-left: 10%;margin-top: 1%; height: 50px; overflow-x: hidden;text-align: center;">
 	<div class="col-md-12" style="margin-left: 9.8%;">
 		<div class="mce-container row">
@@ -186,18 +175,11 @@
 </div>
 </div>
 <!--Modal Content Start-->
-<div *ngIf="isContentTable" class="container-fluid barranombre" style="margin-top: 1%; margin-left: 15%;">
-	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
-		<ul class="nav navbar-nav col-md-12">
-			<h4>
-				<font color=#0c3a6b style="font-size: 12px;">Detalle Archivo: {{fileContentName}}</font> <font
-					color=#0c3a6b></font>
-			</h4>
-		</ul>
+<div class="container" *ngIf="isContentTable">
+	<div class="alert alert-primary title-opc" role="alert">
+		Detalle Archivo: {{fileContentName}}
 	</div>
-</div>
-<div *ngIf="isContentTable" class="mce-container row" style="width: 80%; margin-left: 8%; margin-top: -1%; margin-bottom: 2%;">
-	<div class="col-md-12" style="margin-left: 9.8%;">
+	<!-- <div class="col-md-12" style="margin-left: 9.8%;">
 		<div class="mce-container row">
 			<div class="col-md-4">
 				<div class="inner-addon left-addon">
@@ -206,12 +188,17 @@
 				</div>
 			</div>
 		</div>
+	</div> -->
+	<div class="row">
+		<div class="col-md">
+			<input type="text" class="form-control" placeholder="Buscar" id="buscadorModal" style="margin-bottom: 2%;"/>
+		</div>
+		<div class="col-md"></div>
+		<div class="col-md"></div>
 	</div>
-</div>
-<div *ngIf="isContentTable" class="mce-container row" style="width: 80%; height: 458px; margin-left: 15%;">
 	<table class="table table-hover tbody-scroll" id="tablafullModal">
 		<thead>
-			<tr id="trModal" style="display: block !important;">
+			<tr id="trModal">
 				<th (click)="sortTableModal(0)" style="padding: 0.4em; vertical-align: baseline;">
 					<div style="width: 217px;">
 						<div>
@@ -491,6 +478,7 @@
 			</tr>
 		</tbody>
 	</table>
+
 	<div style="width: 80%;margin-left: 10%;margin-top: 1%; height: 50px; overflow-x: hidden;">
 	<div class="col-md-10" style="margin-left: 9.8%;">
 		<div class="mce-container row">
@@ -502,6 +490,8 @@
 		</div>
 	</div>
 </div>
+
+
 </div>
 <!--Modal Content End-->
 <div *ngIf="isContentTable" style="width: 80%;margin-left: 10%;margin-top: 1%; height: 50px; overflow-x: hidden;">
@@ -517,15 +507,17 @@
 		</div>
 	</div>
 </div>
-<div *ngIf="isInfo" style="width: 80%; margin-left: 15%; margin-top: 1%;">
-	<div class="alert alert-info alert-dismissible" >
-	  	<button type="button" class="close" data-dismiss="alert"></button>
-	  	<strong>{{infoCode}}</strong> - {{infoMsj}}.
+<div class="container">
+	<div *ngIf="isInfo" style="margin-top: 1%;">
+		<div class="alert alert-info alert-dismissible" >
+			  <button type="button" class="close" data-dismiss="alert"></button>
+			  <strong>{{infoCode}}</strong> - {{infoMsj}}
+		</div>
 	</div>
-</div>
-<div *ngIf="isError" style="width: 80%; margin-left: 15%; margin-top: 1%;">
-	<div class="alert alert-danger alert-dismissible">
-	  	<button type="button" class="close" data-dismiss="alert"></button>
-	  	<strong>{{errorCode}}</strong> - {{errorMsj}}
+	<div *ngIf="isError" style="margin-top: 1%;">
+		<div class="alert alert-danger alert-dismissible">
+			  <button type="button" class="close" data-dismiss="alert"></button>
+			  <strong>{{errorCode}}</strong> - {{errorMsj}}
+		</div>
 	</div>
 </div>
