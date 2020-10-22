@@ -130,4 +130,4 @@
     </div>
 </div>
 
-<app-modal-auth *ngIf="!errService"></app-modal-auth>
+<app-modal-auth [processAuth]="flagAuth" [processLiquidation]="flagLiquidation" [processPreNotice]="flagPreNotice"></app-modal-auth>

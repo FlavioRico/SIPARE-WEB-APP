@@ -241,7 +241,9 @@ export class BackOfficeComponent implements OnInit {
 					this.successCode = 'SUCCESS';
 					this.isInfo = false;
   					this.infoCode  = '';
-  					this.infoMsj  = '';
+					this.infoMsj  = '';
+					this.message_liquidation = 'La transacción ya fue realizada.';
+					this.liquidation_flag = true;
 					this.clearInputs();
 					$(document).ready(function(){
 						$("#btnAuthorized").prop('disabled', false); 

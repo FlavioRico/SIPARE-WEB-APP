@@ -9,7 +9,9 @@ export const environment = {
 
     //YAXCHE
     sipare_ms_processFile_url :                'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
+    //Servicio de Angel
     sipare_generate_processFile :              'http://10.160.14.213:8084/multiva/sipare/generateFileToPROCESAR',
+    // sipare_generate_processFile :              'http://10.160.14.213:8085/sipareMSProcessFileApp/multiva/sipare/generateFileToPROCESAR',
     sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',
     //Este no cambia
     sipare_ms_authenticate_url :               'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/',

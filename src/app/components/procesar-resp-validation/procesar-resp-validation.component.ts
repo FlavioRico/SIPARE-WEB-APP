@@ -60,8 +60,6 @@ export class ProcesarRespValidationComponent implements OnInit {
 
   ngOnInit() {
 
-	this.spinner.show();
-
 	this.globalResp = '1';
 	this.notAutorized = true;
 
@@ -69,9 +67,9 @@ export class ProcesarRespValidationComponent implements OnInit {
   	this.isContentTable = false;
   	this.tableListRegisterByCode = false;
   	if(localStorage.getItem('username') === '' || localStorage.getItem('username') == null){
-		this.spinner.hide();
 		this.router.navigate(['/']);
 	}else{
+		// this.spinner.show();
 		this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 			result => {
 				if(result.resultCode == 0){
