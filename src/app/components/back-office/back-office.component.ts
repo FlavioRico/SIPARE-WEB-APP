@@ -133,7 +133,7 @@ export class BackOfficeComponent implements OnInit {
 			this.message_liquidation = 'La transacción ya fue realizada.';
 			this.liquidation_flag = true;
 			$(document).ready(function(){
-				$("#btnAuthorized").prop('disabled', false); 
+				$("#btnAuthorized").prop('disabled', true); 
 				$("#btnAuthorized").hide();
 			});
 		}else {
@@ -243,10 +243,10 @@ export class BackOfficeComponent implements OnInit {
   					this.infoCode  = '';
 					this.infoMsj  = '';
 					this.message_liquidation = 'La transacción ya fue realizada.';
-					this.liquidation_flag = true;
+					this.liquidation_flag = false;
 					this.clearInputs();
 					$(document).ready(function(){
-						$("#btnAuthorized").prop('disabled', false); 
+						$("#btnAuthorized").prop('disabled', true); 
 						$("#btnAuthorized").hide();
 					});
 					this.spinner.hide();

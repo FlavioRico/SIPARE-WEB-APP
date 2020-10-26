@@ -145,13 +145,13 @@
 			</div>
 		</div>
 
-		<!-- <div>
-			<button *ngIf="!liquidationErr" (click)="paymentTransaction();"
+		<div>
+			<button *ngIf="!liquidationErr && !isSuccess" (click)="paymentTransaction();"
 			type="button" class="btn btn-outline-success float-right" 
 			style="margin-bottom: 15px;" id="btnAuthorized">
 				Aceptar y Firmar
 			</button>
-		</div> -->
+		</div>
 
 	</form>
 </div>

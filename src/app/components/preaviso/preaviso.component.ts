@@ -50,6 +50,7 @@ export class PreavisoComponent implements OnInit {
 		private router : Router, private spinner: NgxSpinnerService) { }
 
 	ngOnInit() {
+	this.isSuccess = false;
 	this.spinner.show();
   	if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
 		this.spinner.hide();
