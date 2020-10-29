@@ -145,12 +145,34 @@
 			</div>
 		</div>
 
-		<div>
-			<button *ngIf="!liquidationErr && !isSuccess" (click)="paymentTransaction();"
-			type="button" class="btn btn-outline-success float-right" 
-			style="margin-bottom: 15px;" id="btnAuthorized">
-				Aceptar y Firmar
+		<div class="float-right">
+			Hora por defecto para programar la transacción (09 : 00 AM)
+			<br>
+			<div class="editProgrammed" *ngIf="flagHab">
+				Hora personalizada para programar la transacción:
+				<ngb-timepicker [(ngModel)]="timeTransactionProgrammed" [meridian]="meridian" name="clockPicker" [minuteStep]="minuteStep">
+				</ngb-timepicker>
+				<hr>
+			</div>
+			<button (click)="changeAvalible();" type="button" class="btn btn-outline-success" style="margin: 15px 0px 15px 0px;">
+				{{ txtForProgrammed }}
 			</button>
+			<br>
+			<div>
+				<button *ngIf="!liquidationErr && !isSuccess" (click)="paymentTransaction();"
+				type="button" class="btn btn-outline-success float-right" 
+				style="margin-bottom: 15px;" id="btnAuthorized">
+					Aceptar y Firmar
+				</button>
+			</div>
+			<!-- <div>
+				<button (click)="paymentTransaction2();"
+				type="button" class="btn btn-outline-success float-right" 
+				style="margin-bottom: 15px;" id="btnAuthorized">
+					TEST
+				</button>
+			</div> -->
+			<!-- <pre>Selected time: {{timeTransactionProgrammed | json}}</pre> -->
 		</div>
 
 	</form>

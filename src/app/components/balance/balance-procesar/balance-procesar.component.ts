@@ -456,6 +456,6 @@ export class BalanceProcesarComponent implements OnInit {
 					}
 				}
 			});
-	}
+  }
 
 }

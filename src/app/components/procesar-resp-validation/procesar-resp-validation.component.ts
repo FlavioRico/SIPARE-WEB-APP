@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 import { LineCap } from '../models/models-procesarRespValidation/lineCap';
 import { DataCaptureLineUpdate } from '../models/models-procesarRespValidation/dataCaptureLineUpdate';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DataComplementary } from '../models/models-procesarRespValidation/dataComplementary';
 
 @Component({
   selector: 'app-procesar-resp-validation',
@@ -52,6 +53,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public capLine: LineCap = new LineCap();
 	public messageErrService: string = '';
 	public errService: boolean = false;
+	public respuestas: DataComplementary = new DataComplementary();
 	/*termina*/
 
   constructor(public authServ : AuthenticationService, public processFile : ProcessFileService,
@@ -175,6 +177,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 					// console.log('debug', result);
 					this.processFile.getDataComplementary(this.capLine).subscribe(
 						data => {
+							this.respuestas = data.body;
 							this.errServices(false, '');
 							let headers;
 							const keys = data.headers.keys();

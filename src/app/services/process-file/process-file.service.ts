@@ -10,6 +10,7 @@ import { DataCaptureLineUpdate } from '../../components/models/models-procesarRe
 import { DataComplementary } from '../../components/models/models-procesarRespValidation/dataComplementary';
 import { LineCap } from '../../components/models/models-procesarRespValidation/lineCap';
 import { LiquidationPreAviso } from 'src/app/components/models/models-preaviso/liquidationPreAviso';
+import { Programmed } from 'src/app/components/models/models-backOffice/Programmed';
 
 
 @Injectable()
@@ -389,6 +390,36 @@ export class ProcessFileService {
       data, {observe: 'response'}
     );
 
+  }
+
+  updateProgrammed(type: string, newProgrammed: Programmed) {
+
+    let url = (type == 'DEFAULT') ? 'http://localhost:9098/transactions?type=DEFAULT' : 'http://localhost:9098/transactions?type=CRON';
+    console.log("this", url, newProgrammed);
+
+    return this.http.put<any>(
+      url, 
+      newProgrammed,
+      {observe: 'response'}
+    );
+  }
+
+  verifyTransactionToday() {
+    
+    return this.http.get<any>('url',
+    {observe: 'response'});
+  }
+
+  updateHourTransaction(newHour: string) {
+
+    var obj = { newHour: newHour }
+    let url = '';
+
+    return this.http.put<any>(
+      url,
+      JSON.stringify(obj),
+      {observe: 'response'}
+    );
   }
   
 }

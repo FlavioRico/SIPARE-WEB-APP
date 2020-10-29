@@ -6,6 +6,8 @@ import * as $ from 'jquery';
 import { msjscode } from '../../../environments/msjsAndCodes';
 import { Liquidation } from '../models/models-backOffice/liquidation';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { SharedComponent } from 'src/app/shared/shared/shared.component';
+import { Programmed } from '../models/models-backOffice/Programmed';
 
 @Component({
   selector: 'app-back-office',
@@ -25,10 +27,10 @@ export class BackOfficeComponent implements OnInit {
 	public ngKeyEntity : string;
 	public ngBankNameRecep : string;
 	public ngTxt : string;
-	public ngIMSS : string;
-	public ngViv : string;
-	public ngAcv : string;
-	public ngTotal : string;
+	public ngIMSS : any;
+	public ngViv : any;
+	public ngAcv : any;
+	public ngTotal : any;
 	public errorMsj : string;
 	public infoMsj : string;
 	public errorCode : string;
@@ -52,8 +54,11 @@ export class BackOfficeComponent implements OnInit {
 	public messageErrService: string = '';
 	public errService: boolean = false;
 
-	  constructor(public processFile : ProcessFileService, public authServ : AuthenticationService,
-		private router : Router, private spinner: NgxSpinnerService) { }
+	shared = new SharedComponent();
+	programmed = new Programmed();
+
+	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService,
+	private router : Router, private spinner: NgxSpinnerService) { }
 
   	ngOnInit() {
 		this.spinner.show();
@@ -113,12 +118,13 @@ export class BackOfficeComponent implements OnInit {
 	loadDataLiquidation (result: Liquidation){
 		this.isError= false;
 		this.ngDateRep = result.receiving_date;
-		this.ngIMSS = result.imss.toString();
-		this.ngViv = result.viv.toString();
-		this.ngAcv = result.acv.toString();
-		this.ngDateRegistry = result.registry_date;
-		this.ngTotal = result.total.toString();
 
+		this.ngIMSS = this.shared.formatTable(result.imss.toString());
+		this.ngViv = this.shared.formatTable(result.viv.toString());
+		this.ngAcv = this.shared.formatTable(result.acv.toString());
+		this.ngTotal = this.shared.formatTable(result.total.toString());
+		
+		this.ngDateRegistry = result.registry_date;
 		this.ngTxt =  result.description;
 		this.ngTypeOperation = result.operation_type;
 		this.ngPlace = result.office;
@@ -249,6 +255,9 @@ export class BackOfficeComponent implements OnInit {
 						$("#btnAuthorized").prop('disabled', true); 
 						$("#btnAuthorized").hide();
 					});
+
+					// this.updateProgrammed();
+
 					this.spinner.hide();
 	        	} else {
 	        		this.isError= true;
@@ -279,6 +288,36 @@ export class BackOfficeComponent implements OnInit {
 				this.spinner.hide();
 		    }
 		);
-  	}
+	}
+	  
+	updateProgrammed() {
 
+		this.programmed.date = "2020-09-29";
+		this.processFile.updateProgrammed('DEFAULT', this.programmed).subscribe(
+			data=>{
+				let headers;
+				const keys = data.headers.keys();
+				headers = keys.map(key =>
+					`${key}: ${data.headers.get(key)}`
+				);
+				if (data.status !== 200) {
+					this.errorCode = 'Atención - ';
+					this.errorMsj = 'No se pudo actualizar el programmed del día actual. (DEFAULT).';
+					// alert("No se pudo actualizar el programmed del día actual. (random)");
+				}else{
+					console.log("Se actualizó el Programmed del día actual.");
+				}
+			},error=>{
+				this.errorCode = 'Error inesperado - ';
+				this.errorMsj = 'Ups.. Contacte a soporte por favor (updateProgrammed).';
+				// console.log(error);
+				// alert("Ups.. Error inesperado, contacte a soporte por favor (updateProgrammed).");
+			}
+		);
+	
+	}
+
+	paymentTransaction2(){
+		this.updateProgrammed();
+	}
 }

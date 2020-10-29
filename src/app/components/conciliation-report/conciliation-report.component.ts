@@ -107,7 +107,7 @@ export class ConciliationReportComponent implements OnInit {
             this.rows = data.rows;
             this.contentAvailable = true;
             this.noContentAvailable = false;
-            this.url = "http://localhost:9091/sipare/api/v1/reports/conciliation/date_types/"
+            this.url = "http://10.160.188.123:8083/sipare/api/v1/reports/conciliation/date_types/"
               + this.dateType + "/download?" 
               + "from=" + this.fechaStart 
               + "&to=" + this.fechaEnd;
@@ -155,7 +155,7 @@ export class ConciliationReportComponent implements OnInit {
             this.rows = data.rows;
             this.contentAvailable = true;
             this.noContentAvailable = false;
-            this.url = "http://localhost:9091/sipare/api/v1/reports/conciliation/date_types/"
+            this.url = "http://10.160.188.123:8083/sipare/api/v1/reports/conciliation/date_types/"
               + this.monthType + "/months/" + this.month +"/download";
             this.spinner.hide();
           }

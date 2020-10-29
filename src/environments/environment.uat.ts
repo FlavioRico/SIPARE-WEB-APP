@@ -71,9 +71,9 @@ export const environment = {
     url_Get_Liquidation :           'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate',
     url_Get_PreNotice :             'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices/findByCurrentDate',
     
-    sipare_api :                    'http://127.0.0.1:8765/api/v1/sipare/',
+    sipare_api :                    'http://10.160.188.123:8082/api/v1/sipare/',
     urlFileStatus :                 'http://localhost:8765/sipare-consar-file-status/status',
     urlFileWorklog :                'http://localhost:8765/sipare-consar-file-worklog/worklogs/',
     urlBalanceCONSAR :              'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR',
-    url_Data_Complementary :        'http://localhost:9027/multiva/sipare/responseTypeCaptureLine'
+    url_Data_Complementary :        'http://10.160.188.123:8765/sipare-response-type-patch/multiva/sipare/responseTypeCaptureLine'
 };
