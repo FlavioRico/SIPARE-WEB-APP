@@ -3,6 +3,10 @@ import { ProcessFileService } from  '../../services/process-file/process-file.se
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import * as $ from 'jquery';
+import { LineCap } from '../models/models-procesarRespValidation/lineCap';
+import { DataCaptureLineUpdate } from '../models/models-procesarRespValidation/dataCaptureLineUpdate';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DataComplementary } from '../models/models-procesarRespValidation/dataComplementary';
 
 @Component({
   selector: 'app-procesar-resp-validation',
@@ -43,45 +47,59 @@ export class ProcesarRespValidationComponent implements OnInit {
 	/*this agregado para funcionamiento*/
 	public p: number;
 	public globalResp: string;
+	public responseType: number;
 	public notAutorized: boolean;
+	public dataCaptureLine: DataCaptureLineUpdate = new DataCaptureLineUpdate();
+	public capLine: LineCap = new LineCap();
+	public messageErrService: string = '';
+	public errService: boolean = false;
+	public respuestas: DataComplementary = new DataComplementary();
 	/*termina*/
 
   constructor(public authServ : AuthenticationService, public processFile : ProcessFileService,
-  	private router : Router) { }
+	  private router : Router,
+	  private spinner: NgxSpinnerService,) { }
 
   ngOnInit() {
-	this.globalResp = '1 Corrección ER.';
+
+	this.globalResp = '1';
 	this.notAutorized = true;
 
   	this.isContentTableFull = false;
   	this.isContentTable = false;
   	this.tableListRegisterByCode = false;
   	if(localStorage.getItem('username') === '' || localStorage.getItem('username') == null){
-			this.router.navigate(['/']);
+		this.router.navigate(['/']);
 	}else{
+		// this.spinner.show();
 		this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 			result => {
 				if(result.resultCode == 0){
 					if(result.logged == 0){
+						this.spinner.hide();
 						this.router.navigate(['/']);
 					}else{
 						this.isLogin = true;
 						this.processFile.getLastFileToResponseProcesarService().subscribe(
-							result => {           
+							result => {  
 				        		if(result.resultCode == 0){
 						        	if (result.listSize == 0){
+										this.isError= true;
 						        		this.tableStatusProcesar = false;
 								        this.errorCode = 'Emp-001';
-								        this.errorMsj = 'Sin registros por el momento.';
+										this.errorMsj = 'Sin registros por el momento.';
+										this.spinner.hide();
 						        	} else {
 						        		this.tableStatusProcesar = true;
 										this.rows = result.listContent;
+										this.spinner.hide();
 									}
 						        }
 						    },error => {
 							    this.isError= true;
 							    this.errorCode = error.resultCode;
 								this.errorMsj = error.resultDescription;
+								this.spinner.hide();
 						    }
 						);
 					}
@@ -90,6 +108,13 @@ export class ProcesarRespValidationComponent implements OnInit {
 		);
 	}
   }
+		
+	errServices(valueBolean: boolean, message: string) {
+
+		this.errService = valueBolean;
+		this.messageErrService = message;
+		
+	}
 
   	listRegisterByCodeAndFileResponseProcesar(oid, status){
   		this.oidRequest = oid;
@@ -103,6 +128,8 @@ export class ProcesarRespValidationComponent implements OnInit {
 				        this.errorCode = 'Emp-001';
 				        this.errorMsj = 'Sin registros por el momento.';
 		        	} else {
+						console.log('Debug', result.listContent);
+						
 		        		this.isError = false;
 		        		this.tableListRegisterByCode = true;
 		        		this.tableStatusProcesar = false;
@@ -125,13 +152,15 @@ export class ProcesarRespValidationComponent implements OnInit {
   	}
 
  	updateRegistry(line, oid, code: any){
-		console.log('debug function = ', code);
+		console.log('debug function = ', line);
 		
 		this.notAutorized = (code == '01') ? false : true;
 
- 		this.lineCap = line;
+		this.lineCap = line;
+		this.capLine.capture_line = line; 
  		this.processFile.getContentDataT24ByResponseProcesar(oid).subscribe(
-  			result => {           
+  			result => {  
+				this.spinner.show();         
         		if(result.resultCode == 0){
 	        		this.dataRowT24 = result;
 	        		this.ngBalanceImss = this.format2(result.imss, '$');
@@ -144,9 +173,27 @@ export class ProcesarRespValidationComponent implements OnInit {
  					if(result.accountNumber == 'EFECTIVO')
  						this.inputAccountFlag = false;
  					else
-						 this.inputAccountFlag = true;
-					console.log('debug', result);
-					
+						this.inputAccountFlag = true;
+					// console.log('debug', result);
+					this.processFile.getDataComplementary(this.capLine).subscribe(
+						data => {
+							this.respuestas = data.body;
+							this.errServices(false, '');
+							let headers;
+							const keys = data.headers.keys();
+							headers = keys.map(key =>
+								`${key}: ${data.headers.get(key)}`);
+							this.globalResp = data.body.responseType.toString();
+							this.dataCaptureLine.response_type = data.body.responseType;
+							console.log('dejaré response this.dataCaptureLine.response_type en', 
+							this.dataCaptureLine.response_type, 'en la otra hay', data.body.responseType);
+							this.spinner.hide();
+						}, error => {
+							this.spinner.hide();
+							this.errServices(true, `Ocurrió un error en el servicio getDataComplementary ${error}`);
+						}
+					);
+
 		        }
 		    },error => {
 			    this.isError= true;
@@ -182,7 +229,10 @@ export class ProcesarRespValidationComponent implements OnInit {
         		if(result.resultCode == 0){
 	        		this.tableListRegisterByCode = false;
  					this.isContentTable = false;
- 					this.tableStatusProcesar = true;
+					this.tableStatusProcesar = true;
+
+					this.updateTwo();
+
 		        }
 		    },error => {
 			    this.isError= true;
@@ -190,6 +240,28 @@ export class ProcesarRespValidationComponent implements OnInit {
 				this.errorMsj = error.resultDescription;
 		    }
     	);
-  	}
+	}
+	  
+		/*this Agregado */
+	seleccion(operationType: number){
+		this.globalResp = operationType.toString();
+		this.responseType = operationType;
+	}
+
+	updateTwo () {
+		// this.dataCaptureLine.response_type = this.globalResp;
+		this.dataCaptureLine.capture_line = this.lineCap;
+		console.log("vamos a enviar esto => ",this.dataCaptureLine);
+		
+		this.processFile.updateCaptureLine(this.dataCaptureLine).subscribe(
+			dta => {
+				if (dta.body.response == 0) alert('Actualización realizada con exito');
+				console.log(dta,'aqui cumplo');
+				
+			}, err => {
+				alert(`Error en servicio de actualización updateCaptureLine`);
+			}
+		);
+	}
 
 }

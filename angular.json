@@ -65,6 +65,30 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "DEV": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
+            "UAT": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.uat.ts"
+                }
+              ]
+            },
+            "CUSTOM": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.custom.ts"
+                }
+              ]
             }
           }
         },
@@ -76,6 +100,15 @@
           "configurations": {
             "production": {
               "browserTarget": "V2Sipare:build:production"
+            },
+            "DEV": {
+              "browserTarget": "V2Sipare:build:DEV"
+            },
+            "UAT": {
+              "browserTarget": "V2Sipare:build:UAT"
+            },
+            "CUSTOM": {
+              "browserTarget": "V2Sipare:build:CUSTOM"
             }
           }
         },

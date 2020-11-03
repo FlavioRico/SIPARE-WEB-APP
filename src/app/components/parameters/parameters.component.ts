@@ -3,15 +3,14 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 import { ProcessFileService } from  '../../services/process-file/process-file.service';
 import { msjscode } from '../../../environments/msjsAndCodes';
 import { TypeTransaction } from '../models/models-parameters/typeTransaction';
-import { DataTypeOperation } from '../models/models-parameters/dataTypeOperation';
 import { Parameter } from '../models/models-parameters/parameter';
-import { GetParameter } from '../models/models-parameters/getParameter';
 
 @Component({
   selector: 'app-parameters',
   templateUrl: './parameters.component.html',
   styleUrls: ['./parameters.component.scss']
 })
+
 export class ParametersComponent implements OnInit {
 
 	public ngTypeOperation : string;
@@ -63,6 +62,10 @@ export class ParametersComponent implements OnInit {
 	@ViewChild('texto') texto: ElementRef;
 	/* */
 
+	 /*Agregado*/
+	 public messageErrService: string = '';
+	 public errService: boolean = false;
+
 	constructor(public processFile : ProcessFileService,
 				public authServ : AuthenticationService,
 				private render: Renderer2) { }
@@ -92,6 +95,11 @@ export class ParametersComponent implements OnInit {
 	}
 
 	/*this-> agregado */
+	errServices(valueBolean: boolean, message: string) {
+		this.errService = valueBolean;
+        this.messageErrService = message;
+	}
+
 	seleccion(operationType: string){
 		this.typeOperationForService.typeTransaction = operationType;
 		this.globalOperation = operationType;
@@ -99,13 +107,14 @@ export class ParametersComponent implements OnInit {
 
 		this.processFile.getParameter(operationType).subscribe(
 			data =>{
+				this.errServices(false, '');
 				let headers;
 				const keys = data.headers.keys();
-					headers = keys.map(key =>
-						`${key}: ${data.headers.get(key)}`);
+				headers = keys.map(key =>
+					`${key}: ${data.headers.get(key)}`);
 				this.loadNewData(data);
 			},error =>{
-				alert(`Error inesperado en los servicios ${error.resultCode}`);
+				this.errServices(true, `Fallo en servicio getParameter(${operationType})`);
 			}
 		);
 	}
@@ -156,9 +165,25 @@ export class ParametersComponent implements OnInit {
 		}
 	}
 
+	validatedInputNumbersAndStrings(evt){
+		let keynum;
+		if(window.Event) keynum = evt.keyCode;
+		else keynum = evt.which;
+		let conditionNumbers = (keynum > 47 && keynum <58);
+		let conditionStringsUpper = (keynum > 64 && keynum < 91);
+		let conditionStringsLower = (keynum > 96 && keynum < 123);
+		if(conditionNumbers || conditionStringsUpper || conditionStringsLower || keynum == 8 || keynum == 13) return true;
+		else {
+			alert('Sólo se admiten números y letras.');
+			return false;
+		}
+	}
+
 	refresh(){
 		this.seleccion(this.typeOperationForService.typeTransaction);
-		if (this.globalOperation == 'T+1' || this.globalOperation == '1') this.globalOperation = '116027';
+		console.log('global operation en => ', this.globalOperation);
+		
+		if (this.globalOperation == 'T+1' || this.globalOperation == '1' || this.globalOperation == '116027') this.globalOperation = '116027';
 		else this.globalOperation = '116018';
 		this.isSuccess = false;
 	}
@@ -190,6 +215,7 @@ export class ParametersComponent implements OnInit {
 			this.parameter.created_by = nameUser;
 			this.processFile.actualizarParametro(this.parameter).subscribe(
 				resp => {
+					this.errServices(false, ``);
 					const keys = resp.headers.keys();
 					headers = keys.map(key =>
 						`${key}: ${resp.headers.get(key)}`);
@@ -202,7 +228,7 @@ export class ParametersComponent implements OnInit {
 						this.renderButtons(false, true, false);
 						this.refresh();
 					}else {
-						this.clear();
+						// this.clear();
 						this.isSuccess = false;
 						this.isError = true;
 						this.errorCode = 'ERROR';
@@ -210,7 +236,7 @@ export class ParametersComponent implements OnInit {
 						this.renderButtons(true, false, false);
 					}
 				}, error => {
-					alert(`Error inesperado en servicio ${error.message}`);
+					this.errServices(true, `Fallo en servicio actualizarParametro.`);
 					this.isError = true;
 					this.errorCode = error.resultCode;
 					this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
@@ -220,7 +246,7 @@ export class ParametersComponent implements OnInit {
 		} else {
 			this.isError = true;
 			this.errorCode = 'Error ';
-			this.errorMsj = 'Existen campos vacios, por favor incluya toda la información solicitada.';
+			this.errorMsj = 'Existen campos vacíos, por favor incluya toda la información solicitada';
 		}
 	}
 	/* */
@@ -275,8 +301,10 @@ export class ParametersComponent implements OnInit {
 			this.parameter.receiving_bank_key = this.ngKeyEntity;
 			this.parameter.description = this.ngTxt;
 			this.parameter.created_by = nameUser;
+
 			this.processFile.createParameter(this.parameter).subscribe(
 				resp => {
+					this.errServices(false, '');
 					const keys = resp.headers.keys();
 					headers = keys.map(key =>
 						`${key}: ${resp.headers.get(key)}`);
@@ -296,13 +324,14 @@ export class ParametersComponent implements OnInit {
 						this.renderButtons(true, false, false);
 					}
 				}, error => {
-					alert(`Error inesperado en servicio ${error.message}`);
+					this.errServices(true, 'Fallo en servicio createParameter.');
 					this.isError = true;
 					this.errorCode = error.resultCode;
 					this.errorMsj = error.resultDescription.includes('Could not commit Hibernate transaction') ? 'No se pudo confirmar la transacción de Hibernate, el servicio no esta dispoible' : error.resultDescription;
 					this.renderButtons(true, false, false);
 				}
-			)
+			);
+
 		} else {
 			this.isError = true;
 			this.errorCode = 'Error ';
@@ -320,7 +349,8 @@ export class ParametersComponent implements OnInit {
         	this.errorMsj = 'No hay código para realizar la búsqueda del banco ordenante';
 		} else {
 			this.processFile.searchBankReceptorByCode(this.ngCodeBank).subscribe(
-			result => {           
+			result => {    
+				this.errServices(false, '');       
         		if(result.resultCode == msjscode.resultCodeOk){
 					this.ngBankName = result.bank;
 					this.searchSucces = true;
@@ -333,6 +363,7 @@ export class ParametersComponent implements OnInit {
 		        	this.errorMsj = result.resultDescription;
 		        }
 		    },error => {
+				this.errServices(true, 'Fallo en servicio searchBankReceptorByCode.');       
 			    this.isError = true;
 			    this.ngBankName = '';
 		       	this.errorCode = error.resultCode;
@@ -352,7 +383,8 @@ export class ParametersComponent implements OnInit {
         	this.errorMsj = 'No hay código para realizar la búsqueda del banco receptor';
 		} else {
 			this.processFile.searchBankReceptorByCode(this.ngKeyEntity).subscribe(
-			result => {           
+			result => {   
+				this.errServices(false, '');               
         		if(result.resultCode == msjscode.resultCodeOk){
 					this.ngBankNameRecep = result.bank;
 					this.searchSucces = true;
@@ -365,6 +397,7 @@ export class ParametersComponent implements OnInit {
 		        	this.errorMsj = result.resultDescription;
 		        }
 		    },error => {
+				this.errServices(true, 'Fallo en servicio searchBankReceptorByCode.');       
 			    this.isError = true;
 			    this.ngBankNameRecep = '';
 		       	this.errorCode = error.resultCode;

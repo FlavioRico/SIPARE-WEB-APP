@@ -5,17 +5,27 @@
 	<div class="alert alert-primary title-opc" role="alert">
 		<strong>PROCESAR</strong> - Liquidación Back Office
 	</div>
+
+	<div *ngIf="errService" class="alert alert-danger" role="alert">
+		<h4 class="alert-heading">Error inesperado.</h4>
+		<p>Error en servicios.</p>
+		<hr>
+		<p class="mb-0">{{ messageErrService }}</p>
+	</div>
+
 	<!-- <div class="alert alert-info alert-dismissible">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<strong>Atención: </strong> datos en modo "Sólo lectura".
 	</div> -->
-	<div class="alert alert-info alert-dismissible" *ngIf="balaceApproved">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ message_liquidation }}</strong>
-	</div>
-	<div class="alert alert-info alert-dismissible" *ngIf="!balaceApproved">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>{{ message_liquidation }}</strong>
+	<div *ngIf="!liquidationErr">
+		<div class="alert alert-info alert-dismissible" *ngIf="balaceApproved">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>{{ message_liquidation }}</strong>
+		</div>
+		<div class="alert alert-info alert-dismissible" *ngIf="!balaceApproved">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong>{{ message_liquidation }}</strong>
+		</div>
 	</div>
 	<div class="alert alert-warning alert-dismissible" *ngIf="liquidationErr">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -70,7 +80,7 @@
 				<div class="form-group input-info">
 					Clave:
 					<input type="text" name="codeBank" id="codeBank" [(ngModel)]="ngCodeBank" type="text" class="form-control"
-					placeholder="Clave ordenante" aria-describedby="currentName" readonly="readonly">
+					placeholder="" aria-describedby="currentName" readonly="readonly">
 				</div>
 			</div>
 			<div class="col-sm">
@@ -151,6 +161,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="row">
 		<div class="col-md">
 			<div class="form-group input-info">
@@ -161,6 +172,7 @@
 		</div>
 		<div class="col-md"></div>
 	</div>
+	
 	<div class="row end-element">
 		<div class="col-md">
 			<div class="form-group input-info">
@@ -172,12 +184,19 @@
 	</div>
 
 	<div>
-		<button (click)="paymentTransaction();"
+		<button *ngIf="!liquidationErr" (click)="paymentTransaction();"
 		type="button" class="btn btn-outline-success float-right" 
 		style="margin-bottom: 15px;" id="btnAuthorized">
 			Aceptar y Firmar
 		</button>
 	</div>
+	<!-- <div>
+		<button (click)="paymentTransaction2();"
+		type="button" class="btn btn-outline-success float-right" 
+		style="margin-bottom: 15px;" id="btnAuthorized">
+			Aceptar y Firmar for TEST
+		</button>
+	</div> -->
 	</form>
 </div>
 
@@ -195,3 +214,12 @@
 		  <strong>{{successCode}}</strong> - {{successrMsj}}.
 	</div>
 </div>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.5)"
+  size="large"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+    <p style="font-size: 20px; color: white">Cargando...</p>
+</ngx-spinner>

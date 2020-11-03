@@ -4,6 +4,7 @@ import { ProcessFileService } from  '../../services/process-file/process-file.se
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
+import { SharedComponent } from 'src/app/shared/shared/shared.component';
 
 @Component({
   selector: 'app-collection-report',
@@ -32,9 +33,28 @@ export class CollectionReportComponent implements OnInit {
 	public dateFrom : boolean;
 	public dateTo : boolean;
 
+	/*Agregado*/
+	public fechaStart;
+	public fechaEnd;
+	public fechaDefault;
+	shared = new SharedComponent();
+	public dia;
+	public mes;
+	public año;
+
+	/*For test*/
+	dateStartTest: any = '2020-09-28'
+	dateEndTest: any = '2020-09-29'
+
+
 	constructor(public authServ : AuthenticationService, public processFile : ProcessFileService, private router : Router) { }
 
 	ngOnInit() {
+
+		this.fechaDefault = this.shared.getDateFormated2();
+		this.fechaStart = this.fechaDefault;
+		this.fechaEnd = this.fechaDefault;
+
 		$(document).ready( function() {
 			$("#buscadorModal").on("keyup", function() {
 				var input, filter, table, tr, td, i, txtValue;
@@ -196,7 +216,7 @@ export class CollectionReportComponent implements OnInit {
 			result => {
 				if(result.resultCode == 0){
 					if(result.logged == 0)
-							this.router.navigate(['/']);
+						this.router.navigate(['/']);
 					else{
 						this.isInfo= true;
 				        this.infoCode = 'EXPORT';
@@ -205,7 +225,7 @@ export class CollectionReportComponent implements OnInit {
 				        this.isError= false;
 				        this.errorCode = '';
 						this.errorMsj = '';
-				  		if(this.dateRange === undefined || this.dateRange === null){
+				  		if(this.fechaStart === null || this.fechaEnd === null){
 							this.processFile.exportDataInFileT24XlsDefault().subscribe(
 					  			result => {           
 					        		if(result.byteLength > 0){
@@ -242,7 +262,13 @@ export class CollectionReportComponent implements OnInit {
 							    }
 					  		);
 				  		}else{
-				  			this.processFile.exportDataInFileT24Xls(this.dateRange.from, this.dateRange.to).subscribe(
+
+							var dateControlStart: any = document.getElementById('fechaStart');
+							var dateControlEnd: any = document.getElementById('fechaEnd');
+							this.fechaStart = dateControlStart.value;
+							this.fechaEnd = dateControlEnd.value;
+
+				  			this.processFile.exportDataInFileT24Xls(this.fechaStart, this.fechaEnd).subscribe(
 					  			result => {           
 					        		if(result.byteLength > 0){this.isInfo= false;
 								        this.infoCode = '';
@@ -284,26 +310,36 @@ export class CollectionReportComponent implements OnInit {
 
   	searchByDate(){
   		this.authServ.getUserByUserNameWithSessionId(localStorage.getItem('username'),localStorage.getItem('sessionId')).subscribe(
-			result => {
+			result => {				
 				if(result.resultCode == 0){
 					if(result.logged == 0)
 						this.router.navigate(['/']);
 					else{
-						let dateNow = new Date();
+						var dateControlStart: any = document.getElementById('fechaStart');
+						var dateControlEnd: any = document.getElementById('fechaEnd');
+						this.fechaStart = dateControlStart.value;
+						this.fechaEnd = dateControlEnd.value;
+
+						// var endDate = new Date(this.fechaEnd); descomentar terminando pruebas
+						var endDate = new Date(this.dateEndTest);
+						console.log(this.fechaStart, this.fechaEnd, endDate)
+
+						let dateNow = new Date(this.dateStartTest);
+						// let dateNow = new Date(); descomentar terminando pruebas
 				  		this.isInfo= true;
 				        this.infoCode = 'PROCESS';
 				        this.infoMsj = 'Se esta ejecutando el listado de Reporte de Recaudación por rango de fecha';
-				  		if(this.dateRange === undefined || this.dateRange === null){
-				  			this.tableHidden = true;
-				  			this.isInfo= false;
-					        this.infoCode = '';
-					        this.infoMsj = '';
-				    		this.isError= true;
-				    		this.isInfo = false;
-						    this.errorCode = 'ERR-DR';
-							this.errorMsj = 'Rango de búsqueda por fecha debe ser hasta un día hábil anterior al día actual';
-				  		}else if(this.dateRange.to.getUTCFullYear() + (this.dateRange.to.getUTCMonth() +1) + this.dateRange.to.getUTCDate() >
-				  		    		dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate()){
+
+						if(endDate.getUTCFullYear() + (endDate.getUTCMonth() +1) + endDate.getUTCDate() >
+				  		    		(dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate()) + 1){
+
+							console.log('Fecha final:',
+							endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
+							'Fecha actual: ',
+				  		    dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
+							);
+							
+							
 				    		this.tableHidden = true;
 				    		this.isInfo= false;
 					        this.infoCode = '';
@@ -312,9 +348,18 @@ export class CollectionReportComponent implements OnInit {
 				    		this.isInfo = false;
 						    this.errorCode = 'ERR-DR';
 							this.errorMsj = 'Rango de búsqueda por fecha debe ser hasta un día hábil anterior al día actual';
-				    	}else{
-				    		this.processFile.getFilesRiceibingToT24ByDateRange(this.dateRange.from, this.dateRange.to).subscribe(
-								result => {           
+						}
+						else{
+							// this.processFile.getFilesRiceibingToT24ByDateRange(this.fechaStart, this.fechaEnd).subscribe(
+				    		this.processFile.getFilesRiceibingToT24ByDateRange(this.dateStartTest, this.dateEndTest).subscribe(
+								result => {  
+									console.log('Fecha final:',
+									endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
+									'Fecha actual: ',
+									dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
+									);
+									console.log(result);
+									         
 						    		if(result.resultCode == 0){
 							        	if (result.listSize == 0){
 							        		this.tableHidden = true;
@@ -440,60 +485,60 @@ export class CollectionReportComponent implements OnInit {
 	}
 
 	sortTableMoney(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0, xText, yText;
-  table = document.getElementById("tablafull");
-  switching = true;
+		var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0, xText, yText;
+		table = document.getElementById("tablafull");
+		switching = true;
 
-  dir = "asc";
+		dir = "asc";
 
-  while (switching) {
+		while (switching) {
 
-    switching = false;
-    rows = table.getElementsByTagName("TR");
+			switching = false;
+			rows = table.getElementsByTagName("TR");
 
-    for (i = 1; i < (rows.length - 1); i++) {
+			for (i = 1; i < (rows.length - 1); i++) {
 
-      shouldSwitch = false;
+			shouldSwitch = false;
 
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
+			x = rows[i].getElementsByTagName("TD")[n];
+			y = rows[i + 1].getElementsByTagName("TD")[n];
 
 
-      if (n == 0) {
-        xText = x.innerHTML.toLowerCase();
-        yText = y.innerHTML.toLowerCase();
-      } else {
-        xText = parseFloat(x.innerHTML.split('$')[1].replace(/,/g, ''));
-        yText = parseFloat(y.innerHTML.split('$')[1].replace(/,/g, ''));
-      }
+			if (n == 0) {
+				xText = x.innerHTML.toLowerCase();
+				yText = y.innerHTML.toLowerCase();
+			} else {
+				xText = parseFloat(x.innerHTML.split('$')[1].replace(/,/g, ''));
+				yText = parseFloat(y.innerHTML.split('$')[1].replace(/,/g, ''));
+			}
 
-      if (dir == "asc") {
-        if (xText > yText) {
-          shouldSwitch = true;
-          break;
-        }
-      } else if (dir == "desc") {
-        if (xText < yText) {
-          shouldSwitch = true;
-          break;
-        }
-      }
-    }
-    if (shouldSwitch) {
+			if (dir == "asc") {
+				if (xText > yText) {
+				shouldSwitch = true;
+				break;
+				}
+			} else if (dir == "desc") {
+				if (xText < yText) {
+				shouldSwitch = true;
+				break;
+				}
+			}
+			}
+			if (shouldSwitch) {
 
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
+			rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+			switching = true;
 
-      switchcount++;
-    } else {
+			switchcount++;
+			} else {
 
-      if (switchcount == 0 && dir == "asc") {
-        dir = "desc";
-        switching = true;
-      }
-    }
-  }
-}
+			if (switchcount == 0 && dir == "asc") {
+				dir = "desc";
+				switching = true;
+			}
+			}
+		}
+	}
 
 sortTableMoneyModal(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0, xText, yText;

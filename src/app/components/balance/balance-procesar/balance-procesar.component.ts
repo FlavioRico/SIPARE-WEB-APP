@@ -27,11 +27,12 @@ export class BalanceProcesarComponent implements OnInit {
   @ViewChild('iconVerifyACV') iconCompACV: ElementRef;
   @ViewChild('iconVerifyRCV') iconCompRCV: ElementRef;
   @ViewChild('iconVerifyTotal') iconCompTotal: ElementRef;
+  @ViewChild('exportExcel') exportExcel: ElementRef;
 
   /*Others*/
   shared = new SharedComponent();
   balance: BalanceProcesar;
-  fechaCompleta = this.shared.getDateFormated();
+  fechaCompleta = '';
   public loadComplete: boolean = false;
   resourceBalance: ResourceBalance = new ResourceBalance(this.render);
 
@@ -62,6 +63,13 @@ export class BalanceProcesarComponent implements OnInit {
   backOfficeCompleted: boolean = true;
   err: boolean = false;
 
+  /*Agregado*/
+  public messageErrService: string = '';
+  public errService: boolean = false;
+  public flagAuth: boolean;
+  public flagLiquidation: boolean;
+  public flagPreNotice: boolean;
+
   constructor(
     private render: Renderer2,
     private serviceBalance: BalanceServiceService,
@@ -77,6 +85,8 @@ export class BalanceProcesarComponent implements OnInit {
     this.processFile.getParameter('116027').subscribe(
 
       data => {
+        this.errService = false;
+        this.messageErrService = '';
         let headers;
         const keys = data.headers.keys();
           headers = keys.map(key =>
@@ -88,6 +98,8 @@ export class BalanceProcesarComponent implements OnInit {
         this.processFile.getParameter('116018').subscribe(
           data => {
             let headers;
+            this.errService = false;
+            this.messageErrService = '';
             const keys = data.headers.keys();
               headers = keys.map(key =>
                 `${key}: ${data.headers.get(key)}`
@@ -99,11 +111,14 @@ export class BalanceProcesarComponent implements OnInit {
             this.sendRequestBalance(this.backOfficeCompleted);
 
           }, error => {
+            this.errService = true;
+            this.messageErrService = 'Contacta a soporte por favor. (getParameter - 116018).';
             this.parameterT1 = true;
             this.parameterT2 = true;
             this.backOfficeCompleted = false;
             this.err = true;
-            alert(`Ocurrió un error en el servicio getParameter.`);
+            this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+            this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
             this.spinner.hide();
           }
         );
@@ -112,7 +127,10 @@ export class BalanceProcesarComponent implements OnInit {
         this.parameterT1 = true;
         this.parameterT2 = true;
         this.err = true;
-        alert(`Ocurrió un error en el servicio getParameter.`);
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
+        this.errService = true;
+        this.messageErrService = 'Contacta a soporte por favor. (getParameter - 116027).';
         this.spinner.hide();
       }
     );
@@ -124,6 +142,9 @@ export class BalanceProcesarComponent implements OnInit {
       this.spinner.show();
       this.serviceBalance.retrieveBalancePROCESAR().subscribe(
         data => {
+          this.errService = false;
+          this.messageErrService = '';
+          this.fechaCompleta = data.dispatch_date;
           if(data === null){
             this.spinner.hide();
             this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
@@ -145,10 +166,16 @@ export class BalanceProcesarComponent implements OnInit {
                 this.iconCompTotal
               );
             }
+            if(data.balanced == false) {
+              this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+            }
           }
           this.spinner.hide();  
         }, error => {
-          alert(`Error inesperado en los servicios. ${error.message}`);
+          this.errService = true;
+          this.messageErrService = 'Contacta a soporte por favor (retrieveBalancePROCESAR).';
+          this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+          this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
           this.spinner.hide();  
         }
       );
@@ -175,7 +202,7 @@ export class BalanceProcesarComponent implements OnInit {
     }
     
     if (!balanced || status === 201) {
-      this.createMessage('alert-danger', 'Error. Inconsistencia en los saldos.');
+      this.createMessage('alert-danger', 'Atención. Inconsistencia en los saldos.');
       this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       return 0;
     }
@@ -249,12 +276,69 @@ export class BalanceProcesarComponent implements OnInit {
   }  
 
   aproveBalancePROCESAR(){
+
     let a: any;
     this.serviceBalance.aproveBalancePROCESAR(this.balance).subscribe(
       data => {
-        a = data;
+        this.errService = false;
+        this.messageErrService = '';
+        this.flagAuth = true;
+        this.generateLiquidation(); 
+      }, error => {
+        this.flagAuth = false;
+        this.flagLiquidation = false;
+        this.flagPreNotice = false;
+        this.errService = true;
+        this.messageErrService = `Contacta a soporte por favor (aproveBalancePROCESAR).`;
       }
     );
+    // this.generateLiquidation(); 
+  }
+
+  generateLiquidation() {
+
+    this.serviceBalance.createLiquidation().subscribe(
+      data2 => {
+        // this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+        this.errService = false;
+        this.messageErrService = '';
+
+        this.flagLiquidation = true;
+
+        this.generatePreNotice();
+      },error =>{
+
+        this.flagLiquidation = false;
+        this.flagPreNotice = false;
+
+        this.errService = true;
+        this.messageErrService = `Contacta a soporte por favor (createLiquidation).`;
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+      }
+    );
+    // this.generatePreNotice();
+
+    
+  }
+
+  generatePreNotice() {
+
+    this.serviceBalance.createPreNotice().subscribe(
+      data => {
+        this.errService = false;
+        this.messageErrService = '';
+        this.flagPreNotice = true;
+        this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+      },error =>{
+
+        this.flagPreNotice = false;
+
+        this.errService = false;
+        this.messageErrService = `Contacta a soporte por favor (createPreNotice).`;
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+      }
+    );
+    
   }
 
   /*Agregado proveedor*/
@@ -337,9 +421,10 @@ export class BalanceProcesarComponent implements OnInit {
 						this.isInfo = false;
 						this.infoMsj = '';
 						this.infoCode = '';
-						this.isProgressBar = false;
+            this.isProgressBar = false;
 						this.processFile.sendFileToConnectDirect(localStorage.getItem('username')).subscribe(
-							result => {           
+							result => { 
+                            
 				        		if(result.resultCode == msjscode.resultCodeOk){
 				        			if(result.descriptionOrReject != null ){  
 										    this.isError = true;
@@ -351,8 +436,7 @@ export class BalanceProcesarComponent implements OnInit {
 							        	this.isError = false;
 							        	this.successCode = 'SUCCESS';
                         this.successrMsj = result.resultDescription;
-                        this.aproveBalancePROCESAR();
-                        this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+                        this.aproveBalancePROCESAR();                                                                       
 				        			}
 						        	this.successrMsj = result.resultDescription;
 						        	this.isProgressBar = false;
@@ -361,16 +445,17 @@ export class BalanceProcesarComponent implements OnInit {
 						        	this.isProgressBar = false;
 						       		this.errorCode = result.resultCode;
 						        	this.errorMsj = result.resultDescription;
-						        }
+                    }
 						    },error => {
 							    this.isError = true;
-						       	this.errorCode = error.resultCode;
-						        this.errorMsj = error.resultDescription;
-						    }
-						);
+                  this.errorCode = error.resultCode;
+                  this.errorMsj = error.resultDescription;
+                }
+            );
+            // this.aproveBalancePROCESAR();                                                                       
 					}
 				}
 			});
-	}
+  }
 
 }

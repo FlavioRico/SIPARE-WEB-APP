@@ -1,104 +1,159 @@
 <app-navbar></app-navbar>
 
 <div class="container">
-    <div class="row" style="width: 100%;">
-        <div class="col-md-10" style="margin-left: 9.8%;">
-            <div class="alert alert-primary title-opc" role="alert">
-                <strong>PROCESAR</strong> - Reporte Conciliación
+
+    <div class="alert alert-primary" role="alert">
+        <p><strong>PROCESAR</strong> - Reporte Conciliación</p>
+        <hr>
+       <strong><p class="mb-0">{{ descriptionTypeSearch }}</p></strong>
+    </div>
+
+    <div *ngIf="errService" class="alert alert-danger" role="alert">
+		<h4 class="alert-heading">Error inesperado.</h4>
+		<p>Error en servicios.</p>
+		<hr>
+		<p class="mb-0">{{ messageErrService }}</p>
+	</div>
+
+    <div class="row">
+		<div class="col-sm">
+			<strong>Tipo de búsqueda: </strong>
+			<div class="input-group" style="margin-top: 5px;">
+				<div class="input-group-prepend btn-dprdwn">
+					<button class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
+					<div class="opciones">
+						<button (click)="selectOpcSearch('Intervalo')" type="button" class="btn btn-light opc">
+                            Intervalo
+                        </button><!--(click)="seleccion(operation1)"-->
+						<div class="dropdown-divider"></div>
+						<button (click)="selectOpcSearch('Mes')" type="button" class="btn btn-light opc">
+                            Mes
+                        </button>
+					</div>
+				</div>
+				<input [ngModel]="typeSearchGlobal" type="text" style="min-width: 20px;" readonly="readonly">
+			</div>
+		</div>
+	</div><br>
+
+    <div class="busquedaPorIntervalo" *ngIf="flagIntervalo" style="margin-bottom: 10px;">
+        <!-- <strong>Busqueda por intervalo de fechas:</strong><br> -->
+        <div class="row">
+            <label class="col-sm">Fecha de inicio:</label>
+            <label class="col-sm">Fecha Final:</label>
+            <label class="col-sm">Tipo de fecha:</label>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
             </div>
-            <div class="mce-container row">
-    
-                <!-- Search by Date form -->
-                <div style="margin-left: 3%; margin-top: 2%;">
-                    <app-date-range [(dateRange)]="dateRange"></app-date-range>
-                </div>
-                <div style="margin-top: 2%; margin-left: 5px;">
-                    <select [(ngModel)]="dateType" class="browser-default custom-select">
-                        <option selected disabled>Tipo de fecha</option>
-                        <option value="PROCESAR">Resultados PROCESAR</option>
-                        <option value="PAYMENT">Pago de Líneas de Captura</option>
-                    </select>
-                </div>
-                <div style="margin-top: 2%; margin-left: 5px;">
-                    <button (click)="searchByDate();" type="button" class="btn btn-outline-primary">
-                        Buscar
-                    </button>
-                </div>
-    
-                <!-- Search by Month -->
-                <div style="margin-top: 2%; margin-left: 30px;">
-                    <select [(ngModel)]="month" class="browser-default custom-select">
-                        <option selected disabled>Mes</option>
-                        <option value="1">Enero</option>
-                        <option value="2">Febrero</option>
-                        <option value="3">Marzo</option>
-                        <option value="4">Abril</option>
-                        <option value="5">Mayo</option>
-                        <option value="6">Junio</option>
-                        <option value="7">Julio</option>
-                        <option value="8">Agosto</option>
-                        <option value="9">Septiembre</option>
-                        <option value="10">Octubre</option>
-                        <option value="11">Noviembre</option>
-                        <option value="12">Diciembre</option>
-                    </select>
-                </div>
-                <div style="margin-top: 2%; margin-left: 5px;">
-                    <select [(ngModel)]="monthType" class="browser-default custom-select">
-                        <option selected disabled>Concepto</option>
-                        <option value="PROCESAR">Resultados PROCESAR</option>
-                        <option value="PAYMENT">Pago de Líneas de Captura</option>
-                    </select>
-                </div>
-                <div style="margin-top: 2%; margin-left: 5px;">
-                    <button (click)="searchByMonth();" type="button" class="btn btn-outline-primary">
-                        Buscar
-                    </button>
-                </div>
-    
+            <div class="col-sm" style="text-align: center;">
+                <input #endDate type="date" id="fechaEnd" [ngModel]="fechaEnd" style="min-height: 100%; min-width: 95%;">
             </div>
-            <br>
-            <div *ngIf="incompleteForm" class="alert alert-primary alert-dismissible fade show" role="alert">
-                <strong>Completa el formulario de búsqueda</strong>
+            <div class="col-sm" style="text-align: center;">
+                <select [(ngModel)]="dateType" class="browser-default custom-select">
+                    <option selected disabled>Tipo de fecha</option>
+                    <option value="PROCESAR">Resultados PROCESAR</option>
+                    <option value="PAYMENT">Pago de Líneas de Captura</option>
+                </select>
             </div>
-            <div *ngIf="noContentAvailable" class="alert alert-info alert-dismissible fade show" role="alert">
-                <strong>No se encontraron registros</strong>
-            </div>
-            <div *ngIf="contentAvailable">
-                <p>
-                    Reporte : {{parameters.start_date}} {{parameters.end_date}} {{parameters.month}}
-                </p>
-                <table class="table">
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Cantidad de Lineas recibidas</th>
-                        <th scope="col">Importe de Lineas Recibidas</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let row of rows">
-                        <th scope="row">{{row.id}}</th>
-                        <td>{{row.date}}</td>
-                        <td>{{row.total_lines}}</td>
-                        <td>${{row.total_import}}</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><a href="{{url}}" target="_blank">
-                            <button type="button" class="btn btn-success">Exportar</button>
-                        </a></td>
-                    </tr>
-                    </tbody>
-                </table>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <button (click)="searchByDate();" type="button" class="btn btn-outline-primary float-right" style="margin: 10px 0px 10px 30px;">
+                    Buscar
+                </button>
             </div>
         </div>
     </div>
+
+
+    <div class="busquedaPorMes" *ngIf="flagMes">
+        <!-- <strong>Busqueda por mes:</strong><br> -->
+        <div class="row">
+            <label class="col-md">Mes:</label>
+            <label class="col-md">Concepto:</label>
+            <label class="col-md"></label>
+        </div>
+        <div class="row">            
+            <!-- Search by Month -->
+            <div class="col-md">
+                <select [(ngModel)]="month" class="browser-default custom-select">
+                    <option selected disabled>Mes</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+    
+            <div class="col-md">
+                <select [(ngModel)]="monthType" class="browser-default custom-select">
+                    <option selected disabled>Concepto</option>
+                    <option value="PROCESAR">Resultados PROCESAR</option>
+                    <option value="PAYMENT">Pago de Líneas de Captura</option>
+                </select>
+            </div>
+            <div class="col-md"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <button (click)="searchByMonth();" type="button" class="btn btn-outline-primary float-right" style="margin: 10px 0px 10px 10px">
+                    Búscar
+                </button>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <div *ngIf="incompleteForm" class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>Completa el formulario de búsqueda.</strong>
+    </div>
+    <div *ngIf="noContentAvailable" class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>No se encontraron registros.</strong>
+    </div>
+    <div *ngIf="contentAvailable">
+        <p>
+            Reporte: {{parameters.start_date}} {{parameters.end_date}} {{parameters.month}}
+        </p>
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Cantidad de Lineas recibidas</th>
+                <th scope="col">Importe de Lineas Recibidas</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of rows">
+                <th scope="row">{{row.id}}</th>
+                <td>{{row.date}}</td>
+                <td>{{row.total_lines}}</td>
+                <td>${{row.total_import}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row"></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a href="{{url}}" target="_blank">
+                    <button type="button" class="btn btn-success">Exportar</button>
+                </a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 

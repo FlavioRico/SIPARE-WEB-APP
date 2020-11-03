@@ -36,6 +36,17 @@ export class SharedComponent implements OnInit {
     return this.fechaCompleta;
   }
 
+  getDateFormated2(){
+    this.day = this.fecha.getDate();
+    this.month  = this.fecha.getMonth() + 1;
+    this.year  = this.fecha.getFullYear();
+    this.month = this.formatDate(this.month);
+    this.day = this.formatDate(this.day);
+    this.fechaCompleta = this.year + '-' + this.month + '-' + this.day;
+
+    return this.fechaCompleta;
+  }
+
   formatTable(valTable){
     return ('$' + new Intl.NumberFormat('en-US').format(valTable));
   }

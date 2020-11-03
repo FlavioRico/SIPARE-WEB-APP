@@ -1,14 +1,36 @@
 <!-- this -->
 <app-navbar></app-navbar>
 
-<div class="container-fluid barranombre" style="margin-top: 1%">
-	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
-		<ul class="nav navbar-nav col-md-12">
-			<h4>
-				<font color=#0c3a6b style="font-size: 12px;">Reporte Validaciones PROCESAR</font> <font
-					color=#0c3a6b></font>
-			</h4>
-		</ul>
+<div class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+        <strong>PROCESAR</strong> - Reporte validaciones.
+    </div>
+</div>
+
+<div *ngIf="errService" class="container alert alert-danger" role="alert">
+	<h4 class="alert-heading">Error inesperado.</h4>
+	<p>Error en servicios.</p>
+	<hr>
+	<p class="mb-0">{{ messageErrService }}</p>
+</div>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.5)"
+  size="large"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+    <p style="font-size: 20px; color: white">Cargando...</p>
+</ngx-spinner>
+
+<div class="container" style="margin-top: 1%">
+	<div class="alert alert-warning alert-dismissible" *ngIf="isError">
+	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  	<strong>{{errorCode}}</strong> - {{errorMsj}}.
+	</div>
+	<div class="alert alert-info alert-dismissible" *ngIf="isInfo">
+	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  	<strong>{{infoMsj}}</strong>.
 	</div>
 </div>
 
@@ -269,11 +291,11 @@
 						<div class="input-group-prepend btn-dprdwn">
 							<button class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
 							<div class="opciones">
-								<button type="button" class="btn btn-light opc dropBox">1<br>Corrección ER</button>
+								<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(1)">1<br>Corrección ER</button>
 								<div class="dropdown-divider"></div>
-								<button type="button" class="btn btn-light opc dropBox">2<br>Confirmación positiva</button>
+								<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(2)">2<br>Confirmación positiva</button>
 								<div class="dropdown-divider"></div>
-								<button type="button" class="btn btn-light opc dropBox">3<br>Confirmación negativa ER</button>
+								<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(3)">3<br>Confirmación negativa ER</button>
 							</div>
 						</div>
 						<input [ngModel]="globalResp" class="dropBox" type="text" style="min-width: 20px;" readonly="readonly">
@@ -432,7 +454,7 @@
 			Diagnostico 1:
 		  		<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
     				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
-					class="form-control" value={{dataRowT24.respProcesar}} readonly/>
+					class="form-control" value={{this.respuestas.diagnosisOne}} readonly/>
 		</div>
 	</div>
 	<div class="row" style="margin-left: 14%; margin-top: 8px; width: 80%;">
@@ -440,7 +462,7 @@
 			Diagnostico 2:
 		  		<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
     				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
-					class="form-control" value={{dataRowT24.respProcesar}} readonly/>
+					class="form-control" value={{this.respuestas.diagnosisTwo}} readonly/>
 		</div>
 	</div>
 	<div class="row" style="margin-left: 14%; margin-top: 8px; width: 80%;">
@@ -448,7 +470,7 @@
 			Diagnostico 3:
 		  		<input style="width: 100%; padding: 12px 20px;  margin: 8px 0; box-sizing: border-box;
     				border: none;  border-bottom: 2px solid #eaf1f9; background-color: white; height: 40px;" type="text"
-					class="form-control" value={{dataRowT24.respProcesar}} readonly/>
+					class="form-control" value={{this.respuestas.diagnosisThree}} readonly/>
 		</div>
 	</div>
 </div>
@@ -456,6 +478,7 @@
 		<div class="col-md-4"></div>
 		<div class="col-md-4">
 			<button *ngIf="notAutorized" class="btn btn-success" (click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
+			<!-- <button *ngIf="notAutorized" class="btn btn-success" (click)="updateTwo()"> -->
 			<font color=#fff>
 				Actualizar
 			</font>

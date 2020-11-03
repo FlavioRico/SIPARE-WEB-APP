@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 // import { DatepickerOptions } from 'ng2-datepicker';
-
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,6 +10,7 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 })
 export class LoginComponent implements OnInit {
 
+  public envName = environment.name;
   // nameUser: string;
   // password: string;
   // route: string;
@@ -48,7 +49,9 @@ export class LoginComponent implements OnInit {
   onSubmitLogin(){
     this.isError= false;
 	  this.authServ.loginService(this.userName, this.password).subscribe(
-      result => {           
+      result => {     
+        console.log('this', result);
+        
         if(result.resultCode == 0){
           localStorage.setItem('user', result.nameUser);
           localStorage.setItem('pass', this.password);
@@ -64,7 +67,7 @@ export class LoginComponent implements OnInit {
           this.password = '';
         }
       },error => {
-        this.router.navigate(['/']);
+          this.router.navigate(['/']);
           this.userName = '';
           this.password = '';
           this.isError= true;
@@ -72,6 +75,7 @@ export class LoginComponent implements OnInit {
           this.errorMsj = 'Servicio no se encuentra disponible por el momento.';
       }
     );
+    console.log('deb', this.userName, this.password);    
 	}
 
 }

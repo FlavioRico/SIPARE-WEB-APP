@@ -6,7 +6,11 @@ import { environment } from '../../../environments/environment';
 import { Parameter } from '../../components/models/models-parameters/parameter';
 import { GetParameter } from '../../components/models/models-parameters/getParameter';
 import { Liquidation } from '../../components/models/models-backOffice/liquidation';
-import { DataCaptureLineUpdate } from '../../components/models/models-procesarRespValidation/DataCaptureLineUpdate';
+import { DataCaptureLineUpdate } from '../../components/models/models-procesarRespValidation/dataCaptureLineUpdate';
+import { DataComplementary } from '../../components/models/models-procesarRespValidation/dataComplementary';
+import { LineCap } from '../../components/models/models-procesarRespValidation/lineCap';
+import { LiquidationPreAviso } from 'src/app/components/models/models-preaviso/liquidationPreAviso';
+import { Programmed } from 'src/app/components/models/models-backOffice/Programmed';
 
 
 @Injectable()
@@ -160,8 +164,11 @@ export class ProcessFileService {
     var fileDTO = {
       fileName : fileName,
     };
-    return this.http.post(environment.sipare_ms_processFile_url.concat(environment.sendValidatedFileToPROCESAR), fileDTO, 
+    let url: string = 'http://10.160.14.213:8085/sipareMSProcessFileApp/multiva/sipare/sendValidatedFile';
+    return this.http.post(url, fileDTO, 
           {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
+    // return this.http.post(environment.sipare_ms_processFile_url.concat(environment.sendValidatedFileToPROCESAR), fileDTO, 
+    //       {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
 
   getContentFileEdit(fileName : string) : Observable<any>{
@@ -251,7 +258,7 @@ export class ProcessFileService {
     var request = {
       username : username
     };
-    return this.http.post(environment.sipare_ms_processFile_url.concat(environment.sendFileToConnectDirectUrl), 
+    return this.http.post(environment.sipare_generate_processFile, 
       JSON.stringify(request), {headers: new HttpHeaders().set(environment.contentType,environment.appJson)})
   }
 
@@ -296,6 +303,8 @@ export class ProcessFileService {
       code : status,
       oid : oid
     };
+    console.log(dto);
+    
     return this.http.post(environment.sipare_ms_processFile_url.concat(environment.getRespProcesarUrl), 
       JSON.stringify(dto), {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
@@ -316,10 +325,10 @@ export class ProcessFileService {
   //this -> agregado
   
   createParameter (parameter: Parameter):Observable<HttpResponse<Parameter>> {
-        
+
     return this.http.post<any>(environment.addParameter, 
-                                    parameter, 
-                                    { observe: 'response' }
+                              parameter, 
+                              { observe: 'response' }
     );
 
   }
@@ -327,8 +336,7 @@ export class ProcessFileService {
   getParameter (operationType: string) {
 
     let urlParameter: string = (operationType == '116027') ? 
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
+    environment.urlParameter1 : environment.urlParameter2;
 
     return this.http.get<GetParameter>(urlParameter, { observe: 'response' });
 
@@ -337,8 +345,7 @@ export class ProcessFileService {
   actualizarParametro (parameter: Parameter) {
 
     let urlUpdate: string = (parameter.operation_type == '116027') ? 
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027' :
-    'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018';
+    environment.urlParameter1 : environment.urlParameter2;
 
     return this.http.put<GetParameter>(
       urlUpdate,
@@ -350,18 +357,68 @@ export class ProcessFileService {
 
   getLiquidation () {
 
-    let url_Liquidation = 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate';
     return this.http.get<Liquidation>(
-      url_Liquidation,
+      environment.url_Get_Liquidation,
+      {observe: 'response'}
+    ); 
+
+  }
+  
+  getPreNotice () {
+
+    return this.http.get<LiquidationPreAviso>(
+      environment.url_Get_PreNotice,
       {observe: 'response'}
     ); 
 
   }
 
   /*PROCESAR-RESP-VALIDATION*/
+  getDataComplementary (capLine: LineCap) {
+
+    return this.http.post<DataComplementary>(
+      environment.url_Data_Complementary, 
+      capLine, {observe: 'response'}
+    );
+
+  }
+
   updateCaptureLine (data: DataCaptureLineUpdate) {
-    let url_captureLine = 'PENDIENTE';
-    return this.http.post<number>(url_captureLine, data, {observe: 'response'}
+    
+    return this.http.put<any>(
+      environment.url_Data_Complementary,
+      data, {observe: 'response'}
+    );
+
+  }
+
+  updateProgrammed(type: string, newProgrammed: Programmed) {
+
+    let url = (type == 'DEFAULT') ? 'http://localhost:9098/transactions?type=DEFAULT' : 'http://localhost:9098/transactions?type=CRON';
+    console.log("this", url, newProgrammed);
+
+    return this.http.put<any>(
+      url, 
+      newProgrammed,
+      {observe: 'response'}
+    );
+  }
+
+  verifyTransactionToday() {
+    
+    return this.http.get<any>('url',
+    {observe: 'response'});
+  }
+
+  updateHourTransaction(newHour: string) {
+
+    var obj = { newHour: newHour }
+    let url = '';
+
+    return this.http.put<any>(
+      url,
+      JSON.stringify(obj),
+      {observe: 'response'}
     );
   }
   

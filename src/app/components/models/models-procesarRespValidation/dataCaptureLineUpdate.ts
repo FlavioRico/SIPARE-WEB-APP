@@ -1,4 +1,4 @@
 export class DataCaptureLineUpdate {
-    captureLine : string;
-    responseType: number;
+    response_type: number;
+    capture_line : string;
 }

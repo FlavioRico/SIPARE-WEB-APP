@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { msjscode } from '../../../environments/msjsAndCodes';
 import { Liquidation } from '../models/models-backOffice/liquidation';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SharedComponent } from 'src/app/shared/shared/shared.component';
+import { Programmed } from '../models/models-backOffice/Programmed';
 
 @Component({
   selector: 'app-back-office',
@@ -24,10 +27,10 @@ export class BackOfficeComponent implements OnInit {
 	public ngKeyEntity : string;
 	public ngBankNameRecep : string;
 	public ngTxt : string;
-	public ngIMSS : string;
-	public ngViv : string;
-	public ngAcv : string;
-	public ngTotal : string;
+	public ngIMSS : any;
+	public ngViv : any;
+	public ngAcv : any;
+	public ngTotal : any;
 	public errorMsj : string;
 	public infoMsj : string;
 	public errorCode : string;
@@ -48,42 +51,59 @@ export class BackOfficeComponent implements OnInit {
 	public balaceApproved: boolean = false;
 	public message_liquidation_err: string = '';
 	public liquidationErr: boolean = false;
+	public messageErrService: string = '';
+	public errService: boolean = false;
 
-  	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
+	shared = new SharedComponent();
+	programmed = new Programmed();
+
+	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService,
+	private router : Router, private spinner: NgxSpinnerService) { }
 
   	ngOnInit() {
+		this.spinner.show();
 	  	if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
+				this.spinner.hide();
 				this.router.navigate(['/']);
 		}else{
 			this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 				result => {
 					if(result.resultCode == 0){
 						if(result.logged == 0){
+							this.spinner.hide();
 							this.router.navigate(['/']);
 						}else{
 
 							this.processFile.getLiquidation().subscribe(
 								data => {
+									
 									this.balaceApproved = false;
 									this.liquidationErr = false;
+									this.errService = false;
 									let headers;
 									const keys = data.headers.keys();
 										headers = keys.map(key =>
 											`${key}: ${data.headers.get(key)}`
 									);
-									if (data.status == 200)
+									if (data.status == 200){
 										this.loadDataLiquidation (data.body);
+									}
+									this.spinner.hide();
 
 								},error =>{
 									this.balaceApproved = false;
-									this.liquidationErr = false;
+									this.liquidationErr = true;
 									if (error.status == 424)
 										this.message = 'Fallo en servicios del proveedor.';
 									else if (error.status == 428)
-										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada';
+										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada.';
 									else if (error.status == 500)
 										this.message = 'Fallo insesperado en BD';
-									this.message_liquidation_err = this.message;								
+									else 
+										this.errService = true;
+										this.messageErrService = 'Error en el servicio getLiquidation().';
+									this.message_liquidation_err = this.message;
+									this.spinner.hide();						
 								}
 							);
 
@@ -98,12 +118,13 @@ export class BackOfficeComponent implements OnInit {
 	loadDataLiquidation (result: Liquidation){
 		this.isError= false;
 		this.ngDateRep = result.receiving_date;
-		this.ngIMSS = result.imss.toString();
-		this.ngViv = result.viv.toString();
-		this.ngAcv = result.acv.toString();
-		this.ngDateRegistry = result.registry_date;
-		this.ngTotal = result.total.toString();
 
+		this.ngIMSS = this.shared.formatTable(result.imss.toString());
+		this.ngViv = this.shared.formatTable(result.viv.toString());
+		this.ngAcv = this.shared.formatTable(result.acv.toString());
+		this.ngTotal = this.shared.formatTable(result.total.toString());
+		
+		this.ngDateRegistry = result.registry_date;
 		this.ngTxt =  result.description;
 		this.ngTypeOperation = result.operation_type;
 		this.ngPlace = result.office;
@@ -119,6 +140,7 @@ export class BackOfficeComponent implements OnInit {
 			this.liquidation_flag = true;
 			$(document).ready(function(){
 				$("#btnAuthorized").prop('disabled', true); 
+				$("#btnAuthorized").hide();
 			});
 		}else {
 			this.message_liquidation = 'La transacción aún no ha sido autorizada.';
@@ -205,6 +227,8 @@ export class BackOfficeComponent implements OnInit {
 
 
   	paymentTransaction(){
+		this.spinner.show();
+
   		this.isInfo = true;
   		this.infoCode  = 'INFO';
   		this.infoMsj  = 'Se esta realizando la petición';
@@ -214,13 +238,27 @@ export class BackOfficeComponent implements OnInit {
   		this.processFile.sendTransactionWS().subscribe(
 			result => {           
         		if(result.resultCode == msjscode.resultCodeOk){
-			        this.isSuccess= true;
+					this.isSuccess= true;
+
+					this.balaceApproved = true;
+					this.liquidationErr = false;
+
 			        this.successrMsj = 'Transacción T+1 realizada con exito';
 					this.successCode = 'SUCCESS';
 					this.isInfo = false;
   					this.infoCode  = '';
-  					this.infoMsj  = '';
+					this.infoMsj  = '';
+					this.message_liquidation = 'La transacción ya fue realizada.';
+					this.liquidation_flag = false;
 					this.clearInputs();
+					$(document).ready(function(){
+						$("#btnAuthorized").prop('disabled', true); 
+						$("#btnAuthorized").hide();
+					});
+
+					// this.updateProgrammed();
+
+					this.spinner.hide();
 	        	} else {
 	        		this.isError= true;
 	        		this.errorMsj = result.resultDescription;
@@ -230,7 +268,8 @@ export class BackOfficeComponent implements OnInit {
 						$("#btnAuthorized").prop('disabled', false); 
 					});
   					this.infoCode  = '';
-  					this.infoMsj  = '';
+					this.infoMsj  = '';
+					this.spinner.hide();
 				}
 		    },error => {
 		    	this.isSuccess= false;
@@ -242,11 +281,43 @@ export class BackOfficeComponent implements OnInit {
 			    this.isError= true;
 			    $(document).ready(function(){
 					$("#btnAuthorized").prop('disabled', false); 
+					$("#btnAuthorized").hide();
 				});
 			    this.errorCode = 'NOT-SRV';
 				this.errorMsj = 'Servicio no disponible';
+				this.spinner.hide();
 		    }
 		);
-  	}
+	}
+	  
+	updateProgrammed() {
 
+		this.programmed.date = "2020-09-29";
+		this.processFile.updateProgrammed('DEFAULT', this.programmed).subscribe(
+			data=>{
+				let headers;
+				const keys = data.headers.keys();
+				headers = keys.map(key =>
+					`${key}: ${data.headers.get(key)}`
+				);
+				if (data.status !== 200) {
+					this.errorCode = 'Atención - ';
+					this.errorMsj = 'No se pudo actualizar el programmed del día actual. (DEFAULT).';
+					// alert("No se pudo actualizar el programmed del día actual. (random)");
+				}else{
+					console.log("Se actualizó el Programmed del día actual.");
+				}
+			},error=>{
+				this.errorCode = 'Error inesperado - ';
+				this.errorMsj = 'Ups.. Contacte a soporte por favor (updateProgrammed).';
+				// console.log(error);
+				// alert("Ups.. Error inesperado, contacte a soporte por favor (updateProgrammed).");
+			}
+		);
+	
+	}
+
+	paymentTransaction2(){
+		this.updateProgrammed();
+	}
 }

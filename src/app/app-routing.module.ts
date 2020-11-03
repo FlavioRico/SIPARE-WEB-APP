@@ -38,9 +38,6 @@ const routes: Routes = [
   {
     path: 'fileMonthlyProcesar', component: PrivadoPageComponent
   },
-  { 
-    path: 'fileMonthlyProcesar', component: PrivadoPageComponent 
-  },
 	{ 
     path: 'collectionReport', component: CollectionReportComponent 
   },
