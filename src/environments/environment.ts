@@ -68,5 +68,11 @@ export const environment = {
   urlParameter2: 'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018',
   url_Get_Liquidation : 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate',
   url_Get_PreNotice : 'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices/findByCurrentDate',
-  url_Data_Complementary : 'http://localhost:9027/multiva/sipare/responseTypeCaptureLine'
+  url_Data_Complementary : 'http://localhost:9027/multiva/sipare/responseTypeCaptureLine',
+  updateProgrammedDefault:        'http://localhost:9098/transactions?type=DEFAULT',
+  updateProgrammedCron:           'http://localhost:9098/transactions?type=CRON',
+  updateHourTansaction:           'http://10.160.188.123:8765/sipare-procesar-transactions/transactions?type=HOUR',
+  verifyButtonTransaction: 'http://10.160.188.123:8765/sipare-procesar-transactions/transactions',
+  transactionNotifications: 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/transactionNotifications',
+  datesCollectionReport : 'http://10.160.188.123:8765/sipare-procesar-retrieve-dates/dates/'
 };

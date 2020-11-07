@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('username', this.userName);
           localStorage.setItem('sessionId', result.sessionId);
           this.router.navigate(['/menu']);
-          this.router.navigate(['/balanceProcesar']);
+          this.router.navigate(['/collectionReport']);
         }else if(result.resultCode == 'USER-NOT-FOUND'){
           this.isError= true;
           this.errorCode = result.resultCode;

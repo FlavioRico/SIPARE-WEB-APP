@@ -47,6 +47,10 @@
 </div>
 <div class="container">
 
+	<div *ngIf="isError" class="alert alert-danger" role="alert">
+		{{ errorCode }} - {{ errorMsj }}
+	</div>
+
 	<div *ngIf="isContentTable" class="mce-container row" style="margin-top: 1%;">
 		<table class="table table-hover tbody-scroll" id="tablafullModal">
 			<thead>

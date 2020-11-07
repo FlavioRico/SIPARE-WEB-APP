@@ -292,14 +292,12 @@ export class BalanceProcesarComponent implements OnInit {
         this.messageErrService = `Contacta a soporte por favor (aproveBalancePROCESAR).`;
       }
     );
-    // this.generateLiquidation(); 
   }
 
   generateLiquidation() {
 
     this.serviceBalance.createLiquidation().subscribe(
       data2 => {
-        // this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
         this.errService = false;
         this.messageErrService = '';
 
@@ -316,9 +314,6 @@ export class BalanceProcesarComponent implements OnInit {
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       }
     );
-    // this.generatePreNotice();
-
-    
   }
 
   generatePreNotice() {
@@ -329,6 +324,8 @@ export class BalanceProcesarComponent implements OnInit {
         this.messageErrService = '';
         this.flagPreNotice = true;
         this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
+
+        this.transactionNotifications();
       },error =>{
 
         this.flagPreNotice = false;
@@ -339,6 +336,25 @@ export class BalanceProcesarComponent implements OnInit {
       }
     );
     
+  }
+
+  transactionNotifications(){
+    
+    this.serviceBalance.sendTransactionNotifications().subscribe(
+
+      data=>{
+        this.errService = false;
+        this.messageErrService = '';
+        if(!(data.resultCode == "0" && data.resultDescription == "SUCCESS"))
+        this.errService = true;
+        this.messageErrService = `No se pudieron generar las notificaciónes de las transacciones.`;
+      },error=>{
+        this.errService = true;
+        this.messageErrService = `Contacta a soporte por favor (transactionNotifications).`;
+      }
+      
+    );
+
   }
 
   /*Agregado proveedor*/

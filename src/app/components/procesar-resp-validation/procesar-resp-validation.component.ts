@@ -1,12 +1,12 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { ProcessFileService } from  '../../services/process-file/process-file.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
-import * as $ from 'jquery';
 import { LineCap } from '../models/models-procesarRespValidation/lineCap';
 import { DataCaptureLineUpdate } from '../models/models-procesarRespValidation/dataCaptureLineUpdate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DataComplementary } from '../models/models-procesarRespValidation/dataComplementary';
+import { SharedComponent } from 'src/app/shared/shared/shared.component';
 
 @Component({
   selector: 'app-procesar-resp-validation',
@@ -39,11 +39,11 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public dateFrom : boolean;
 	public dateTo : boolean;
 	public lineCap : string;
-	public ngBalanceImss : string;
-	public ngBalanceRcv : string;
-	public ngBalanceViv : string;
-	public ngBalanceAcv : string;
-	public ngBalanceTotal : string;
+	public ngBalanceImss : any;
+	public ngBalanceRcv : any;
+	public ngBalanceViv : any;
+	public ngBalanceAcv : any;
+	public ngBalanceTotal : any;
 	/*this agregado para funcionamiento*/
 	public p: number;
 	public globalResp: string;
@@ -54,11 +54,28 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public messageErrService: string = '';
 	public errService: boolean = false;
 	public respuestas: DataComplementary = new DataComplementary();
+	public flagCorrect: boolean = false;
+	public respProcesar: string;
+	public dateToday: string = '';
+
+	shared = new SharedComponent();
+	@ViewChild('nameClient') nameClient: ElementRef;
+	@ViewChild('nameOrRfc') nameOrRfc: ElementRef;
+	@ViewChild('tel') tel: ElementRef;
+	@ViewChild('nameContact') nameContact: ElementRef;
+	@ViewChild('email') email: ElementRef;
+	@ViewChild('importIMSS') importIMSS: ElementRef;
+	@ViewChild('importRCV') importRCV: ElementRef;
+	@ViewChild('importVIV') importVIV: ElementRef;
+	@ViewChild('importACV') importACV: ElementRef;
+	@ViewChild('total') total: ElementRef;
+
 	/*termina*/
 
   constructor(public authServ : AuthenticationService, public processFile : ProcessFileService,
 	  private router : Router,
-	  private spinner: NgxSpinnerService,) { }
+	  private spinner: NgxSpinnerService,
+	  private render: Renderer2) { }
 
   ngOnInit() {
 
@@ -71,7 +88,7 @@ export class ProcesarRespValidationComponent implements OnInit {
   	if(localStorage.getItem('username') === '' || localStorage.getItem('username') == null){
 		this.router.navigate(['/']);
 	}else{
-		// this.spinner.show();
+		this.spinner.show();
 		this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 			result => {
 				if(result.resultCode == 0){
@@ -92,6 +109,8 @@ export class ProcesarRespValidationComponent implements OnInit {
 						        	} else {
 						        		this.tableStatusProcesar = true;
 										this.rows = result.listContent;
+										this.dateToday = result.resultTimestamp;
+										
 										this.spinner.hide();
 									}
 						        }
@@ -126,7 +145,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 						this.isError= true;
 						this.isContentTableFull = false;
 				        this.errorCode = 'Emp-001';
-				        this.errorMsj = 'Sin registros por el momento.';
+				        this.errorMsj = 'Sin registros por el momento';
 		        	} else {
 						console.log('Debug', result.listContent);
 						
@@ -162,12 +181,17 @@ export class ProcesarRespValidationComponent implements OnInit {
   			result => {  
 				this.spinner.show();         
         		if(result.resultCode == 0){
-	        		this.dataRowT24 = result;
-	        		this.ngBalanceImss = this.format2(result.imss, '$');
-	        		this.ngBalanceAcv = this.format2(result.acv, '$');
-	        		this.ngBalanceRcv = this.format2(result.rcv, '$');
-	        		this.ngBalanceTotal = this.format2(result.total, '$');
-	        		this.ngBalanceViv = this.format2(result.ap, '$');
+					this.dataRowT24 = result;
+					console.log("this=>", result);
+					
+	        		// this.ngBalanceImss = this.format2(result.imss, '$');
+	        		this.ngBalanceImss = this.shared.formatRespProcesar(result.importImss);
+	        		this.ngBalanceAcv = this.shared.formatRespProcesar(result.importAcv);
+	        		this.ngBalanceRcv = this.shared.formatRespProcesar(result.importRcv );
+	        		this.ngBalanceTotal = this.shared.formatRespProcesar(result.importTotal );
+					this.ngBalanceViv = this.shared.formatRespProcesar(result.importAp );
+					this.respProcesar = result.respProcesar;
+
 	        		this.tableListRegisterByCode = false;
  					this.isContentTable = true;
  					if(result.accountNumber == 'EFECTIVO')
@@ -184,6 +208,13 @@ export class ProcesarRespValidationComponent implements OnInit {
 							headers = keys.map(key =>
 								`${key}: ${data.headers.get(key)}`);
 							this.globalResp = data.body.responseType.toString();
+							if( data.body.responseType == 1){
+								this.renderForm(true);
+								this.flagCorrect = true;
+							}else{
+								this.renderForm(false);
+								this.flagCorrect = false;
+							}
 							this.dataCaptureLine.response_type = data.body.responseType;
 							console.log('dejaré response this.dataCaptureLine.response_type en', 
 							this.dataCaptureLine.response_type, 'en la otra hay', data.body.responseType);
@@ -262,6 +293,19 @@ export class ProcesarRespValidationComponent implements OnInit {
 				alert(`Error en servicio de actualización updateCaptureLine`);
 			}
 		);
+	}
+
+	renderForm (value: boolean){
+		this.render.setProperty(this.nameClient.nativeElement, 'disabled', value);
+		this.render.setProperty(this.nameOrRfc.nativeElement, 'disabled', value);
+		this.render.setProperty(this.tel.nativeElement, 'disabled', value);
+		this.render.setProperty(this.nameContact.nativeElement, 'disabled', value);
+		this.render.setProperty(this.email.nativeElement, 'disabled', value);
+		this.render.setProperty(this.importIMSS.nativeElement, 'disabled', value);
+		this.render.setProperty(this.importRCV.nativeElement, 'disabled', value);
+		this.render.setProperty(this.importVIV.nativeElement, 'disabled', value);
+		this.render.setProperty(this.importACV.nativeElement, 'disabled', value);
+		this.render.setProperty(this.total.nativeElement, 'disabled', value);
 	}
 
 }

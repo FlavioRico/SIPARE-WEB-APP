@@ -1,7 +1,7 @@
 export const environment = {
     production: false,
     name: 'UAT',
-    // baseUrl: 'http://10.160.14.213:8083/sipareMSProcessFileApp/',
+    baseUrl: 'http://10.160.188.123:8765/',
 
     //8083 UAT <-> 8085 DEV
     contentType :   'Content-Type',
@@ -58,22 +58,27 @@ export const environment = {
         http://10.160.188.123:X
     */
     //X = 8766 DEV; X = 8765 UAT
+    urlAproveBalancePROCESAR :      'http://10.160.188.123:8765/sipare-approve-balance/balances',
+    sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
+    urlBalancePROCESAR :            'http://10.160.188.123:8765/sipare-retrieve-procesar-balance/balances/findByTypeAndDate?type=PROCESAR',
     addParameter:                   'http://10.160.188.123:8765/sipare-procesar-parameters/parameters',
     addParameterT2:                 'http://10.160.188.123:8765/sipare-procesar-pre-notice/preaviso',
-    sipare_ms_updateParameter_url : 'http://10.160.188.123:8765/sipare-backoffice-parameters/parameters',
-    // urlBalancePROCESAR :            'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR',
-    urlBalancePROCESAR :            'http://10.160.188.123:8765/sipare-retrieve-procesar-balance/balances/findByTypeAndDate?type=PROCESAR',
-    urlAproveBalancePROCESAR :      'http://10.160.188.123:8765/sipare-approve-balance/balances',
     url_Liquidation :               'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations',
+    url_Get_Liquidation :           'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate',
     url_PreNotice :                 'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices',
+    url_Get_PreNotice :             'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices/findByCurrentDate',
     urlParameter1:                  'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116027',
     urlParameter2:                  'http://10.160.188.123:8765/sipare-procesar-parameters/parameters/116018',
-    url_Get_Liquidation :           'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations/findByCurrentDate',
-    url_Get_PreNotice :             'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices/findByCurrentDate',
+    url_Data_Complementary :        'http://10.160.188.123:8765/sipare-response-type-patch/multiva/sipare/responseTypeCaptureLine',
+    verifyButtonTransaction:        'http://10.160.188.123:8765/sipare-procesar-transactions/transactions',
+    updateHourTansaction:           'http://10.160.188.123:8765/sipare-procesar-transactions/transactions?type=HOUR',
+    updateProgrammedDefault:        'http://10.160.188.123:8765/sipare-procesar-transactions/transactions?type=DEFAULT',
+    updateProgrammedCron:           'http://10.160.188.123:8765/sipare-procesar-transactions/transactions?type=CRON',
+    datesCollectionReport :         'http://10.160.188.123:8765/sipare-procesar-retrieve-dates/dates/',
+    transactionNotifications:       'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/transactionNotifications',
     
     sipare_api :                    'http://10.160.188.123:8082/api/v1/sipare/',
     urlFileStatus :                 'http://localhost:8765/sipare-consar-file-status/status',
     urlFileWorklog :                'http://localhost:8765/sipare-consar-file-worklog/worklogs/',
-    urlBalanceCONSAR :              'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR',
-    url_Data_Complementary :        'http://10.160.188.123:8765/sipare-response-type-patch/multiva/sipare/responseTypeCaptureLine'
+    urlBalanceCONSAR :              'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR'
 };

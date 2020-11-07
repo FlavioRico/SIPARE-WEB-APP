@@ -67,7 +67,9 @@ export class SendFileToConnectDirectComponent implements OnInit {
 									this.spinner.hide()
 							    },error => {
 									this.spinner.hide()
-								    console.log('Error: ' + error.resultDescription);
+									this.isError= true;
+				    				this.errorCode = 'ERR-EXPORT';
+				    				this.errorMsj = 'No se pudo realizar la exportaci&oacute;n del listado de Archivos, error al exportar';
 							    }
 					  		);
 						}

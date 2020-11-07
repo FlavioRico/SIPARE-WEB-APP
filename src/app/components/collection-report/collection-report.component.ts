@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ProcessFileService } from  '../../services/process-file/process-file.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { SharedComponent } from 'src/app/shared/shared/shared.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-collection-report',
@@ -47,13 +47,30 @@ export class CollectionReportComponent implements OnInit {
 	dateEndTest: any = '2020-09-29'
 
 
-	constructor(public authServ : AuthenticationService, public processFile : ProcessFileService, private router : Router) { }
+	constructor(
+		public authServ : AuthenticationService, 
+		public processFile : ProcessFileService, 
+		private router : Router,
+		private spinner: NgxSpinnerService
+	) { }
 
 	ngOnInit() {
 
-		this.fechaDefault = this.shared.getDateFormated2();
-		this.fechaStart = this.fechaDefault;
-		this.fechaEnd = this.fechaDefault;
+		this.spinner.show();
+		this.processFile.getDatesCollectionReport().subscribe(
+			data=>{
+				// console.log('data', data);
+				this.fechaStart = data.body.previousBusinessDay;
+				this.fechaEnd = data.body.currentDate;
+				this.spinner.hide();
+			},error=>{
+				// console.log('Fechas por default, fallo en servicio');
+				this.fechaDefault = this.shared.getDateFormated2();
+				this.fechaStart = this.fechaDefault;
+				this.fechaEnd = this.fechaDefault;
+				this.spinner.hide();
+			}
+		);
 
 		$(document).ready( function() {
 			$("#buscadorModal").on("keyup", function() {
@@ -319,12 +336,13 @@ export class CollectionReportComponent implements OnInit {
 						var dateControlEnd: any = document.getElementById('fechaEnd');
 						this.fechaStart = dateControlStart.value;
 						this.fechaEnd = dateControlEnd.value;
-
+						// console.log('fechas => ', this.fechaStart, this.fechaEnd);
+						
 						// var endDate = new Date(this.fechaEnd); descomentar terminando pruebas
-						var endDate = new Date(this.dateEndTest);
-						console.log(this.fechaStart, this.fechaEnd, endDate)
+						var endDate = new Date(this.fechaEnd);
+						// console.log(this.fechaStart, this.fechaEnd, endDate)
 
-						let dateNow = new Date(this.dateStartTest);
+						let dateNow = new Date(this.fechaStart);
 						// let dateNow = new Date(); descomentar terminando pruebas
 				  		this.isInfo= true;
 				        this.infoCode = 'PROCESS';
@@ -333,11 +351,11 @@ export class CollectionReportComponent implements OnInit {
 						if(endDate.getUTCFullYear() + (endDate.getUTCMonth() +1) + endDate.getUTCDate() >
 				  		    		(dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate()) + 1){
 
-							console.log('Fecha final:',
-							endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
-							'Fecha actual: ',
-				  		    dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
-							);
+							// console.log('Fecha final:',
+							// endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
+							// 'Fecha actual: ',
+				  		    // dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
+							// );
 							
 							
 				    		this.tableHidden = true;
@@ -350,15 +368,15 @@ export class CollectionReportComponent implements OnInit {
 							this.errorMsj = 'Rango de búsqueda por fecha debe ser hasta un día hábil anterior al día actual';
 						}
 						else{
-							// this.processFile.getFilesRiceibingToT24ByDateRange(this.fechaStart, this.fechaEnd).subscribe(
-				    		this.processFile.getFilesRiceibingToT24ByDateRange(this.dateStartTest, this.dateEndTest).subscribe(
+							this.processFile.getFilesRiceibingToT24ByDateRange(this.fechaStart, this.fechaEnd).subscribe(
+				    		// this.processFile.getFilesRiceibingToT24ByDateRange(this.dateStartTest, this.dateEndTest).subscribe(
 								result => {  
-									console.log('Fecha final:',
-									endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
-									'Fecha actual: ',
-									dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
-									);
-									console.log(result);
+									// console.log('Fecha final:',
+									// endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
+									// 'Fecha actual: ',
+									// dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
+									// );
+									// console.log(result);
 									         
 						    		if(result.resultCode == 0){
 							        	if (result.listSize == 0){
@@ -418,8 +436,8 @@ export class CollectionReportComponent implements OnInit {
 		      	y = rows[i + 1].getElementsByTagName("TD")[n];
 		      	var cmpX = isNaN(parseInt(x.innerHTML)) ? x.innerHTML.toLowerCase():parseInt(x.inner);
 		      	var cmpY = isNaN(parseInt(y.innerHTML)) ? y.innerHTML.toLowerCase():parseInt(y.inner);
-		      	console.log(cmpX);
-		      	console.log(cmpY);
+		      	// console.log(cmpX);
+		      	// console.log(cmpY);
 		      	cmpX = (cmpX == '-') ? 0 :  cmpX;
 		      	cmpY = (cmpY == '-') ? 0 :  cmpY;
 		      	if (dir == "asc") {

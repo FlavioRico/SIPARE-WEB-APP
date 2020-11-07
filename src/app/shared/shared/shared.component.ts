@@ -51,4 +51,7 @@ export class SharedComponent implements OnInit {
     return ('$' + new Intl.NumberFormat('en-US').format(valTable));
   }
   
+  formatRespProcesar(val: any){
+    return (`$${val}`);
+  }
 }

@@ -71,4 +71,11 @@ export class BalanceServiceService {
   
   }
 
+  sendTransactionNotifications(){
+    return this.http.post<any>(
+      environment.transactionNotifications,
+      { observe: 'response'}
+    );
+  }
+
 }

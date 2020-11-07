@@ -9,6 +9,7 @@ import { LiquidationPreAviso } from '../models/models-preaviso/liquidationPreAvi
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedComponent } from 'src/app/shared/shared/shared.component';
 import { Programmed } from '../models/models-backOffice/Programmed';
+import { NewHour } from '../models/models-backOffice/newHour';
 
 @Component({
   selector: 'app-preaviso',
@@ -51,6 +52,7 @@ export class PreavisoComponent implements OnInit {
 
 	shared = new SharedComponent();
 	programmed = new Programmed();
+	newHour = new NewHour();
 
 	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService,
 		private router : Router, private spinner: NgxSpinnerService) { }
@@ -84,11 +86,12 @@ export class PreavisoComponent implements OnInit {
 										this.loadDataPreNotice (data.body);
 									}
 
-									// this.verifyTransactionToday();
+									this.verifyTransactionToday();
 
 									this.spinner.hide();
 
 								}, error => {
+
 									this.balaceApproved = false;
 									this.liquidationErr = true;
 									if (error.status == 424)
@@ -167,7 +170,7 @@ export class PreavisoComponent implements OnInit {
 	}
 
 	paymentTransaction(){
-		// this.updateProgrammed();
+		this.updateProgrammed();
 
         this.isSuccess= true;
         this.successrMsj = 'Transacción T+2 programada con exito';
@@ -175,13 +178,9 @@ export class PreavisoComponent implements OnInit {
 		this.clearInputs();   
 	}
 
-	paymentTransaction2(){
-		this.updateProgrammed();
-	}
-
 	updateProgrammed() {
 
-		this.programmed.date = "2020-09-29";
+		this.programmed.date = null;
 		this.processFile.updateProgrammed('CRON', this.programmed).subscribe(
 			data=>{
 				let headers;
@@ -191,10 +190,11 @@ export class PreavisoComponent implements OnInit {
 				);
 				if (data.status !== 200) {
 					this.errorCode = 'Atención - ';
-					this.errorMsj = 'No se pudo actualizar el programmed del día actual. (DEFAULT).';
-					// alert("No se pudo actualizar el programmed del día actual. (CRON)");
+					this.errorMsj = 'No se pudo actualizar el programmed del día actual. (CRON).';
+					alert("No se pudo actualizar el programmed del día actual. (CRON)");
 				}else{
-					console.log("Se actualizó el Programmed del día actual.");
+					alert("Se actualizó el Programmed del día actual.");
+					this.updateHour();
 				}
 			},error=>{
 				this.errorCode = 'Error inesperado - ';
@@ -206,7 +206,10 @@ export class PreavisoComponent implements OnInit {
 	}
 	
 	updateHour(){
-		this.processFile.updateHourTransaction(this.timeTransactionProgrammed.hour.toString()).subscribe(
+
+		this.newHour.hour = this.timeTransactionProgrammed.hour;
+		this.newHour.minutes = this.timeTransactionProgrammed.minute;
+		this.processFile.updateHourTransaction(this.newHour).subscribe(
 			data=>{
 				let headers;
 				const keys = data.headers.keys();
@@ -233,10 +236,14 @@ export class PreavisoComponent implements OnInit {
 				headers = keys.map(key =>
 					`${key}: ${data.headers.get(key)}`
 				);
-				if(data.status == 204){
+				if(data.body.httpStatus == 'OK' &&
+				data.body.isProgrammedOrExistStr == 'Programe la ejecución' &&
+				data.body.programmedOrExist == false){
+
 					console.log('Se puede visualizar el botón');
 					this.verifyBtn = false;
-				}else if(data.status == 200){
+
+				}else{
 					this.verifyBtn = true;
 					console.log('No visualizar el botón porque ya se cambió a 100.');
 				}
@@ -250,7 +257,7 @@ export class PreavisoComponent implements OnInit {
 	meridian = true;
 	flagHab: boolean = false;
 	txtForProgrammed: string = 'Habilitar edición de hora';
-	minuteStep = 60;
+	minuteStep = 5;
 	changeAvalible() {
 		this.flagHab = (this.flagHab ? false : true);
 		this.txtForProgrammed = ( !this.flagHab ? 'Habilitar edición de hora' : 'Deshabilitar edición de hora');

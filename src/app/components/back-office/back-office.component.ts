@@ -256,7 +256,7 @@ export class BackOfficeComponent implements OnInit {
 						$("#btnAuthorized").hide();
 					});
 
-					// this.updateProgrammed();
+					this.updateProgrammed();
 
 					this.spinner.hide();
 	        	} else {
@@ -292,7 +292,7 @@ export class BackOfficeComponent implements OnInit {
 	  
 	updateProgrammed() {
 
-		this.programmed.date = "2020-09-29";
+		this.programmed.date = null;
 		this.processFile.updateProgrammed('DEFAULT', this.programmed).subscribe(
 			data=>{
 				let headers;
@@ -315,9 +315,5 @@ export class BackOfficeComponent implements OnInit {
 			}
 		);
 	
-	}
-
-	paymentTransaction2(){
-		this.updateProgrammed();
 	}
 }

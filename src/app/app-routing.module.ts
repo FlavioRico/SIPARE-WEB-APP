@@ -5,7 +5,6 @@ import { LoginComponent } from './components/login/login.component';
 import { BalanceConsarComponent } from './components/balance/balance-consar/balance-consar.component';
 import { BalanceProcesarComponent } from './components/balance/balance-procesar/balance-procesar.component';
 import { BitacoraComponent } from './components/bitacora/bitacora.component';
-import { PreloaderComponent } from './components/preloader/preloader.component';
 import { ValidFileComponent } from './components/valid-file/valid-file.component';
 import { PrivadoPageComponent } from './components/privado-page/privado-page.component';
 import { CollectionReportComponent } from './components/collection-report/collection-report.component';

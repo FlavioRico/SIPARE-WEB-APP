@@ -11,6 +11,9 @@ import { DataComplementary } from '../../components/models/models-procesarRespVa
 import { LineCap } from '../../components/models/models-procesarRespValidation/lineCap';
 import { LiquidationPreAviso } from 'src/app/components/models/models-preaviso/liquidationPreAviso';
 import { Programmed } from 'src/app/components/models/models-backOffice/Programmed';
+import { NewHour } from 'src/app/components/models/models-backOffice/newHour';
+import { Dates } from 'src/app/components/models/models-collectionReport/Dates';
+import { TransactionProgrammed } from 'src/app/components/models/models-preaviso/TransactionProgrammed';
 
 
 @Injectable()
@@ -394,7 +397,7 @@ export class ProcessFileService {
 
   updateProgrammed(type: string, newProgrammed: Programmed) {
 
-    let url = (type == 'DEFAULT') ? 'http://localhost:9098/transactions?type=DEFAULT' : 'http://localhost:9098/transactions?type=CRON';
+    let url = (type == 'DEFAULT') ? environment.updateProgrammedDefault : environment.updateProgrammedCron;
     console.log("this", url, newProgrammed);
 
     return this.http.put<any>(
@@ -406,18 +409,24 @@ export class ProcessFileService {
 
   verifyTransactionToday() {
     
-    return this.http.get<any>('url',
+    return this.http.get<TransactionProgrammed>(
+    environment.verifyButtonTransaction,
     {observe: 'response'});
   }
 
-  updateHourTransaction(newHour: string) {
-
-    var obj = { newHour: newHour }
-    let url = '';
+  updateHourTransaction(newHour: NewHour) {
 
     return this.http.put<any>(
-      url,
-      JSON.stringify(obj),
+      environment.updateHourTansaction,
+      newHour,
+      {observe: 'response'}
+    );
+  }
+
+  getDatesCollectionReport() {
+
+    return this.http.get<Dates>(
+      environment.datesCollectionReport,
       {observe: 'response'}
     );
   }
