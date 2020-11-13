@@ -61,8 +61,8 @@ export class SendFileToConnectDirectComponent implements OnInit {
 							this.processFile.getFilesToSendToConnectDirect().subscribe(
 					  			result => {           
 					        		if(result.resultCode == 0){
-										this.files = result.listContentFile.filter(file => file.countLines !== 0);
-										// this.files = result.listContentFile;
+										// this.files = result.listContentFile.filter(file => file.countLines !== 0);
+										this.files = result.listContentFile;
 									}
 									this.spinner.hide()
 							    },error => {

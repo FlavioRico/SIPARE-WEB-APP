@@ -399,8 +399,8 @@ export class CollectionReportComponent implements OnInit {
 							        	this.tableHidden = true;
 						        		this.isError= true;
 										this.isInfo= false;
-								        this.errorCode = 'ERR-SERVICE';
-								        this.errorMsj = result.resultDescription;
+								        this.errorCode = 'Atención ';
+								        this.errorMsj = 'No hay archivos cargados desde T24.';
 							        }
 							    },error => {
 							    	this.isInfo= false;

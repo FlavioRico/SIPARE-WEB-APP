@@ -8,7 +8,7 @@ export const environment = {
   production: false,
   contentType : 'Content-Type',
   appJson : 'application/json', //8083 UAT - 8085 DEV
-  sipare_ms_processFile_url :                'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/',
+  sipare_ms_processFile_url :                'http://10.160.14.213:808/sipareMSProcessFileApp/multiva/sipare/',
   sipare_generate_processFile :              'http://10.160.14.213:8084/multiva/sipare/generateFileToPROCESAR',
   sipare_ms_authenticate_url : 'http://10.160.14.213:8081/sipareMSAuthenticationApp/multiva/sipare/', //este no cambia en ninguno
   sipare_ms_parameters_by_type_transaction : 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction',

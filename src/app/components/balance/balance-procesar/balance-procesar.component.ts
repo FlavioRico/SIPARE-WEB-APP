@@ -193,7 +193,7 @@ export class BalanceProcesarComponent implements OnInit {
         this.aprovedTrue(); 
       }else{
         
-        this.createMessage('alert-warning', 'Advertencia. No hay archivos de T-24 del día actual.');
+        this.createMessage('alert-warning', 'Advertencia. Sin movimientos de recaudación.');
         this.render.removeClass(this.btnAutorizar.nativeElement, 'btn-outline-success');
         this.render.addClass(this.btnAutorizar.nativeElement, 'btn-outline-warning');
         this.setIconsWarning();

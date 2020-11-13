@@ -40,6 +40,13 @@
 		Resultato de Validaciones PROCESAR para correcciones (Resumen). <br>
 		Estatus a la Fecha {{ dateToday }}.
 	</div>
+
+	<!-- <div class="row">
+		<div class="col-2">
+			<input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
+		</div>
+	</div> -->
+
 	<div *ngIf="tableStatusProcesar" class="mce-container row" style="margin-top: 1%;">
 		<table class="table table-hover tbody-scroll tabContent" id="tablafullModal">
 			<thead>
@@ -108,7 +115,9 @@
 					<th style="padding: 0.4em; vertical-align: baseline;">
 						<div class="row cenContent" style="width: 165px;">
 							<div class="col-md-9">
-								<p style="text-align: center; font-size: 13px">Pendientes</p>
+								<p style="text-align: center; font-size: 13px">
+									Pendientes
+								</p>
 							</div>
 						</div>
 					</th>
@@ -321,21 +330,21 @@
 		<div class="col-3" style="margin-top: 10px;">
 			Fecha y hora de recepción:
 			<div class="form-group input-info">
-				<input type="text" class="form-control inputCustom" 
-				aria-describedby="basic-addon1" value={{dataRowT24.datePayment}} readonly>
+				<input #dateAnHourReception type="text" class="form-control inputCustom" 
+				aria-describedby="basic-addon1" value={{dataRowT24.datePayment}}>
 			</div>
 		</div>
 		<div class="col-6" style="margin-top: 10px;">
 			Sucursal:
 			<div class="form-group input-info">
-				<input class="form-control inputCustom" 
-				value={{dataRowT24.placeOffice}} readonly>
+				<input #sucursal class="form-control inputCustom" 
+				value={{dataRowT24.placeOffice}}>
 			</div>
 		</div>
 		<div class="col-3" style="margin-top: 10px;">
 			Usuario:
 			<div class="form-group input-info">
-				<input class="form-control inputCustom" value={{dataRowT24.clientOrUser}} readonly>
+				<input #user class="form-control inputCustom" value={{dataRowT24.clientOrUser}}>
 			</div>
 		</div>
 	</div>
@@ -345,15 +354,15 @@
 		<div class="col-9">
 			<div class="form-group input-info">
 				Linea de captura:
-				<input type="text" class="form-control inputCustom" value={{dataRowT24.line}} minlength="53" maxlength="53" readonly>
+				<input #linecap type="text" class="form-control inputCustom" value={{dataRowT24.line}} minlength="53" maxlength="53">
 			</div>
 		</div>
 		<div class="col-3">
 			<div class="form-group input-info">
 				Folio T24:
-				<input type="text" class="form-control inputCustom" value={{dataRowT24.idTransaccionT24}} 
+				<input #folioT24 type="text" class="form-control inputCustom" value={{dataRowT24.idTransaccionT24}} 
 				[(ngModel)]="dataRowT24.idTransaccionT24"
-				minlength="53" maxlength="53" readonly>
+				minlength="53" maxlength="53">
 			</div>
 		</div>
 	</div>
@@ -361,8 +370,8 @@
 		<div class="col-3">
 			<div class="form-group input-info">
 				Usuario T24:
-				<input type="text" class="form-control inputCustom"value={{dataRowT24.usuarioIngresoT24}} 
-				[(ngModel)]="dataRowT24.usuarioIngresoT24" minlength="53" maxlength="53" readonly>
+				<input #userT24 type="text" class="form-control inputCustom"value={{dataRowT24.usuarioIngresoT24}} 
+				[(ngModel)]="dataRowT24.usuarioIngresoT24" minlength="53" maxlength="53">
 			</div>
 		</div>
 		<div class="col-md"></div>
@@ -377,7 +386,7 @@
 		<div class="col-md">
 			<div class="form-group input-info">
 				Nombre del cliente:
-				<input #nameClient type="text" class="form-control inputCustom" placeholder="Buscar" id="buscadorModal" pattern="[a-zA-Z ]$">
+				<input #nameClient type="text" class="form-control inputCustom" id="buscadorModal" pattern="[a-zA-Z ]$">
 			</div>
 		</div>
 		<div class="col-md"></div>
@@ -388,7 +397,7 @@
 			<div class="form-group input-info">
 				Registro patronal:
 				<input name="patronRegistry" type="text" class="form-control inputCustom" value={{dataRowT24.patronRegistry}} 
-				minlength="11" maxlength="11" id="patronRegistry" name="patronRegistry" [(ngModel)]="dataRowT24.patronRegistry" readonly/>	
+				minlength="11" maxlength="11" id="patronRegistry" name="patronRegistry" [(ngModel)]="dataRowT24.patronRegistry"/>	
 			</div>
 		</div>
 		<div class="col-sm">
@@ -405,7 +414,7 @@
 				Forma de Pago:
 				<div class="form-group input-info">
 					<input name="bankNameRecep" type="text"
-					class="form-control inputCustom" value={{dataRowT24.formatPayment}}  id="buscadorModal" readonly/>
+					class="form-control inputCustom" value={{dataRowT24.formatPayment}}  id="buscadorModal"/>
 				</div>
 				
 			</div>
@@ -415,7 +424,7 @@
 				Cliente o Ususario:
 				<div class="form-group input-info">
 					<input name="buscadorModal" type="text"
-					class="form-control inputCustom" value={{dataRowT24.clientOrUser}} id="buscadorModal" readonly/>
+					class="form-control inputCustom" value={{dataRowT24.clientOrUser}} id="buscadorModal"/>
 				</div>
 			</div>
 		</div>
@@ -491,7 +500,7 @@
 		<div class="col-lg">
 			<div class="form-group input-info">
 				<input type="text"
-				class="form-control inputCustom" value={{this.respProcesar}} readonly/>
+				class="form-control inputCustom" value={{this.respProcesar}}/>
 			</div>
 		</div>
 	</div>
@@ -500,7 +509,7 @@
 			<div class="form-group input-info">
 				Diagnostico 1:
 				<input type="text"
-				class="form-control inputCustom" value={{this.respuestas.diagnosisOne}} readonly/>
+				class="form-control inputCustom" value={{this.respuestas.diagnosisOne}}/>
 			</div>
 		</div>
 	</div>
@@ -509,7 +518,7 @@
 			<div class="form-group input-info">
 				Diagnostico 2:
 				<input type="text"
-				class="form-control inputCustom" value={{this.respuestas.diagnosisTwo}} readonly/>
+				class="form-control inputCustom" value={{this.respuestas.diagnosisTwo}}/>
 			</div>
 		</div>
 	</div>
@@ -518,7 +527,7 @@
 			<div class="form-group input-info">
 				Diagnostico 3:
 				<input type="text"
-				class="form-control inputCustom" value={{this.respuestas.diagnosisThree}} readonly/>
+				class="form-control inputCustom" value={{this.respuestas.diagnosisThree}}/>
 			</div>
 		</div>
 	</div>

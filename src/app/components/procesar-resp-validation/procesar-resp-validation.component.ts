@@ -57,8 +57,17 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public flagCorrect: boolean = false;
 	public respProcesar: string;
 	public dateToday: string = '';
+	public fechaStart;
+
 
 	shared = new SharedComponent();
+	@ViewChild('dateAnHourReception') dateAnHourReception: ElementRef;
+	@ViewChild('sucursal') sucursal: ElementRef;
+	@ViewChild('user') user: ElementRef;
+	@ViewChild('linecap') linecap: ElementRef;
+	@ViewChild('folioT24') folioT24: ElementRef;
+	@ViewChild('userT24') userT24: ElementRef;
+
 	@ViewChild('nameClient') nameClient: ElementRef;
 	@ViewChild('nameOrRfc') nameOrRfc: ElementRef;
 	@ViewChild('tel') tel: ElementRef;
@@ -110,7 +119,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 						        		this.tableStatusProcesar = true;
 										this.rows = result.listContent;
 										this.dateToday = result.resultTimestamp;
-										
+										this.fechaStart = result.resultTimestamp;
 										this.spinner.hide();
 									}
 						        }
@@ -218,6 +227,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 							this.dataCaptureLine.response_type = data.body.responseType;
 							console.log('dejaré response this.dataCaptureLine.response_type en', 
 							this.dataCaptureLine.response_type, 'en la otra hay', data.body.responseType);
+							if (!this.notAutorized) this.renderForm(true);
 							this.spinner.hide();
 						}, error => {
 							this.spinner.hide();
@@ -275,12 +285,15 @@ export class ProcesarRespValidationComponent implements OnInit {
 	  
 		/*this Agregado */
 	seleccion(operationType: number){
+		console.log('debdeb');
+		
 		this.globalResp = operationType.toString();
 		this.responseType = operationType;
+		console.log("estooo", this.responseType)
 	}
 
 	updateTwo () {
-		// this.dataCaptureLine.response_type = this.globalResp;
+		this.dataCaptureLine.response_type = this.responseType;
 		this.dataCaptureLine.capture_line = this.lineCap;
 		console.log("vamos a enviar esto => ",this.dataCaptureLine);
 		
@@ -306,6 +319,13 @@ export class ProcesarRespValidationComponent implements OnInit {
 		this.render.setProperty(this.importVIV.nativeElement, 'disabled', value);
 		this.render.setProperty(this.importACV.nativeElement, 'disabled', value);
 		this.render.setProperty(this.total.nativeElement, 'disabled', value);
+
+		this.render.setProperty(this.dateAnHourReception.nativeElement, 'disabled', value);
+		this.render.setProperty(this.sucursal.nativeElement, 'disabled', value);
+		this.render.setProperty(this.user.nativeElement, 'disabled', value);
+		this.render.setProperty(this.linecap.nativeElement, 'disabled', value);
+		this.render.setProperty(this.folioT24.nativeElement, 'disabled', value);
+		this.render.setProperty(this.userT24.nativeElement, 'disabled', value);
 	}
 
 }

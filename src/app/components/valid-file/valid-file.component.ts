@@ -3,7 +3,7 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 import { ProcessFileService } from  '../../services/process-file/process-file.service';
 import { Router } from '@angular/router';
 import { msjscode } from '../../../environments/msjsAndCodes';
-import * as $ from 'jquery';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-valid-file',
@@ -28,7 +28,10 @@ export class ValidFileComponent implements OnInit {
 	public successCode : string;
 	public successrMsj : string;
 
-	constructor(public processFile : ProcessFileService, public authServ : AuthenticationService, private router : Router) { }
+	constructor(public processFile : ProcessFileService, 
+				public authServ : AuthenticationService,
+				private router : Router,
+				private spinner: NgxSpinnerService) { }
 
   	ngOnInit() {
 		this.isError = false;
@@ -76,11 +79,14 @@ export class ValidFileComponent implements OnInit {
   	}
 
   	sendFileToConnectDirect(fileName){
+		this.spinner.show();
   		this.authServ.getUserByUserNameWithSessionId(localStorage.getItem('username'),localStorage.getItem('sessionId')).subscribe(
 			result => {
 				if(result.resultCode == 0){
-					if(result.logged == 0)
+					if(result.logged == 0){
 						this.router.navigate(['/']);
+						this.spinner.hide();
+					}
 					else{
 						this.isSuccess = false;
 				  		this.successCode = '';
@@ -93,28 +99,28 @@ export class ValidFileComponent implements OnInit {
 				        			this.successCode = 'SUCCESS';
 									this.successrMsj = 'Archivo envido con exito';
 						        	this.processFile.searchFilesToValidService().subscribe(
-												response => {           
-									        		if(response.resultCode == 0){
-														this.fileValid = response.listFiles;
-														this.isSuccess = true;
-											        	this.isError = false;
-											        	this.isInfo = false;
-											        	this.successCode = 'SUCCESS';
-											        	this.successrMsj = 'Listado de Archivos por validar';
-											        }else if(response.resultCode == 2){
-														this.fileValid = response.listFiles;
-														this.isSuccess = true;
-											        	this.isError = false;
-											        	this.isInfo = true;
-											        	this.infoMsj = 'No hay archivos por validar';
-											        }
-											    },error => {
-												    this.isError = true;
-												    this.isInfo = false;
-											    	this.errorCode = error.resultCode;
-											    	this.errorMsj = error.resultDescription;
-											    }
-											);
+										response => {           
+											if(response.resultCode == 0){
+												this.fileValid = response.listFiles;
+												this.isSuccess = true;
+												this.isError = false;
+												this.isInfo = false;
+												this.successCode = 'SUCCESS';
+												this.successrMsj = 'Listado de Archivos por validar';
+											}else if(response.resultCode == 2){
+												this.fileValid = response.listFiles;
+												this.isSuccess = true;
+												this.isError = false;
+												this.isInfo = true;
+												this.infoMsj = 'No hay archivos por validar';
+											}
+										},error => {
+											this.isError = true;
+											this.isInfo = false;
+											this.errorCode = error.resultCode;
+											this.errorMsj = error.resultDescription;
+										}
+									);
 						        }else if(result.resultCode == 'PF-MS-ERR0003'){
 						        	this.isError = true;
 						        	this.isInfo = false;
@@ -132,12 +138,14 @@ export class ValidFileComponent implements OnInit {
 											    	this.errorMsj = error.resultDescription;
 											    }
 											);
-						        }
+								}
+								this.spinner.hide();
 						    },error => {
 							    this.isError = true;
 							    this.isInfo = false;
 						       	this.errorCode = error.resultCode;
-						        this.errorMsj = error.resultDescription;
+								this.errorMsj = error.resultDescription;
+								this.spinner.hide();
 						    }
 						);
 					}

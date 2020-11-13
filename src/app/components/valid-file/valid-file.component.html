@@ -43,7 +43,8 @@
 							</div>
 						</td>
 						<td>{{file.date}}</td>
-						<td>{{file.type}}</td>
+						<td *ngIf="file.type == 'Enviar'">Correcto</td>
+						<td *ngIf="file.type != 'Enviar'">{{ file.type }}</td>
 						<td>
 							<div *ngIf=" file.type == 'Enviar'">
 								<button type="submit" class="btn btn-outline-success" (click)="sendFileToConnectDirect(file.file);">Enviar</button>
