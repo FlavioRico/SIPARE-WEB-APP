@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedComponent } from 'src/app/shared/shared/shared.component';
+import { environment } from 'src/environments/environment';
 import { SipareApiService } from '../../services/conciliation-report/sipare-api.service';
 
 @Component({
@@ -107,7 +108,7 @@ export class ConciliationReportComponent implements OnInit {
             this.rows = data.rows;
             this.contentAvailable = true;
             this.noContentAvailable = false;
-            this.url = "http://10.160.188.123:8083/sipare/api/v1/reports/conciliation/date_types/"
+            this.url = environment.downloadReport
               + this.dateType + "/download?" 
               + "from=" + this.fechaStart 
               + "&to=" + this.fechaEnd;
@@ -155,7 +156,7 @@ export class ConciliationReportComponent implements OnInit {
             this.rows = data.rows;
             this.contentAvailable = true;
             this.noContentAvailable = false;
-            this.url = "http://10.160.188.123:8083/sipare/api/v1/reports/conciliation/date_types/"
+            this.url = environment.downloadReport
               + this.monthType + "/months/" + this.month +"/download";
             this.spinner.hide();
           }

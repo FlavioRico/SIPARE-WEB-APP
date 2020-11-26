@@ -31,7 +31,12 @@
   <span class="name-file-found">
     {{ statusFile }}
   </span>
-
+  <br>
+  <span *ngIf="flagErr" class="name-file-not-found">
+    Atención, el archivo tuvo el siguiente incoveniente:
+    {{ messageError }}
+  </span>
+  <br>
   <div class="row title-short">
       <div class="col-12">
         Bitácora

@@ -62,7 +62,6 @@ export class CollectionReportComponent implements OnInit {
 				// console.log('data', data);
 				this.fechaStart = data.body.previousBusinessDay;
 				this.fechaEnd = data.body.currentDate;
-				this.spinner.hide();
 			},error=>{
 				// console.log('Fechas por default, fallo en servicio');
 				this.fechaDefault = this.shared.getDateFormated2();
@@ -124,6 +123,7 @@ export class CollectionReportComponent implements OnInit {
 				result => {
 					if(result.resultCode == 0){
 						if(result.logged == 0){
+							this.spinner.hide();
 							this.router.navigate(['/']);
 						}else{
 							this.isLogin = true;
@@ -149,6 +149,7 @@ export class CollectionReportComponent implements OnInit {
 											this.files = result.listFiles;
 											this.totalItems = result.listSize;
 										}
+										this.spinner.hide();
 							        }
 							    },error => {
 							    	this.isInfo= false;
@@ -157,6 +158,7 @@ export class CollectionReportComponent implements OnInit {
 								    this.isError= true;
 								    this.errorCode = error.resultCode;
 									this.errorMsj = error.resultDescription;
+									this.spinner.hide();
 							    }
 							);
 						}
@@ -169,6 +171,7 @@ export class CollectionReportComponent implements OnInit {
 				    this.isError= true;
 				    this.errorCode = error.resultCode;
 					this.errorMsj = error.resultDescription;
+					this.spinner.hide();
 			    }
 			);
 		}
@@ -348,28 +351,29 @@ export class CollectionReportComponent implements OnInit {
 				        this.infoCode = 'PROCESS';
 				        this.infoMsj = 'Se esta ejecutando el listado de Reporte de Recaudación por rango de fecha';
 
-						if(endDate.getUTCFullYear() + (endDate.getUTCMonth() +1) + endDate.getUTCDate() >
-				  		    		(dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate()) + 1){
+						// if(endDate.getUTCFullYear() + (endDate.getUTCMonth() +1) + endDate.getUTCDate() >
+				  		//     		(dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate()) + 1){
 
-							// console.log('Fecha final:',
-							// endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
-							// 'Fecha actual: ',
-				  		    // dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
-							// );
+						// 	// console.log('Fecha final:',
+						// 	// endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
+						// 	// 'Fecha actual: ',
+				  		//     // dateNow.getUTCFullYear(), (dateNow.getUTCMonth() +1), dateNow.getUTCDate()
+						// 	// );
 							
 							
-				    		this.tableHidden = true;
-				    		this.isInfo= false;
-					        this.infoCode = '';
-					        this.infoMsj = '';
-				    		this.isError= true;
-				    		this.isInfo = false;
-						    this.errorCode = 'ERR-DR';
-							this.errorMsj = 'Rango de búsqueda por fecha debe ser hasta un día hábil anterior al día actual';
-						}
-						else{
+				    	// 	this.tableHidden = true;
+				    	// 	this.isInfo= false;
+					    //     this.infoCode = '';
+					    //     this.infoMsj = '';
+				    	// 	this.isError= true;
+				    	// 	this.isInfo = false;
+						//     this.errorCode = 'ERR-DR';
+						// 	this.errorMsj = 'Rango de búsqueda por fecha debe ser hasta un día hábil anterior al día actual';
+						// }
+						// else{
 							this.processFile.getFilesRiceibingToT24ByDateRange(this.fechaStart, this.fechaEnd).subscribe(
 				    		// this.processFile.getFilesRiceibingToT24ByDateRange(this.dateStartTest, this.dateEndTest).subscribe(
+								
 								result => {  
 									// console.log('Fecha final:',
 									// endDate.getUTCFullYear(), (endDate.getUTCMonth() +1), endDate.getUTCDate(),
@@ -412,7 +416,7 @@ export class CollectionReportComponent implements OnInit {
 							    }
 							);
 				    	}
-					}
+					// }
 				}
 			});
   	}

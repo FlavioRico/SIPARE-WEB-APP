@@ -56,8 +56,9 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public respuestas: DataComplementary = new DataComplementary();
 	public flagCorrect: boolean = false;
 	public respProcesar: string;
-	public dateToday: string = '';
 	public fechaStart;
+	public fechaDefault;
+	public changeTableStatusProcesar: boolean = false;
 
 
 	shared = new SharedComponent();
@@ -78,6 +79,13 @@ export class ProcesarRespValidationComponent implements OnInit {
 	@ViewChild('importVIV') importVIV: ElementRef;
 	@ViewChild('importACV') importACV: ElementRef;
 	@ViewChild('total') total: ElementRef;
+	@ViewChild('patronRegistry') patronRegistry: ElementRef;
+	@ViewChild('bankNameRecep') bankNameRecep: ElementRef;
+	@ViewChild('clientOrUserDetail') clientOrUserDetail: ElementRef;
+	@ViewChild('respValidateProcesar') respValidateProcesar: ElementRef;
+	@ViewChild('diagnostic1') diagnostic1: ElementRef;
+	@ViewChild('diagnostic2') diagnostic2: ElementRef;
+	@ViewChild('diagnostic3') diagnostic3: ElementRef;
 
 	/*termina*/
 
@@ -93,7 +101,12 @@ export class ProcesarRespValidationComponent implements OnInit {
 
   	this.isContentTableFull = false;
   	this.isContentTable = false;
-  	this.tableListRegisterByCode = false;
+	this.tableListRegisterByCode = false;
+
+	this.fechaDefault = this.shared.getDateFormated2();
+	this.fechaStart = this.fechaDefault;
+
+	  
   	if(localStorage.getItem('username') === '' || localStorage.getItem('username') == null){
 		this.router.navigate(['/']);
 	}else{
@@ -107,26 +120,33 @@ export class ProcesarRespValidationComponent implements OnInit {
 					}else{
 						this.isLogin = true;
 						this.processFile.getLastFileToResponseProcesarService().subscribe(
-							result => {  
-				        		if(result.resultCode == 0){
-						        	if (result.listSize == 0){
-										this.isError= true;
-						        		this.tableStatusProcesar = false;
-								        this.errorCode = 'Emp-001';
-										this.errorMsj = 'Sin registros por el momento.';
-										this.spinner.hide();
-						        	} else {
-						        		this.tableStatusProcesar = true;
-										this.rows = result.listContent;
-										this.dateToday = result.resultTimestamp;
-										this.fechaStart = result.resultTimestamp;
-										this.spinner.hide();
-									}
-						        }
+							data => {
+								
+								let headers;
+								const keys = data.headers.keys();
+								headers = keys.map(key =>
+									`${key}: ${data.headers.get(key)}`
+								);
+				        		if(data.status === 200){
+
+									this.tableStatusProcesar = true;
+									this.rows = data.body.listContent;
+									this.spinner.hide();
+
+								}
+								if (data.status == 204){
+
+									this.isError= true;
+									this.tableStatusProcesar = false;
+									this.errorCode = 'Emp-001';
+									this.errorMsj = 'Sin registros por el momento.';
+									this.spinner.hide();
+
+								}
 						    },error => {
 							    this.isError= true;
-							    this.errorCode = error.resultCode;
-								this.errorMsj = error.resultDescription;
+							    this.errorCode = '';
+								this.errorMsj = 'Ocurrió un error en los servicios, intente más tarde por favor. (getLastFileToResponseProcesarService)';
 								this.spinner.hide();
 						    }
 						);
@@ -144,46 +164,54 @@ export class ProcesarRespValidationComponent implements OnInit {
 		
 	}
 
-  	listRegisterByCodeAndFileResponseProcesar(oid, status){
-  		this.oidRequest = oid;
-  		this.statusRequest = status;
-  		this.processFile.searchFilesToFileT24RespProcesarService(oid, status).subscribe(
-  			result => {           
-        		if(result.resultCode == 0){
-		        	if (result.listSize == 0){
-						this.isError= true;
-						this.isContentTableFull = false;
-				        this.errorCode = 'Emp-001';
-				        this.errorMsj = 'Sin registros por el momento';
-		        	} else {
-						console.log('Debug', result.listContent);
+  	listRegisterByCodeAndFileResponseProcesar(procesarFileDate, procesarResponse){
+		  
+  		this.processFile.searchFilesToFileT24RespProcesarService(procesarFileDate, procesarResponse).subscribe(
+  			result => {   
+				
+				let headers;
+				const keys = result.headers.keys();
+				headers = keys.map(key =>
+					`${key}: ${result.headers.get(key)}`
+				);
+        		if(result.status === 204){
+
+					this.isError= true;
+					this.isContentTableFull = false;
+					this.errorCode = 'Emp-001';
+					this.errorMsj = 'Sin registros por el momento';
+					this.changeTableStatusProcesar = true;
+
+				}
+				if (result.status === 200){
 						
-		        		this.isError = false;
-		        		this.tableListRegisterByCode = true;
-		        		this.tableStatusProcesar = false;
-						this.isContentTableFull = true;
-						this.filesContent = result.listContent;
-						this.totalItems = result.listSize;
-					}
-		        }
+					this.isError = false;
+					this.tableListRegisterByCode = true;
+					this.tableStatusProcesar = false;
+					this.isContentTableFull = true;
+					this.filesContent = result.body.listContent;
+					this.totalItems = result.body.listSize;
+					this.changeTableStatusProcesar = true;
+
+				}
 		    },error => {
+
 			    this.isError= true;
-			    this.errorCode = error.resultCode;
-				this.errorMsj = error.resultDescription;
+			    this.errorCode = '';
+				this.errorMsj = 'Ups... algo salió mal, intentalo más tarde (searchFilesToFileT24RespProcesarService).';
+				
 		    }
     	);
   	}
 
   	backPagePrincipal(){
   		this.tableStatusProcesar = true;
-  		this.tableListRegisterByCode = false;
+		this.tableListRegisterByCode = false;
+		this.changeTableStatusProcesar = false;
   	}
 
- 	updateRegistry(line, oid, code: any){
-		console.log('debug function = ', line);
+ 	updateRegistry(line, oid, code: any, flagEditable){
 		
-		this.notAutorized = (code == '01') ? false : true;
-
 		this.lineCap = line;
 		this.capLine.capture_line = line; 
  		this.processFile.getContentDataT24ByResponseProcesar(oid).subscribe(
@@ -191,7 +219,6 @@ export class ProcesarRespValidationComponent implements OnInit {
 				this.spinner.show();         
         		if(result.resultCode == 0){
 					this.dataRowT24 = result;
-					console.log("this=>", result);
 					
 	        		// this.ngBalanceImss = this.format2(result.imss, '$');
 	        		this.ngBalanceImss = this.shared.formatRespProcesar(result.importImss);
@@ -207,9 +234,9 @@ export class ProcesarRespValidationComponent implements OnInit {
  						this.inputAccountFlag = false;
  					else
 						this.inputAccountFlag = true;
-					// console.log('debug', result);
 					this.processFile.getDataComplementary(this.capLine).subscribe(
 						data => {
+
 							this.respuestas = data.body;
 							this.errServices(false, '');
 							let headers;
@@ -217,22 +244,25 @@ export class ProcesarRespValidationComponent implements OnInit {
 							headers = keys.map(key =>
 								`${key}: ${data.headers.get(key)}`);
 							this.globalResp = data.body.responseType.toString();
-							if( data.body.responseType == 1){
-								this.renderForm(true);
-								this.flagCorrect = true;
-							}else{
+							if( flagEditable == true){
 								this.renderForm(false);
 								this.flagCorrect = false;
+								this.notAutorized = true;
+
+							}else{
+								this.renderForm(true);
+								this.flagCorrect = true;
+								this.notAutorized = false;
+
 							}
 							this.dataCaptureLine.response_type = data.body.responseType;
-							console.log('dejaré response this.dataCaptureLine.response_type en', 
-							this.dataCaptureLine.response_type, 'en la otra hay', data.body.responseType);
-							if (!this.notAutorized) this.renderForm(true);
+							// if (!this.notAutorized) this.renderForm(true);
 							this.spinner.hide();
 						}, error => {
 							this.spinner.hide();
 							this.errServices(true, `Ocurrió un error en el servicio getDataComplementary ${error}`);
 						}
+
 					);
 
 		        }
@@ -243,8 +273,6 @@ export class ProcesarRespValidationComponent implements OnInit {
 		    }
     	);
  	}
-
-
 
  	format2(n, currency) {
 		return currency.concat(' ').concat(n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -258,7 +286,6 @@ export class ProcesarRespValidationComponent implements OnInit {
  	updateConfirmRegistry(row, imss, rcv, viv, acv, total) {
 		//this agregar el nuevo campo
     	this.dataRowT24 = row;
-    	console.log('RCV:', rcv);
     	this.dataRowT24.patronRegistry = this.patronRegistryInput;
     	this.dataRowT24.imss = imss;
     	this.dataRowT24.acv = acv;
@@ -285,22 +312,18 @@ export class ProcesarRespValidationComponent implements OnInit {
 	  
 		/*this Agregado */
 	seleccion(operationType: number){
-		console.log('debdeb');
 		
 		this.globalResp = operationType.toString();
 		this.responseType = operationType;
-		console.log("estooo", this.responseType)
 	}
 
 	updateTwo () {
 		this.dataCaptureLine.response_type = this.responseType;
 		this.dataCaptureLine.capture_line = this.lineCap;
-		console.log("vamos a enviar esto => ",this.dataCaptureLine);
 		
 		this.processFile.updateCaptureLine(this.dataCaptureLine).subscribe(
 			dta => {
 				if (dta.body.response == 0) alert('Actualización realizada con exito');
-				console.log(dta,'aqui cumplo');
 				
 			}, err => {
 				alert(`Error en servicio de actualización updateCaptureLine`);
@@ -326,6 +349,80 @@ export class ProcesarRespValidationComponent implements OnInit {
 		this.render.setProperty(this.linecap.nativeElement, 'disabled', value);
 		this.render.setProperty(this.folioT24.nativeElement, 'disabled', value);
 		this.render.setProperty(this.userT24.nativeElement, 'disabled', value);
+		this.render.setProperty(this.patronRegistry.nativeElement, 'disabled', value);
+		this.render.setProperty(this.bankNameRecep.nativeElement, 'disabled', value);
+		this.render.setProperty(this.clientOrUserDetail.nativeElement, 'disabled', value);
+		this.render.setProperty(this.respValidateProcesar.nativeElement, 'disabled', value);
+		this.render.setProperty(this.diagnostic1.nativeElement, 'disabled', value);
+		this.render.setProperty(this.diagnostic2.nativeElement, 'disabled', value);
+		this.render.setProperty(this.diagnostic3.nativeElement, 'disabled', value);
+	}
+	renderFormFalse (value: boolean){
+		this.render.removeAttribute(this.nameClient.nativeElement, 'disabled');
+		this.render.removeAttribute(this.nameOrRfc.nativeElement, 'disabled');
+		this.render.removeAttribute(this.tel.nativeElement, 'disabled');
+		this.render.removeAttribute(this.nameContact.nativeElement, 'disabled');
+		this.render.removeAttribute(this.email.nativeElement, 'disabled');
+		this.render.removeAttribute(this.importIMSS.nativeElement, 'disabled');
+		this.render.removeAttribute(this.importRCV.nativeElement, 'disabled');
+		this.render.removeAttribute(this.importVIV.nativeElement, 'disabled');
+		this.render.removeAttribute(this.importACV.nativeElement, 'disabled');
+		this.render.removeAttribute(this.total.nativeElement, 'disabled');
+
+		this.render.removeAttribute(this.dateAnHourReception.nativeElement, 'disabled');
+		this.render.removeAttribute(this.sucursal.nativeElement, 'disabled');
+		this.render.removeAttribute(this.user.nativeElement, 'disabled');
+		this.render.removeAttribute(this.linecap.nativeElement, 'disabled');
+		this.render.removeAttribute(this.folioT24.nativeElement, 'disabled');
+		this.render.removeAttribute(this.userT24.nativeElement, 'disabled');
+		this.render.removeAttribute(this.patronRegistry.nativeElement, 'disabled');
+		this.render.removeAttribute(this.bankNameRecep.nativeElement, 'disabled');
+		this.render.removeAttribute(this.clientOrUserDetail.nativeElement, 'disabled');
+		this.render.removeAttribute(this.respValidateProcesar.nativeElement, 'disabled');
+		this.render.removeAttribute(this.diagnostic1.nativeElement, 'disabled');
+		this.render.removeAttribute(this.diagnostic2.nativeElement, 'disabled');
+		this.render.removeAttribute(this.diagnostic3.nativeElement, 'disabled');
+	}
+
+	searchByDate(){
+
+		this.spinner.show();
+		var dateControlStart: any = document.getElementById('fechaStart');		
+
+		this.processFile.getLastFileToResponseProcesarServiceByDate(dateControlStart.value).subscribe(
+			data=>{
+
+				let headers;
+				const keys = data.headers.keys();
+				headers = keys.map(key =>
+					`${key}: ${data.headers.get(key)}`
+				);
+				if(data.status === 200){
+
+					this.tableStatusProcesar = true;
+					this.rows = data.body.listContent;
+					this.isError = false;
+
+				}
+				if (data.status == 204){
+
+					this.isError= true;
+					this.tableStatusProcesar = false;
+					this.errorCode = 'Emp-001';
+					this.errorMsj = 'Sin registros por el momento.';
+
+				}
+
+				this.spinner.hide();
+				
+			},error=>{
+				this.isError= true;
+				this.errorCode = '';
+				this.errorMsj = 'Ocurrió un error en los servicios, intente más tarde por favor. (getLastFileToResponseProcesarService)';
+				this.spinner.hide();
+			}
+		);
+
 	}
 
 }

@@ -65,10 +65,12 @@ export class BalanceProcesarComponent implements OnInit {
 
   /*Agregado*/
   public messageErrService: string = '';
+  public messageErrNotWorkingDay: string = '';
   public errService: boolean = false;
   public flagAuth: boolean;
   public flagLiquidation: boolean;
   public flagPreNotice: boolean;
+  public flagWorkingDay: boolean = true;
 
   constructor(
     private render: Renderer2,
@@ -82,6 +84,28 @@ export class BalanceProcesarComponent implements OnInit {
   ngOnInit(): void {
 
     this.spinner.show();
+
+    this.serviceBalance.validateWorkingDay().subscribe(
+      result => {
+        this.errService = false;
+        this.messageErrService = '';
+        this.flagWorkingDay = (result.body.workDay ? true : false);
+        if (this.flagWorkingDay){
+          this.loadBalanceProcesar();
+        }else{
+          this.messageErrNotWorkingDay = 'Estás intentando acceder a funcionalidades en un día no laboral, ve a tomar un descanso a casa :D.';
+          this.spinner.hide();
+        }
+      },err =>{
+        this.errService = true;
+        this.messageErrService = 'Contacta a soporte por favor. (validateWorkingDay).';
+        this.spinner.hide();
+      }
+    );
+
+  }
+
+  loadBalanceProcesar() {
     this.processFile.getParameter('116027').subscribe(
 
       data => {
@@ -280,16 +304,21 @@ export class BalanceProcesarComponent implements OnInit {
     let a: any;
     this.serviceBalance.aproveBalancePROCESAR(this.balance).subscribe(
       data => {
+
         this.errService = false;
         this.messageErrService = '';
         this.flagAuth = true;
         this.generateLiquidation(); 
+
       }, error => {
+
         this.flagAuth = false;
         this.flagLiquidation = false;
         this.flagPreNotice = false;
         this.errService = true;
         this.messageErrService = `Contacta a soporte por favor (aproveBalancePROCESAR).`;
+        this.spinner.hide();
+
       }
     );
   }
@@ -298,12 +327,12 @@ export class BalanceProcesarComponent implements OnInit {
 
     this.serviceBalance.createLiquidation().subscribe(
       data2 => {
+
         this.errService = false;
         this.messageErrService = '';
-
         this.flagLiquidation = true;
-
         this.generatePreNotice();
+
       },error =>{
 
         this.flagLiquidation = false;
@@ -312,6 +341,8 @@ export class BalanceProcesarComponent implements OnInit {
         this.errService = true;
         this.messageErrService = `Contacta a soporte por favor (createLiquidation).`;
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        this.spinner.hide();
+
       }
     );
   }
@@ -319,13 +350,16 @@ export class BalanceProcesarComponent implements OnInit {
   generatePreNotice() {
 
     this.serviceBalance.createPreNotice().subscribe(
+
       data => {
+        
         this.errService = false;
         this.messageErrService = '';
         this.flagPreNotice = true;
         this.resourceBalance.authSucess(this.btnAutorizar, this.messageValidacion);
 
         this.transactionNotifications();
+
       },error =>{
 
         this.flagPreNotice = false;
@@ -333,7 +367,10 @@ export class BalanceProcesarComponent implements OnInit {
         this.errService = false;
         this.messageErrService = `Contacta a soporte por favor (createPreNotice).`;
         this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        this.spinner.hide();
+
       }
+
     );
     
   }
@@ -343,14 +380,21 @@ export class BalanceProcesarComponent implements OnInit {
     this.serviceBalance.sendTransactionNotifications().subscribe(
 
       data=>{
+
         this.errService = false;
         this.messageErrService = '';
-        if(!(data.resultCode == "0" && data.resultDescription == "SUCCESS"))
-        this.errService = true;
-        this.messageErrService = `No se pudieron generar las notificaciónes de las transacciones.`;
+        if(!(data.resultCode == "0" && data.resultDescription == "SUCCESS")){
+          this.errService = true;
+          this.messageErrService = `No se pudieron generar las notificaciónes de las transacciones.`;
+        }
+        this.spinner.hide();
+
       },error=>{
+
         this.errService = true;
         this.messageErrService = `Contacta a soporte por favor (transactionNotifications).`;
+        this.spinner.hide();
+
       }
       
     );
@@ -422,15 +466,25 @@ export class BalanceProcesarComponent implements OnInit {
   }
 
   sendFileToConnectDirect(){
+
+    this.spinner.show();
+
 		$(document).ready(function(){
 			$("#btnAuthorized").prop('disabled', true); 
 		});
 		this.authServ.getUserByUserNameWithSessionId(localStorage.getItem('username'),localStorage.getItem('sessionId')).subscribe(
 			result => {
 				if(result.resultCode == 0){
-					if(result.logged == 0)
-						this.router.navigate(['/']);
+
+					if(result.logged == 0){
+
+            this.router.navigate(['/']);
+            this.spinner.hide();
+
+          }
+
 					else{
+
 						$(document).ready(function(){
 							$("#btnAuthorized").prop('disabled', true); 
 						});
@@ -442,30 +496,44 @@ export class BalanceProcesarComponent implements OnInit {
 							result => { 
                             
 				        		if(result.resultCode == msjscode.resultCodeOk){
+
 				        			if(result.descriptionOrReject != null ){  
+
 										    this.isError = true;
 										    this.isSuccess = false;
 						        		this.errorCode = 'ERR-FILE';
-						        		this.errorMsj = result.resultDescription;
+                        this.errorMsj = result.resultDescription;
+                        this.spinner.hide();
+
 				        			}else{
+
 										    this.isSuccess = true;
 							        	this.isError = false;
 							        	this.successCode = 'SUCCESS';
                         this.successrMsj = result.resultDescription;
-                        this.aproveBalancePROCESAR();                                                                       
-				        			}
+                        this.aproveBalancePROCESAR();    
+
+                      }
+                      
 						        	this.successrMsj = result.resultDescription;
-						        	this.isProgressBar = false;
+                      this.isProgressBar = false;
+                      
 						        }else if(result.resultCode == 'PF-MS-ERR0003'){
+
 						        	this.isError = true;
 						        	this.isProgressBar = false;
 						       		this.errorCode = result.resultCode;
-						        	this.errorMsj = result.resultDescription;
+                      this.errorMsj = result.resultDescription;
+                      this.spinner.hide();
+
                     }
 						    },error => {
+                  
+                  this.spinner.hide();
 							    this.isError = true;
                   this.errorCode = error.resultCode;
                   this.errorMsj = error.resultDescription;
+
                 }
             );
             // this.aproveBalancePROCESAR();                                                                       

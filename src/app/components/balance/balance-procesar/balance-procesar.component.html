@@ -1,17 +1,33 @@
 <app-navbar></app-navbar>
 
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.5)"
+  size="large"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+    <p style="font-size: 20px; color: white">Cargando...</p>
+</ngx-spinner>
+
 <div class="container">
     <div class="alert alert-primary title-opc" role="alert">
         <strong>PROCESAR</strong> - Conciliación de cifras
     </div>
-
-    <div *ngIf="errService" class="alert alert-danger" role="alert">
+    <div *ngIf="errService && flagWorkingDay" class="alert alert-danger" role="alert">
 		<h4 class="alert-heading">Error en servicios.</h4>
 		<p>Ups algo salio mal..</p>
 		<hr>
 		<p class="mb-0">{{ messageErrService }}</p>
-	</div>
+    </div>
+    <div *ngIf="!flagWorkingDay" class="alert alert-warning" role="alert">
+		<h4 class="alert-heading">Atención</h4>
+		<p>Día no laborable.</p>
+		<hr>
+		<p class="mb-0">Día sin operación bancaria.</p>
+    </div>
+</div>
 
+<div *ngIf="flagWorkingDay" class="container">
     <strong>Fecha: </strong> 
     <span class="border border-light date">
         {{ fechaCompleta }}
@@ -28,16 +44,7 @@
     </div>
 </div>
 
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.5)"
-  size="large"
-  color="#fff"
-  type="ball-scale-multiple"
->
-    <p style="font-size: 20px; color: white">Cargando...</p>
-</ngx-spinner>
-
-<div class="content-balance" *ngIf="backOfficeCompleted">
+<div class="content-balance" *ngIf="backOfficeCompleted && flagWorkingDay">
     <div class="container"> <!--*ngIf="loadComplete"-->
         <div class="row justify-content-between table-titles">
             <div class="col-sm-3 title-table">Archivo</div>
@@ -113,7 +120,7 @@
     </div>
 </div>
 
-<div class="message container" *ngIf="!backOfficeCompleted">
+<div class="message container" *ngIf="!backOfficeCompleted && flagWorkingDay">
     <div class="alert alert-danger" role="alert">
         <strong>Atención: </strong>Contenido de Balance PROCESAR <strong>no disponible</strong>.
         Se requiere: 

@@ -3,9 +3,10 @@ import { SharedComponent } from 'src/app/shared/shared/shared.component';
 import { BalanceServiceService } from 'src/app/services/balance/balance-service.service';
 import { BalanceConsar } from '../../models/models-balance/balance-consar';
 import { Summary } from 'src/app/components/models/models-balance/summary';
-import { Comparsion } from 'src/app/components/models/models-balance/comparison';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ResourceBalance } from '../util/resource-balance';
+import * as $ from 'jquery';
+
 
 @Component({
   selector: 'app-balance-consar',
@@ -27,7 +28,7 @@ export class BalanceConsarComponent implements OnInit {
   /*Others*/
   shared = new SharedComponent();
   balance: BalanceConsar;
-  fechaCompleta = this.shared.getDateFormated();
+  fechaCompleta = '';
   public loadComplete: boolean = false;
   resourceBalance: ResourceBalance = new ResourceBalance(this.render);
   flagFilesNotFound: boolean = true;
@@ -54,6 +55,16 @@ export class BalanceConsarComponent implements OnInit {
   totalArchivoformated: any;
   totalAuxiliaresformated: any;
 
+  /*Posterior de solución con CONSAR*/
+  errService: boolean = false;
+  messageErrService: string = '';
+  flagWorkingDay: boolean = true;
+  messageErrNotWorkingDay: string = '';
+  authComplete: boolean = true;
+  flagAuth: boolean;
+  flagLiquidation: boolean;
+  flagPreNotice: boolean;
+
   constructor(
     private render: Renderer2,
     private serviceBalance: BalanceServiceService,
@@ -62,14 +73,65 @@ export class BalanceConsarComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.show();
+    this.serviceBalance.validateWorkingDay().subscribe(
+      result => {
+        this.errService = false;
+        this.messageErrService = '';
+        this.flagWorkingDay = (result.body.workDay ? true : false);
+        if (this.flagWorkingDay){
+          this.loadBalanceProcesar();
+        }else{
+          this.messageErrNotWorkingDay = 'Estás intentando acceder a funcionalidades en un día no laboral, ve a tomar un descanso a casa :D.';
+          this.spinner.hide();
+        }
+      },err =>{
+        this.errService = true;
+        this.messageErrService = 'Contacta a soporte por favor. (validateWorkingDay).';
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        this.spinner.hide();
+      }
+    );
+  }
+
+  approveBalance() {
+    this.spinner.show();
+    this.serviceBalance.aproveBalanceCONSAR(this.balance).subscribe(
+      data=>{
+        $(document).ready(function(){
+          $("#btnAuthorized").prop('disabled', true); 
+        });
+        // this.createMessage('alert-succes', 'Autorización realizada con éxito.');
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        this.spinner.hide();
+      },error=>{
+        alert("Error inesperado en servicio (approveBalance).")
+        // this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        // this.createMessage('alert-danger', 'No se pudo realizar la autorización, intente más tarde.');
+        this.spinner.hide();
+      }
+    );
+  }
+
+  loadBalanceProcesar(){
     this.serviceBalance.retrieveBalanceCONSAR().subscribe(
       data => {
-        if(data === null){
-          this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+        this.errService = false;
+        this.messageErrService = '';
+        if(data.status == 204){
           alert('Sin archivos del día actual.');
+          this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+          this.fechaCompleta = '';
           this.spinner.hide();  
-        }else{
-          this.balance = data;
+        }
+        if(data.status == 500){
+          this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'flex');
+          this.fechaCompleta = '';
+          this.spinner.hide(); 
+        }
+        else{
+
+          this.balance = data.body;
+          this.fechaCompleta = data.body.dispatch_date;          
           this.setT24Amounts(this.balance.t24_amounts);
           this.setFileAmounts(this.balance.file_amounts);
           this.format();
@@ -80,7 +142,7 @@ export class BalanceConsarComponent implements OnInit {
           );
           if (!saldosEmpity){
             this.resourceBalance.validationChangeIcons(
-              this.balance.comparison,
+              this.balance.comparisons,
               this.iconCompACV, 
               this.iconCompRCV,
               this.iconCompTotal
@@ -89,7 +151,9 @@ export class BalanceConsarComponent implements OnInit {
         }
         this.spinner.hide();  
       }, error => {
+        
         alert(`Error inesperado en los servicios. ${error.message}`);
+        this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
         this.spinner.hide();  
       }
     );
@@ -101,22 +165,25 @@ export class BalanceConsarComponent implements OnInit {
     let saldosToday = t24Amounts.total;
     
     if (saldosToday === 0) {
-      this.createMessage('alert-warning', 'Advertencia. No hay archivos de T-24 del día actual.');
-      this.render.removeClass(this.btnAutorizar.nativeElement, 'btn-outline-success');
-      this.render.addClass(this.btnAutorizar.nativeElement, 'btn-outline-dark');
-      this.setIconsWarning();
+      if(status == 203){
+        this.aprovedTrue();
+      }else{
+        this.createMessage('alert-warning', 'Advertencia. Sin movimientos de recaudación.');
+        this.render.removeClass(this.btnAutorizar.nativeElement, 'btn-outline-success');
+        this.render.addClass(this.btnAutorizar.nativeElement, 'btn-outline-warning');
+        this.setIconsWarning();
+      }
       return 1;
     }
     
     if (!balanced || status === 201) {
-      this.createMessage('alert-danger', 'Error. Inconsistencia en los saldos.');
+      this.createMessage('alert-danger', 'Atención. Inconsistencia en los saldos.');
       this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
       return 0;
     }
 
     if (status === 203){
-      this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
-      this.createMessage('alert-success', 'Autorización realizada.');
+      this.aprovedTrue();
       return 0;
     }
 
@@ -129,6 +196,11 @@ export class BalanceConsarComponent implements OnInit {
       this.createMessage('alert-success', 'Los saldos cuadran correctamente.');
       return 0;
     }
+  }
+
+  aprovedTrue(){
+    this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
+    this.createMessage('alert-success', `La autorización ya fue realizada por ${this.balance.approved_by}.`);
   }
 
   createMessage (classMessage: string, textMessage: string) {
@@ -147,6 +219,8 @@ export class BalanceConsarComponent implements OnInit {
   }
 
   setT24Amounts(t24Amounts: Summary) {
+    console.log(`this ${t24Amounts}`);
+    
     this.valueT2RCV = t24Amounts.rcv;
     this.valueT1RCV = t24Amounts.vivienda_acv_imss;
     this.totalAuxiliares = t24Amounts.total;
@@ -177,5 +251,12 @@ export class BalanceConsarComponent implements OnInit {
       this.render.setProperty(iconos[i].nativeElement, 'innerHTML', newIcon);
     }
   }  
+
+  test(){
+    
+    this.flagAuth = true;
+    this.flagLiquidation = true;
+    this.flagPreNotice = true;
+  }
   
 }

@@ -1,14 +1,20 @@
 <app-navbar></app-navbar>
-<div class="container-fluid barranombre" style="margin-top: 1%; margin-left: 15%;">
-	<div class="col-md-10 " id="bs-example-navbar-collapse-1">
-		<ul class="nav navbar-nav col-md-12">
-			<h4>
-				<font color=#0c3a6b style="font-size: 12px;">Archivos por validar</font> <font
-					color=#0c3a6b></font>
-			</h4>
-		</ul>
+
+<div class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+		<strong>PROCESAR</strong> - Archivos por validar
 	</div>
 </div>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Cargando contenido</p>
+</ngx-spinner>
+
 <br>
 <div *ngIf="isContentTable" class="row" style="width: 80%; margin-left: 15%;">
 	<div class="col-md-3"></div>
@@ -83,17 +89,17 @@
 	</div>
 	<div class="col-md-5"></div>
 </div>
-<div style="width: 80%; margin-left: 15%;margin-top: 1%">
+<div class="container">
 	<div class="alert alert-danger alert-dismissible" *ngIf="isError">
 	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	  	<strong>{{errorCode}}</strong> - {{errorMsj}}.
+	  	<strong>{{errorCode}}</strong> {{errorMsj}}.
 	</div>
 	<div class="alert alert-success alert-dismissible" *ngIf="isSuccess">
 	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	  	<strong>{{successCode}}</strong> - {{successrMsj}}.
 	</div>
 	<div class="alert alert-info alert-dismissible" *ngIf="isInfo">
-	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  	<button type="button" class="close" data-dismiss="alert"></button>
 	  	<strong>{{infoMsj}}</strong>.
 	</div>
 </div>

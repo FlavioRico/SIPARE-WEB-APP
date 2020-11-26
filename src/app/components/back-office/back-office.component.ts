@@ -98,7 +98,8 @@ export class BackOfficeComponent implements OnInit {
 									else if (error.status == 428)
 										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada.';
 									else if (error.status == 500)
-										this.message = 'Fallo insesperado en BD';
+										// this.message = 'Fallo insesperado en BD';
+										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada.';
 									else 
 										this.errService = true;
 										this.messageErrService = 'Error en el servicio getLiquidation().';

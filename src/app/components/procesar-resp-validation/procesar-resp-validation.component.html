@@ -38,14 +38,20 @@
 
 	<div *ngIf="tableStatusProcesar" class="alert alert-primary" role="alert" style="text-align: center; background-color: white;">
 		Resultato de Validaciones PROCESAR para correcciones (Resumen). <br>
-		Estatus a la Fecha {{ dateToday }}.
 	</div>
 
-	<!-- <div class="row">
+	<div *ngIf="!changeTableStatusProcesar" class="row">
 		<div class="col-2">
 			<input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
 		</div>
-	</div> -->
+
+		<button type="button" class="btn btn-outline-success float-right col-2"
+			(click)="searchByDate();">
+			Buscar por fecha
+		</button>
+	</div>
+
+
 
 	<div *ngIf="tableStatusProcesar" class="mce-container row" style="margin-top: 1%;">
 		<table class="table table-hover tbody-scroll tabContent" id="tablafullModal">
@@ -121,31 +127,60 @@
 							</div>
 						</div>
 					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 165px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Aceptadas
+								</p>
+							</div>
+						</div>
+					</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="pointer" *ngFor="let row of rows | paginate: { itemsPerPage: 9, currentPage: p }" (click)="listRegisterByCodeAndFileResponseProcesar(row.oid, row.clave);">
+				<tr class="pointer" *ngFor="let row of rows | paginate: { itemsPerPage: 9, currentPage: p }" (click)="listRegisterByCodeAndFileResponseProcesar(row.procesarFileDate, row.procesarResponse);">
 					<td style="display: inline-flex; width: 184px; padding: 0rem; border-top: 0px;">
-						<p style="margin-left: 25%;">{{row.dateOperation}}</p>
+						<p style="margin-left: 25%;">{{row.procesarFileDate}}</p>
 					</td>
 					<td style="padding: 0rem; border-top: 0px; width: 200px;">
 						<p style="text-align: center; font-size: 13px;">
-							<b>{{row.clave}}</b>
+							<b>{{row.procesarResponse}}</b>
 						</p>
 					</td>
 					<td style="padding: 0rem; border-top: 0px; width: 200px;">
 						<p style="text-align: center; font-size: 13px;">
-							{{row.descrip}}
+							{{row.description}}
 						</p>
 					</td>
 					<td style="padding: 0rem; border-top: 0px; width: 160px;">
 						<p style="text-align: center; font-size: 13px;">
-							{{row.total}}
+							{{row.captureLines}}
 						</p>
 					</td>
 					<td style="padding: 0rem; border-top: 0px; width: 165px;">
 						<p style="text-align: center; font-size: 13px;">
-							$ {{row.amount}}
+							$ {{row.totalAmmount}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.rejected}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.attended}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.unattended}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.accepted}}
 						</p>
 					</td> 
 				</tr>
@@ -248,41 +283,41 @@
 							<a> 
 								<i class="glyphicon glyphicon-align-justify" style="color: blue; left: -75px; top: 15px;"></i>
 							</a>
-							<p (click)="updateRegistry(fileContent.lineCapture, fileContent.oid, fileContent.code);" style="text-align: left; font-family: andale mono; font-size: 13px; margin-left: 10px;width: 135px;">
-								<b class="pointer">{{fileContent.lineCapture}}</b>
+							<p (click)="updateRegistry(fileContent.captureLine, fileContent.oid, fileContent.procesarResponseString, fileContent.editable);" style="text-align: left; font-family: andale mono; font-size: 13px; margin-left: 10px;width: 135px;">
+								<b class="pointer">{{fileContent.captureLine}}</b>
 							</p>
 						</div>
 					</td>
 					<td style="padding: 0rem; width: 140px; border-top: 0px; text-align: right;">
 						<div class="col-md-9" style="width: 155px;">
-							<p style="font-size: 13px;">{{fileContent.code}}</p>
+							<p style="font-size: 13px;">{{fileContent.procesarResponseString}}</p>
 						</div>
 					</td>
 					<td style="padding: 0rem; width: 140px; border-top: 0px;">
 						<div class="col-md-9" style="width: 138px;">
-							<p style="font-size: 13px;">{{fileContent.paymentDate}}</p>
+							<p style="font-size: 13px;">{{fileContent.branchOperationDate}}</p>
 						</div>
 					</td>
 					<td style="padding: 0rem; width: 140px; border-top: 0px;">
 						<div class="col-md-12"
 							style="width: 169px; margin-left: 0px;">
-							<p style="font-size: 13px;">{{fileContent.reportProcesarDate}}</p>
+							<p style="font-size: 13px;">{{fileContent.procesarReportedDate}}</p>
 						</div>
 					</td>
 					<td style="padding: 0rem; width: 140px; border-top: 0px;">
 						<div class="col-md-9" style="width: 138px;">
-							<p style="font-size: 13px;">{{fileContent.respProcesarDate}}</p>
+							<p style="font-size: 13px;">{{fileContent.procesarReportedDate}}</p>
 						</div>
 					</td>
 					<td style="padding: 0rem; width: 140px; border-top: 0px;">
 						<div class="col-md-9" style="width: 475px;">
-							<p style="font-size: 13px;width: 435px;">{{fileContent.desc}}</p>
+							<p style="font-size: 13px;width: 435px;">{{fileContent.operationResult}}</p>
 						</div>
 					</td>
 					<td style="padding: 0rem; width: 140px; border-top: 0px;">
 						<div class="col-md-9"
 							style="width: 152px;">
-							<p style="font-size: 13px;">$ {{fileContent.amount}}</p>
+							<p style="font-size: 13px;">$ {{fileContent.totalAmount}}</p>
 						</div>
 					</td>
 				</tr>
@@ -396,7 +431,7 @@
 		<div class="col-sm">
 			<div class="form-group input-info">
 				Registro patronal:
-				<input name="patronRegistry" type="text" class="form-control inputCustom" value={{dataRowT24.patronRegistry}} 
+				<input #patronRegistry name="patronRegistry" type="text" class="form-control inputCustom" value={{dataRowT24.patronRegistry}} 
 				minlength="11" maxlength="11" id="patronRegistry" name="patronRegistry" [(ngModel)]="dataRowT24.patronRegistry"/>	
 			</div>
 		</div>
@@ -413,7 +448,7 @@
 			<div class="col-sm banco">
 				Forma de Pago:
 				<div class="form-group input-info">
-					<input name="bankNameRecep" type="text"
+					<input #bankNameRecep name="bankNameRecep" type="text"
 					class="form-control inputCustom" value={{dataRowT24.formatPayment}}  id="buscadorModal"/>
 				</div>
 				
@@ -423,7 +458,7 @@
 			<div class="col-sm banco">
 				Cliente o Ususario:
 				<div class="form-group input-info">
-					<input name="buscadorModal" type="text"
+					<input #clientOrUserDetail name="buscadorModal" type="text"
 					class="form-control inputCustom" value={{dataRowT24.clientOrUser}} id="buscadorModal"/>
 				</div>
 			</div>
@@ -499,7 +534,7 @@
 	<div class="row end-element">
 		<div class="col-lg">
 			<div class="form-group input-info">
-				<input type="text"
+				<input #respValidateProcesar type="text"
 				class="form-control inputCustom" value={{this.respProcesar}}/>
 			</div>
 		</div>
@@ -508,7 +543,7 @@
 		<div class="col-lg">
 			<div class="form-group input-info">
 				Diagnostico 1:
-				<input type="text"
+				<input #diagnostic1 type="text"
 				class="form-control inputCustom" value={{this.respuestas.diagnosisOne}}/>
 			</div>
 		</div>
@@ -517,7 +552,7 @@
 		<div class="col-lg">
 			<div class="form-group input-info">
 				Diagnostico 2:
-				<input type="text"
+				<input #diagnostic2 type="text"
 				class="form-control inputCustom" value={{this.respuestas.diagnosisTwo}}/>
 			</div>
 		</div>
@@ -526,19 +561,20 @@
 		<div class="col-lg">
 			<div class="form-group input-info">
 				Diagnostico 3:
-				<input type="text"
+				<input #diagnostic3 type="text"
 				class="form-control inputCustom" value={{this.respuestas.diagnosisThree}}/>
 			</div>
 		</div>
 	</div>
 
-	<button *ngIf="notAutorized" type="button" class="btn btn-outline-success float-right" style="margin: 0px 0px 15px 10px;"
-	(click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
-		Actualizar
-	</button>
-	<button type="button" class="btn btn-outline-success float-right" style="margin-bottom: 15px;"
+	
+	<button type="button" class="btn btn-outline-success float-right" style="margin: 0px 0px 15px 10px;"
 	(click)="hideContentFileT24Resp();">
 		Regresar
+	</button>
+	<button *ngIf="notAutorized" type="button" class="btn btn-outline-warning float-right" style="margin-bottom: 15px;"
+	(click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
+		Actualizar
 	</button>
 
 </div>

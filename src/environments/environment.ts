@@ -32,8 +32,10 @@ export const environment = {
   getContentFileToSendConnectDirectUrl : 'getContentFileToSendProcesar',
   searchFileToSendCdUrl : 'searchFileToSendCd',
   filesToSendCdUrl : 'filesToSendCd',
-  getRespProcesarUrl : 'getContentDataFileT24WithRespProcesar',
-  getLastFileRespToProcesarUrl : 'getLastFileRespToProcesar',
+  getRespProcesarUrl : 'http://10.160.188.123:8765/sipare-response-type-patch/procesarResponseCaptureLines?date=2020-10-01&procesarResponse=1',
+  getLastFileRespToProcesarUrl : 'http://10.160.188.123:8765/sipare-response-type-patch/procesarResponseSummary?date=2020-10-01',
+  getLastFileRespToProcesarUrlByDate :    'http://10.160.188.123:8765/sipare-response-type-patch/procesarResponseSummary?date=',
+
   getDataByLineCaptureByRespProcesarUrl : 'getDataByLineCaptureByRespProcesar',
   updateRegistryRespUrl : 'updateRegistryResp',
   genetateListXLSConciliationUrl : 'generateXLSConciliation',
@@ -56,9 +58,10 @@ export const environment = {
 
   /*ADDs */
   //8766 DEV 8765 UAT EN LO DE NOSOTROS 
-  urlBalanceCONSAR : 'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR',
+  urlBalanceCONSAR : 'http://10.160.188.123:8765/sipare-consar-retrieve-balance/balances?type=CONSAR',
   // urlBalancePROCESAR : 'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR',
   urlBalancePROCESAR : 'http://10.160.188.123:8765/sipare-retrieve-procesar-balance/balances/findByTypeAndDate?type=PROCESAR',
+  urlAproveBalanceCONSAR :        'http://10.160.188.123:8765/sipare-consar-approve-balance/balances',
   urlAproveBalancePROCESAR : 'http://10.160.188.123:8765/sipare-approve-balance/balances',
   url_Liquidation : 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations',
   url_PreNotice : 'http://10.160.188.123:8765/sipare-procesar-pre-notice/prenotices',
@@ -74,5 +77,10 @@ export const environment = {
   updateHourTansaction:           'http://10.160.188.123:8765/sipare-procesar-transactions/transactions?type=HOUR',
   verifyButtonTransaction: 'http://10.160.188.123:8765/sipare-procesar-transactions/transactions',
   transactionNotifications: 'http://10.160.14.213:8083/sipareMSProcessFileApp/multiva/sipare/transactionNotifications',
-  datesCollectionReport : 'http://10.160.188.123:8765/sipare-procesar-retrieve-dates/dates/'
+  datesCollectionReport : 'http://10.160.188.123:8765/sipare-procesar-retrieve-dates/dates/',
+  workingDate : 'http://10.160.188.123:8765/sipare-procesar-retrieve-dates/dates/isWorkingDay',
+  downloadAcuse : 'http://multiva-dispersor-06-esb-multiva.apps.dev.openshift.multivaloresgf.local/alfresco/fileDownload',
+  getAcuses : 'http://10.160.188.123:8765/sipare-consar-replies/getAllConsarReplies',
+  downloadReport :                         'http://multiva-dispersor-06-esb-multiva.apps.dev.openshift.multivaloresgf.local/alfresco/fileDownload',
+
 };

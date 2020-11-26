@@ -13,7 +13,9 @@ import { LiquidationPreAviso } from 'src/app/components/models/models-preaviso/l
 import { Programmed } from 'src/app/components/models/models-backOffice/Programmed';
 import { NewHour } from 'src/app/components/models/models-backOffice/newHour';
 import { Dates } from 'src/app/components/models/models-collectionReport/Dates';
+import { FileDownload } from 'src/app/components/models/models-acuses/FileDownload';
 import { TransactionProgrammed } from 'src/app/components/models/models-preaviso/TransactionProgrammed';
+import { Acuse } from 'src/app/components/models/models-acuses/Acuse';
 
 
 @Injectable()
@@ -301,20 +303,24 @@ export class ProcessFileService {
       {headers: new HttpHeaders().set(environment.contentType,environment.appJson)})
   }
 
-  searchFilesToFileT24RespProcesarService(oid : number, status : string) : Observable <any> {
-    var dto = {
-      code : status,
-      oid : oid
-    };
-    console.log(dto);
+  searchFilesToFileT24RespProcesarService(procesarFileDate  : string, procesarResponse : string){
     
-    return this.http.post(environment.sipare_ms_processFile_url.concat(environment.getRespProcesarUrl), 
-      JSON.stringify(dto), {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
+    let ur=environment.getRespProcesarUrl
+    
+    return this.http.get<any>(
+      // 'http://10.160.188.123:8765/sipare-response-type-patch/procesarResponseCaptureLines?date=2020-10-01&procesarResponse=1', 
+      environment.getRespProcesarUrl+procesarFileDate+'&procesarResponse='+procesarResponse, 
+      { observe : 'response' }
+      );
+      
   }
 
-  getLastFileToResponseProcesarService() : Observable <any> {
-    return this.http.post(environment.sipare_ms_processFile_url.concat(environment.getLastFileRespToProcesarUrl), 
-      {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
+  getLastFileToResponseProcesarService(){
+    // return this.http.post(environment.sipare_ms_processFile_url.concat(environment.getLastFileRespToProcesarUrl), 
+    return this.http.get<any>(
+      environment.getLastFileRespToProcesarUrl, 
+      { observe : 'response'}
+    );
   }
 
   getContentDataT24ByResponseProcesar(oid : number) : Observable<any>{
@@ -398,7 +404,6 @@ export class ProcessFileService {
   updateProgrammed(type: string, newProgrammed: Programmed) {
 
     let url = (type == 'DEFAULT') ? environment.updateProgrammedDefault : environment.updateProgrammedCron;
-    console.log("this", url, newProgrammed);
 
     return this.http.put<any>(
       url, 
@@ -431,4 +436,40 @@ export class ProcessFileService {
     );
   }
   
+  downloadContent(idFile: string): Observable<any> {
+
+    const headers = new HttpHeaders().set('Content-Type', 'aplication/json');
+
+    var file = {
+      idArchivo : idFile
+    };
+
+    return this.http.post<any>(
+      environment.downloadAcuse,
+      file,
+      { headers, responseType: 'blob' as 'json'}
+    );
+
+  }
+
+  getAcuses() {
+
+    return this.http.get<Acuse[]>(
+      environment.getAcuses,
+      { observe: 'response'}
+    );
+
+  }
+
+  getLastFileToResponseProcesarServiceByDate(date: string){
+
+    let url_date = 'http://10.160.188.123:8765/sipare-response-type-patch/procesarResponseSummary?date=';
+    return this.http.get<any>(
+      url_date.concat(date),
+      // environment.getLastFileRespToProcesarUrlByDate.concat(date), 
+      { observe : 'response'}
+    );
+
+  }
+
 }

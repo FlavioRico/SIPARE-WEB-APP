@@ -24,7 +24,10 @@ export class BalanceServiceService {
 
   retrieveBalanceCONSAR(){
 
-    return this.http.get<BalanceConsar>(environment.urlBalanceCONSAR);
+    return this.http.get<BalanceConsar>(
+      environment.urlBalanceCONSAR,
+      { observe : 'response'}
+      );
 
   }
 
@@ -76,6 +79,21 @@ export class BalanceServiceService {
       environment.transactionNotifications,
       { observe: 'response'}
     );
+  }
+
+  validateWorkingDay() {
+    return this.http.get<any>(
+      environment.workingDate,
+      { observe: 'response'}
+    );
+  }
+
+  aproveBalanceCONSAR(balance: BalanceProcesar){
+
+    balance.status = 203;
+    balance.approved_by = localStorage.getItem('username');
+    return this.http.put<BalanceProcesar>(environment.urlAproveBalanceCONSAR, balance);
+
   }
 
 }

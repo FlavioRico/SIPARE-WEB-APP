@@ -24,7 +24,6 @@ import { ModalAuthComponent } from './components/balance/modals/modal-auth/modal
 import { SharedComponent } from './shared/shared/shared.component';
 import { PreloaderComponent } from './components/preloader/preloader.component';
 import { ValidFileComponent } from './components/valid-file/valid-file.component';
-import { TransactionComponent } from './components/transaction/transaction.component';
 import { ParametersComponent } from './components/parameters/parameters.component';
 import { BackOfficeComponent } from './components/back-office/back-office.component';
 import { PreavisoComponent } from './components/preaviso/preaviso.component';
@@ -46,6 +45,7 @@ import { AuthenticationService } from './services/authentication/authentication.
 import { ProcessFileService } from  './services/process-file/process-file.service';
 import { SipareApiService } from  './services/conciliation-report/sipare-api.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AcusesComponent } from './components/CONSAR/acuses/acuses.component';
 
 
 @NgModule({
@@ -63,7 +63,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SharedComponent,
     PreloaderComponent,
     ValidFileComponent,
-    TransactionComponent,
     ParametersComponent,
     BackOfficeComponent,
     PreavisoComponent,
@@ -76,7 +75,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     RegisterPageComponent,
     SendFileToConnectDirectComponent,
     ModalFilesNotFoundComponent,
-    ConciliationReportComponent
+    ConciliationReportComponent,
+    AcusesComponent
   ],
   imports: [
     FormsModule,

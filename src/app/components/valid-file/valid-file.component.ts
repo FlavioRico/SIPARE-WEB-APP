@@ -31,9 +31,11 @@ export class ValidFileComponent implements OnInit {
 	constructor(public processFile : ProcessFileService, 
 				public authServ : AuthenticationService,
 				private router : Router,
-				private spinner: NgxSpinnerService) { }
+				private spinner: NgxSpinnerService
+			) { }
 
   	ngOnInit() {
+		this.spinner.show();
 		this.isError = false;
 		this.isContentTable = false;
 		this.isEditForm = false;
@@ -41,12 +43,14 @@ export class ValidFileComponent implements OnInit {
 		this.isInfo = true;
   		this.infoMsj = 'Obteniendo los archivos que fueron validados';
 		if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
+			this.spinner.hide();
 			this.router.navigate(['/']);
 		}else{
 			this.authServ.getUserByUserName(localStorage.getItem('username')).subscribe(
 				result => {
 					if(result.resultCode == 0){
 						if(result.logged == 0){
+							this.spinner.hide();
 							this.router.navigate(['/']);
 						}else{
 							this.isLogin = true;
@@ -57,22 +61,22 @@ export class ValidFileComponent implements OnInit {
   									this.infoMsj = '';    
 					        		if(response.resultCode == 0){
 										this.fileValid = response.listFiles;
-										console.log("DEBUG->", this.fileValid);
 										
 							        }else{
-										console.log("DEBUG->", response);
 							        	this.isContentTable = false;   
 							        	this.isInfo = true;
   										this.infoMsj = 'No hay archivos para validar';  
 							        }
 							    },error => {
-								    this.isError = true;
-							    	this.errorCode = error.resultCode;
-							    	this.errorMsj = error.resultDescription;
+									this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (searchFilesToValidService)');
 							    }
 							);
 						}
 					}
+					this.spinner.hide();
+				},error =>{
+					this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (getUserByUserName)');
+					this.spinner.hide();
 				}
 			);
 		}
@@ -115,10 +119,7 @@ export class ValidFileComponent implements OnInit {
 												this.infoMsj = 'No hay archivos por validar';
 											}
 										},error => {
-											this.isError = true;
-											this.isInfo = false;
-											this.errorCode = error.resultCode;
-											this.errorMsj = error.resultDescription;
+											this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (searchFilesToValidService)');
 										}
 									);
 						        }else if(result.resultCode == 'PF-MS-ERR0003'){
@@ -132,19 +133,13 @@ export class ValidFileComponent implements OnInit {
 														this.fileValid = response.listFiles;
 											        }
 											    },error => {
-												    this.isError = true;
-												    this.isInfo = false;
-											    	this.errorCode = error.resultCode;
-											    	this.errorMsj = error.resultDescription;
+													this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (searchFilesToValidService)');
 											    }
 											);
 								}
 								this.spinner.hide();
 						    },error => {
-							    this.isError = true;
-							    this.isInfo = false;
-						       	this.errorCode = error.resultCode;
-								this.errorMsj = error.resultDescription;
+								this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (sendFileToConnectDirectValidattedFile)');
 								this.spinner.hide();
 						    }
 						);
@@ -170,17 +165,11 @@ export class ValidFileComponent implements OnInit {
 						  		this.fileNameNg = result.fileName;
 					        }else if(result.resultCode == '1'){
 					        	this.isContentTable = true;
-						  		this.isEditForm = false;
-					        	this.isError = true;
-					        	this.isInfo = false;
-					       		this.errorCode = result.resultCode;
-					        	this.errorMsj = result.resultDescription;
+								this.isEditForm = false;
+								this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (getContentFileEdit)');
 					        }
 					    },error => {
-						    this.isError = true;
-						    this.isInfo = false;
-					       	this.errorCode = error.resultCode;
-					        this.errorMsj = error.resultDescription;
+							this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (getContentFileEdit)');
 					    }
 					);
 					}
@@ -216,17 +205,15 @@ export class ValidFileComponent implements OnInit {
 												this.fileValid = response.listFiles;
 									        }
 									    },error => {
-										    this.isError = true;
-									    	this.errorCode = error.resultCode;
-									    	this.errorMsj = error.resultDescription;
+											this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (editFile)');					
 									    }
 									);
 						        }else if(result.resultCode == '1'){
 						        	this.isContentTable = true;
 							  		this.isEditForm = false;
+									this.isSuccess = false;
 						        	this.isError = true;
 						        	this.isInfo = false;
-						        	this.isSuccess = false;
 						       		this.errorCode = result.resultCode;
 						        	this.errorMsj = result.resultDescription;
 						        }
@@ -265,9 +252,7 @@ export class ValidFileComponent implements OnInit {
 												this.fileValid = response.listFiles;
 									        }
 									    },error => {
-										    this.isError = true;
-									    	this.errorCode = error.resultCode;
-									    	this.errorMsj = error.resultDescription;
+											this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (searchFilesToValidService)');					
 									    }
 									);
 						        }else if(result.resultCode == '1'){
@@ -276,19 +261,24 @@ export class ValidFileComponent implements OnInit {
 						        	this.isError = true;
 						        	this.isInfo = false;
 						        	this.isSuccess = false;
-						       		this.errorCode = result.resultCode;
-						        	this.errorMsj = result.resultDescription;
+						       		this.errorCode = '';
+						        	this.errorMsj = 'Ups... algo salió mal, intente más tarde por favor (validFile)';
 						        }
 						    },error => {
-							    this.isError = true;
-							    this.isInfo = false;
-						       	this.errorCode = error.resultCode;
-						        this.errorMsj = error.resultDescription;
+								this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (validFile)');					
 						    }
 						);
 					}
 				}
 			});
-  	}
+	  }
+	  
+
+	infoErrorService (messagge: string){
+		this.isError = true;
+		this.isInfo = false;
+		this.errorCode = '';
+		this.errorMsj = messagge;
+	}
 
 }

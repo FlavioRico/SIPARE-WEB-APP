@@ -14,9 +14,9 @@ import { ProcesarRespValidationComponent } from './components/procesar-resp-vali
 import { ParametersComponent } from './components/parameters/parameters.component';
 import { BackOfficeComponent } from './components/back-office/back-office.component';
 import { PreavisoComponent } from './components/preaviso/preaviso.component';
-import { TransactionComponent } from './components/transaction/transaction.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { ConciliationReportComponent } from './components/conciliation-report/conciliation-report.component';
+import { AcusesComponent } from './components/CONSAR/acuses/acuses.component';
 
 const routes: Routes = [
   {
@@ -62,10 +62,10 @@ const routes: Routes = [
     path: 'preaviso' , component : PreavisoComponent
   },
 	{ 
-    path: 'transaction' , component : TransactionComponent
-  },
-	{ 
     path: 'conciliation-report', component: ConciliationReportComponent
+  },
+  {
+    path: 'acuses', component: AcusesComponent
   },
 	{ 
     path: '**', component: NotFoundPageComponent
