@@ -13,10 +13,10 @@ export class AcusesComponent implements OnInit {
 
   acuses: Acuse[];
   acusesExists: boolean = true;
-
+  
   constructor(
-    private processFileService: ProcessFileService,
-    private spinner: NgxSpinnerService
+    public processFileService: ProcessFileService,
+    public spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {

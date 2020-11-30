@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { SharedComponent } from '../../shared/shared/shared.component';
 import { FileStatus } from '../models/models-bitacora/fileStatus';
 import { FileWorklog } from '../models/models-bitacora/fileWorklog';
@@ -10,7 +10,7 @@ import { NgxSpinnerService } from "ngx-spinner";
   templateUrl: './bitacora.component.html',
   styleUrls: ['./bitacora.component.scss','../balance/balance-consar/balance-consar.component.scss']
 })
-export class BitacoraComponent implements OnInit {
+export class BitacoraComponent implements OnInit, AfterViewInit {
 
   fechaCompleta :   string = '';
   fileName:         string = '';
@@ -59,7 +59,7 @@ export class BitacoraComponent implements OnInit {
           this.fileName =     this.fileWorklog.file_name;
           this.statusFile =   this.fileWorklog.status;
         }
-        this.spinner.hide();  
+        // this.spinner.hide();  
       },error => {
 
         alert(`Error inesperado en los servicios. ${error.message}`);
@@ -67,6 +67,10 @@ export class BitacoraComponent implements OnInit {
 
       }
     );
+  }
+
+  ngAfterViewInit(): void{
+    this.spinner.hide();
   }
 
   generateBaseSteps(listFileStatusEmpity: FileStatus[]) {
@@ -88,7 +92,6 @@ export class BitacoraComponent implements OnInit {
 
     }
     else {
-      console.log('else', data.status);
       
       //estatus erroneo
       if(data.status % 100 === 1) {

@@ -169,11 +169,12 @@ export class ProcessFileService {
     var fileDTO = {
       fileName : fileName,
     };
-    let url: string = 'http://10.160.14.213:8085/sipareMSProcessFileApp/multiva/sipare/sendValidatedFile';
-    return this.http.post(url, fileDTO, 
-          {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
-    // return this.http.post(environment.sipare_ms_processFile_url.concat(environment.sendValidatedFileToPROCESAR), fileDTO, 
-    //       {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
+    // let url: string = 'http://10.160.14.213:8085/sipareMSProcessFileApp/multiva/sipare/sendValidatedFile';
+    return this.http.post(
+      // url,
+      environment.sipare_ms_processFile_url.concat(environment.sendValidatedFileToPROCESAR), 
+      fileDTO, 
+      {headers: new HttpHeaders().set(environment.contentType,environment.appJson)});
   }
 
   getContentFileEdit(fileName : string) : Observable<any>{
@@ -385,9 +386,9 @@ export class ProcessFileService {
   /*PROCESAR-RESP-VALIDATION*/
   getDataComplementary (capLine: LineCap) {
 
-    return this.http.post<DataComplementary>(
-      environment.url_Data_Complementary, 
-      capLine, {observe: 'response'}
+    return this.http.get<DataComplementary>(
+      environment.url_Data_Complementary + '?captureLine=' + capLine.capture_line, 
+      {observe: 'response'}
     );
 
   }
@@ -396,7 +397,8 @@ export class ProcessFileService {
     
     return this.http.put<any>(
       environment.url_Data_Complementary,
-      data, {observe: 'response'}
+      data, 
+      {observe: 'response'}
     );
 
   }

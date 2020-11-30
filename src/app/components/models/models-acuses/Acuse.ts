@@ -1,12 +1,13 @@
-export class  Acuse {
+export interface  Acuse {
+
     generationNumber: number;
     dispatchDate: string;
-    consarReplayFileName: string; //fecha de envío
+    consarReplayFileName: string; 
     consarReplyAlfrescoName: string;
     consarReplyAlfrescoId: string;
-    status: string;
-
-    //agregados 
     reportName: string;
     alfrescoReportId: string;
+    consarReplyDate: string;
+    reply: string;
+
 }

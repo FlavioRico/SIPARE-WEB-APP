@@ -1,4 +1,6 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ProcessFileService } from 'src/app/services/process-file/process-file.service';
 
 @Component({
   selector: 'app-shared',
@@ -13,7 +15,8 @@ export class SharedComponent implements OnInit {
   year: number;
   fechaCompleta: any;
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void {
   }
@@ -54,4 +57,5 @@ export class SharedComponent implements OnInit {
   formatRespProcesar(val: any){
     return (`$${val}`);
   }
+  
 }

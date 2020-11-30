@@ -17,6 +17,7 @@ import { PreavisoComponent } from './components/preaviso/preaviso.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { ConciliationReportComponent } from './components/conciliation-report/conciliation-report.component';
 import { AcusesComponent } from './components/CONSAR/acuses/acuses.component';
+import { MonthlyKeysComponent } from './components/CONSAR/monthly-keys/monthly-keys.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,9 @@ const routes: Routes = [
   },
   {
     path: 'acuses', component: AcusesComponent
+  },
+  {
+    path: 'keys', component: MonthlyKeysComponent
   },
 	{ 
     path: '**', component: NotFoundPageComponent

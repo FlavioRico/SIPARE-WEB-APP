@@ -3,7 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,6 +46,8 @@ import { ProcessFileService } from  './services/process-file/process-file.servic
 import { SipareApiService } from  './services/conciliation-report/sipare-api.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AcusesComponent } from './components/CONSAR/acuses/acuses.component';
+import { MonthlyKeysComponent } from './components/CONSAR/monthly-keys/monthly-keys.component';
+import { KeysService } from './services/CONSAR/keys/keys.service';
 
 
 @NgModule({
@@ -76,7 +78,8 @@ import { AcusesComponent } from './components/CONSAR/acuses/acuses.component';
     SendFileToConnectDirectComponent,
     ModalFilesNotFoundComponent,
     ConciliationReportComponent,
-    AcusesComponent
+    AcusesComponent,
+    MonthlyKeysComponent
   ],
   imports: [
     FormsModule,
@@ -94,6 +97,7 @@ import { AcusesComponent } from './components/CONSAR/acuses/acuses.component';
     AuthenticationService,
     ProcessFileService,
     SipareApiService,
+    KeysService,
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

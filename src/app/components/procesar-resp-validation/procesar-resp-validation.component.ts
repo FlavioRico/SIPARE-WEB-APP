@@ -44,6 +44,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public ngBalanceViv : any;
 	public ngBalanceAcv : any;
 	public ngBalanceTotal : any;
+	
 	/*this agregado para funcionamiento*/
 	public p: number;
 	public globalResp: string;
@@ -59,6 +60,9 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public fechaStart;
 	public fechaDefault;
 	public changeTableStatusProcesar: boolean = false;
+	public ngLastEditBy : any;
+	public ngLastEditTimestamp : any;
+
 
 
 	shared = new SharedComponent();
@@ -139,7 +143,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 									this.isError= true;
 									this.tableStatusProcesar = false;
 									this.errorCode = 'Emp-001';
-									this.errorMsj = 'Sin registros por el momento.';
+									this.errorMsj = 'Sin registros por el momento';
 									this.spinner.hide();
 
 								}
@@ -299,7 +303,7 @@ export class ProcesarRespValidationComponent implements OnInit {
  					this.isContentTable = false;
 					this.tableStatusProcesar = true;
 
-					this.updateTwo();
+					this.updateTwo(this.dataRowT24.usuarioIngresoT24, this.dataRowT24.idTransaccionT24);
 
 		        }
 		    },error => {
@@ -317,9 +321,12 @@ export class ProcesarRespValidationComponent implements OnInit {
 		this.responseType = operationType;
 	}
 
-	updateTwo () {
+	updateTwo (usuarioIngresoT24: string, idTransaccionT24: string) {
 		this.dataCaptureLine.response_type = this.responseType;
 		this.dataCaptureLine.capture_line = this.lineCap;
+		this.dataCaptureLine.user = localStorage.getItem('username');
+		this.dataCaptureLine.user_T24 = usuarioIngresoT24;
+		this.dataCaptureLine.id_transaction_t24	 = idTransaccionT24;
 		
 		this.processFile.updateCaptureLine(this.dataCaptureLine).subscribe(
 			dta => {
@@ -356,32 +363,6 @@ export class ProcesarRespValidationComponent implements OnInit {
 		this.render.setProperty(this.diagnostic1.nativeElement, 'disabled', value);
 		this.render.setProperty(this.diagnostic2.nativeElement, 'disabled', value);
 		this.render.setProperty(this.diagnostic3.nativeElement, 'disabled', value);
-	}
-	renderFormFalse (value: boolean){
-		this.render.removeAttribute(this.nameClient.nativeElement, 'disabled');
-		this.render.removeAttribute(this.nameOrRfc.nativeElement, 'disabled');
-		this.render.removeAttribute(this.tel.nativeElement, 'disabled');
-		this.render.removeAttribute(this.nameContact.nativeElement, 'disabled');
-		this.render.removeAttribute(this.email.nativeElement, 'disabled');
-		this.render.removeAttribute(this.importIMSS.nativeElement, 'disabled');
-		this.render.removeAttribute(this.importRCV.nativeElement, 'disabled');
-		this.render.removeAttribute(this.importVIV.nativeElement, 'disabled');
-		this.render.removeAttribute(this.importACV.nativeElement, 'disabled');
-		this.render.removeAttribute(this.total.nativeElement, 'disabled');
-
-		this.render.removeAttribute(this.dateAnHourReception.nativeElement, 'disabled');
-		this.render.removeAttribute(this.sucursal.nativeElement, 'disabled');
-		this.render.removeAttribute(this.user.nativeElement, 'disabled');
-		this.render.removeAttribute(this.linecap.nativeElement, 'disabled');
-		this.render.removeAttribute(this.folioT24.nativeElement, 'disabled');
-		this.render.removeAttribute(this.userT24.nativeElement, 'disabled');
-		this.render.removeAttribute(this.patronRegistry.nativeElement, 'disabled');
-		this.render.removeAttribute(this.bankNameRecep.nativeElement, 'disabled');
-		this.render.removeAttribute(this.clientOrUserDetail.nativeElement, 'disabled');
-		this.render.removeAttribute(this.respValidateProcesar.nativeElement, 'disabled');
-		this.render.removeAttribute(this.diagnostic1.nativeElement, 'disabled');
-		this.render.removeAttribute(this.diagnostic2.nativeElement, 'disabled');
-		this.render.removeAttribute(this.diagnostic3.nativeElement, 'disabled');
 	}
 
 	searchByDate(){

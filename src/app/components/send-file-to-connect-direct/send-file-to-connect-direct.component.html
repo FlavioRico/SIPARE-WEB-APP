@@ -170,18 +170,6 @@
 							</div>
 						</div>
 					</th>
-					<th  style="padding: 0.4em; vertical-align: baseline;">
-						<div class="row" style="width: 165px;">
-							<div class="col-md-1">
-								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
-							</div>
-							<div class="col-md-9">
-								<p style="text-align: center; font-size: 13px">
-								ID transacción T24
-								</p>
-							</div>
-						</div>
-					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -241,11 +229,6 @@
 					<td style="padding: 0rem; border-top: 0px; width: 165px;">
 						<p style="text-align: center; font-size: 13px;">
 							{{file.dateSendFile}}
-						</p>
-					</td>
-					<td style="padding: 0rem; border-top: 0px; width: 165px;">
-						<p style="text-align: center; font-size: 13px;">
-							{{file.idTransaccionT24}}
 						</p>
 					</td>
 				</tr>
@@ -408,6 +391,18 @@
 						</div>
 					</div>
 				</th>
+				<th  style="padding: 0.4em; vertical-align: baseline;">
+					<div class="row" style="width: 165px;">
+						<div class="col-md-1">
+							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
+						</div>
+						<div class="col-md-9">
+							<p style="text-align: center; font-size: 13px">
+							ID transacción T24
+							</p>
+						</div>
+					</div>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -466,6 +461,12 @@
 					<div class="col-md-12"
 						style="width: 230px; margin-left: 0px;">
 						<p style="text-align: left; font-size: 13px;">{{fileContent.datePayment}}</p>
+					</div>
+				</td>
+				<td style="padding: 0rem; width: 140px; border-top: 0px;">
+					<div class="col-md-12"
+						style="width: 230px; margin-left: 0px;">
+						<p style="text-align: left; font-size: 13px;">{{fileContent.idTransaccionT24}}</p>
 					</div>
 				</td>
 			</tr>
