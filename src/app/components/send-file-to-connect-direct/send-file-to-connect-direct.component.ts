@@ -80,18 +80,16 @@ export class SendFileToConnectDirectComponent implements OnInit {
   	}
 
   	detailFileConnectDirectService(oid, name){
-  		console.log('ID: ' + oid)
   		this.processFile.getContentFileToSendConnectDirect(oid).subscribe(
   			response => {           
         		if(response.resultCode == 0){
-        			console.log('Resp Code: ' + response.resultCode)
         			this.fileContentName = name;
 					this.listContent = response.listContent;
 					this.isContentTable = false;
 					this.isModalTable = true;
 		        }
 		    },error => {
-			    console.log('Error: ' + error.resultDescription);
+				alert('Ups... Algo salio mal, por favor intente más tarde (detailFileConnectDirectService).');
 		    }
   		);
   	}

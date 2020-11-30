@@ -306,7 +306,7 @@ export class BackOfficeComponent implements OnInit {
 					this.errorMsj = 'No se pudo actualizar el programmed del día actual. (DEFAULT).';
 					// alert("No se pudo actualizar el programmed del día actual. (random)");
 				}else{
-					console.log("Se actualizó el Programmed del día actual.");
+					alert("Se actualizó el campo Programmed del día actual.");
 				}
 			},error=>{
 				this.errorCode = 'Error inesperado - ';

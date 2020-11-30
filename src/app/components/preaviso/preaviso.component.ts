@@ -240,12 +240,10 @@ export class PreavisoComponent implements OnInit {
 				data.body.isProgrammedOrExistStr == 'Programe la ejecución' &&
 				data.body.programmedOrExist == false){
 
-					console.log('Se puede visualizar el botón');
 					this.verifyBtn = false;
 
 				}else{
 					this.verifyBtn = true;
-					console.log('No visualizar el botón porque ya se cambió a 100.');
 				}
 			},error=>{
 				alert("Ups.. Error inesperado, contacte a soporte por favor (verifyTransactionToday).");
@@ -260,8 +258,6 @@ export class PreavisoComponent implements OnInit {
 	minuteStep = 5;
 	changeAvalible() {
 		this.flagHab = (this.flagHab ? false : true);
-		this.txtForProgrammed = ( !this.flagHab ? 'Habilitar edición de hora' : 'Deshabilitar edición de hora');
-		console.log(this.timeTransactionProgrammed.hour.toString());
-		
+		this.txtForProgrammed = ( !this.flagHab ? 'Habilitar edición de hora' : 'Deshabilitar edición de hora');		
 	}
 }

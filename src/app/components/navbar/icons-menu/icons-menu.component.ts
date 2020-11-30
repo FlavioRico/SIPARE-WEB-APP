@@ -26,7 +26,7 @@ export class IconsMenuComponent implements OnInit {
             localStorage.clear();
           }
         },error => {
-          console.log(error.resultDescription);
+          alert('Ups... algo salió mal, por favor intente más tarde (LogOut).');
         }
       );
   }

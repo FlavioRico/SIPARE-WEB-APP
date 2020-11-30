@@ -18,7 +18,6 @@ export class ModalAuthComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('recibo', this.processAuth, this.processLiquidation, this.processPreNotice);
     
     this.verifyProcess();
   }

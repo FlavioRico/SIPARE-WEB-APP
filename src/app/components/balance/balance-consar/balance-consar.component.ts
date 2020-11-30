@@ -219,7 +219,6 @@ export class BalanceConsarComponent implements OnInit {
   }
 
   setT24Amounts(t24Amounts: Summary) {
-    console.log(`this ${t24Amounts}`);
     
     this.valueT2RCV = t24Amounts.rcv;
     this.valueT1RCV = t24Amounts.vivienda_acv_imss;

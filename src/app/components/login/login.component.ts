@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit {
     this.isError= false;
 	  this.authServ.loginService(this.userName, this.password).subscribe(
       result => {     
-        console.log('this', result);
         
         if(result.resultCode == 0){
           localStorage.setItem('user', result.nameUser);
@@ -75,7 +74,6 @@ export class LoginComponent implements OnInit {
           this.errorMsj = 'Servicio no se encuentra disponible por el momento.';
       }
     );
-    console.log('deb', this.userName, this.password);    
 	}
 
 }

@@ -137,7 +137,6 @@ export class PrivadoPageComponent implements OnInit {
 			this.fechaStart = dateControlStart.value;
 			this.fechaEnd = dateControlEnd.value;
 			var endDate = new Date(this.fechaEnd);
-			console.log(this.fechaStart, this.fechaEnd, endDate)
 
           	let dateNow = new Date(this.fechaStart);
             this.isInfo = true;

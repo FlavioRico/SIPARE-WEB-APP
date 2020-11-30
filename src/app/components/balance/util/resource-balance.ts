@@ -97,8 +97,6 @@ export class ResourceBalance {
     setT24Amounts(
         t24Amounts: Summary, valueT2RCV: number,
         valueT1RCV: number, totalAuxiliares: number) {
-
-        console.log('debug interno',t24Amounts);
         
         valueT2RCV = t24Amounts.rcv;
         valueT1RCV = t24Amounts.vivienda_acv_imss;

@@ -181,7 +181,6 @@ export class ParametersComponent implements OnInit {
 
 	refresh(){
 		this.seleccion(this.typeOperationForService.typeTransaction);
-		console.log('global operation en => ', this.globalOperation);
 		
 		if (this.globalOperation == 'T+1' || this.globalOperation == '1' || this.globalOperation == '116027') this.globalOperation = '116027';
 		else this.globalOperation = '116018';
