@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProcessFileService } from 'src/app/services/process-file/process-file.service';
-import { FileDownload } from '../../models/models-acuses/FileDownload';
 import { Acuse } from './../../models/models-acuses/Acuse'
 
 @Component({
