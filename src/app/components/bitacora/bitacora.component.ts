@@ -1,5 +1,4 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { SharedComponent } from '../../shared/shared/shared.component';
 import { FileStatus } from '../models/models-bitacora/fileStatus';
 import { FileWorklog } from '../models/models-bitacora/fileWorklog';
 import { BitacoraServiceService } from '../../services/bitacora/bitacora-service.service';
@@ -59,7 +58,8 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
           this.fileName =     this.fileWorklog.file_name;
           this.statusFile =   this.fileWorklog.status;
         }
-        // this.spinner.hide();  
+        this.spinner.hide();
+
       },error => {
 
         alert(`Error inesperado en los servicios. ${error.message}`);
@@ -70,7 +70,7 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void{
-    this.spinner.hide();
+    // this.spinner.hide();
   }
 
   generateBaseSteps(listFileStatusEmpity: FileStatus[]) {
@@ -85,24 +85,20 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
   verifyFinalStep(data: FileWorklog, base: FileStatus[]){
     
     //Ruta completa
-    if (data.status === 400) {
-
-      this.createSteps(0, base.length, base, "active");
-      return;
-
-    }
+    if (data.status === 400) this.createSteps(0, base.length, base, "active");
     else {
       
       //estatus erroneo
       if(data.status % 100 === 1) {
         
-        let stop = (data.status) / 100;
+        // let stop = Math.floor((data.status) / 100);
+        let stop = this.findIndex(data.status) - 1;
         this.createSteps(0, stop, base, "active");
-        // this.createSteps(stop, base.length - stop, base, "noActive");
+        this.createSteps(stop, base.length, base, "error");
         this.flagErr = true;
         let statusErr = this.allSteps.filter(step => 
           (step.id == data.status)
-        );        
+        );
         this.messageError = statusErr[0].description;
 
       }
@@ -111,13 +107,15 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
         let stop = Math.floor(data.status/100);        
         this.createSteps(0, stop, base, "active");
         this.createSteps(0, 1, base.filter(newNodo => (newNodo.id == data.status)), "active");
+        this.createSteps(stop + 1, base.length, base, "warning");
 
       }
       if(data.status % 2 === 0){
 
-        let stop = (data.status/100) + 1;
+        let stop = this.findIndex(data.status);
+        
         this.createSteps(0, stop, base, "active");
-        this.createSteps(stop, base.length, base, "noActive");
+        this.createSteps(stop, base.length, base, "warning");
 
       }
     }
@@ -126,6 +124,8 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
   createSteps(startIndex: number, endIndex: number, base: FileStatus[], classStep: string) {
     
     for(let i = startIndex; i < endIndex; i++){
+      
+      console.log(startIndex, endIndex);
       
       const li = this.renderer.createElement('li'); 
       const div = this.renderer.createElement('div'); 
@@ -137,6 +137,28 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
       this.renderer.addClass(this.stepLi.nativeElement, "text");
       
     }
+
+  }
+
+  findIndex(status: number): number {
+
+    let i = 0;
+    let index = 0;
+    console.log('data =>',
+    status,
+    );
+    for (index; index < this.baseFileStatus.length; index++) {
+      console.log(this.baseFileStatus[index],
+        status);
+      
+      if(status < this.baseFileStatus[index].id){
+        console.log('entra condición');
+        
+        break;
+      }
+    }
+
+    return index;
 
   }
 

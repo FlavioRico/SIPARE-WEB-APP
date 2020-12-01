@@ -5,7 +5,7 @@
   color: #cf292a;
 }
 .name-file-found {
-  color:green;
+  color:rgb(68, 68, 68);
 }
 .progressbar {
   counter-reset: step;
@@ -46,14 +46,34 @@
   content: none;
 }
 .progressbar li.active {
-  color: green;
+  color: rgba(0, 128, 0, 0.775);
 }
 .progressbar li.active:before {
-  border-color: green;
+  border-color: rgba(0, 128, 0, 0.775);
   content: counter(step);
 } 
 .progressbar li.active + li:after {
-  background-color: green;
+  background-color: rgba(0, 128, 0, 0.775);
+}
+.progressbar li.warning {
+  color: rgba(253, 144, 0, 0.83);
+}
+.progressbar li.warning:before {
+  border-color: rgba(253, 144, 0, 0.83);
+  content: counter(step);
+} 
+.progressbar li.warning + li:after {
+  background-color: rgba(253, 144, 0, 0.83);
+}
+.progressbar li.error {
+  color: #cf292a;
+}
+.progressbar li.error:before {
+  border-color: #cf292a;
+  content: counter(step);
+} 
+.progressbar li.error + li:after {
+  background-color: #cf292a;
 }
 
 .text {
