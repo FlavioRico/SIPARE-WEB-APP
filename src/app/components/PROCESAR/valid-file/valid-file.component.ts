@@ -41,7 +41,7 @@ export class ValidFileComponent implements OnInit {
 		this.isEditForm = false;
 		this.isSuccess = false;
 		this.isInfo = true;
-  		this.infoMsj = 'Obteniendo los archivos que fueron validados';
+  		this.infoMsj = 'Por favor espere. Se están obteniendo los archivos que fueron validados...';
 		if(localStorage.getItem('username') == '' || localStorage.getItem('username') == null){
 			this.spinner.hide();
 			this.router.navigate(['/']);

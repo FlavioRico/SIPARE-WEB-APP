@@ -4,6 +4,7 @@ import { ProcessFileService } from  '../../../services/process-file/process-file
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { SharedComponent } from 'src/app/shared/shared/shared.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-privado-page',
@@ -40,8 +41,13 @@ export class PrivadoPageComponent implements OnInit {
 	public mes;
 	public año;
   
-  	constructor(public authServ : AuthenticationService, public processFile : ProcessFileService,
-  	private router : Router) { }
+  	constructor(
+		public authServ : AuthenticationService, 
+		public processFile : ProcessFileService,
+		private router : Router,
+		private spinner: NgxSpinnerService,
+
+	) { }
 
   	ngOnInit() {
 
@@ -70,51 +76,54 @@ export class PrivadoPageComponent implements OnInit {
 
 		});
 		});
+
+		this.spinner.show();
 		if(localStorage.getItem('username') === '' || localStorage.getItem('username') == null){
+			this.spinner.hide();
 			this.router.navigate(['/']);
 		}else{
 			this.authServ.getUserByUserNameWithSessionId(localStorage.getItem('username'), localStorage.getItem('sessionId')).subscribe(
 			result => {
 				if(result.resultCode == 0){
 				if(result.logged == 0){
+					this.spinner.hide();
 					this.router.navigate(['/']);
 				}else{
 					this.isLogin = true;
 					this.isInfo= true;
 					this.tableHidden = true; 
 					this.infoCode = 'PROCESS';
-					this.infoMsj = 'Se esta ejecutando el listado de Archivos Mensuales PROCESAR';
+					this.infoMsj = 'Por favor espere, se está ejecutando el listado de Archivos Mensuales PROCESAR...';
 					this.processFile.getFilesRiceibingToProcesar().subscribe(
 						result => {           
 							if(result.resultCode == 0){
-							if (result.listSize == 0){
-								this.isError= false;
-								this.isInfo= true;
-								this.infoCode = 'Emp-001';
-								this.infoMsj = 'Sin registros por el momento.';
-								this.tableHidden = true; 
-								this.errorCode = '';
-								this.errorMsj = '';
-							} else {
-								this.isInfo= false;
-								this.infoCode = '';
-								this.infoMsj = '';
-								this.isError= false;
-								this.tableHidden = false;
-								this.files = result.listFiles;
-								this.totalItems = result.listSize;
-								this.currentPage = 1;
-								this.maxSize = 10;
-							}
-                    }
-                },error => {
-                  this.isInfo= false;
-                    this.infoCode = '';
-                    this.infoMsj = '';
-                  this.isError= true;
-                  this.errorCode = error.resultCode;
-                this.errorMsj = error.resultDescription;
-                }
+								if (result.listSize == 0){
+									this.isError= false;
+									this.isInfo= true;
+									this.infoCode = 'Emp-001';
+									this.infoMsj = 'Sin registros por el momento.';
+									this.tableHidden = true; 
+									this.errorCode = '';
+									this.errorMsj = '';
+								} else {
+									this.isInfo= false;
+									this.infoCode = '';
+									this.infoMsj = '';
+									this.isError= false;
+									this.tableHidden = false;
+									this.files = result.listFiles;
+									this.totalItems = result.listSize;
+									this.currentPage = 1;
+									this.maxSize = 10;
+								}
+								this.spinner.hide();
+                    	}
+					},error => {
+						this.infoCode = '';
+						this.infoMsj = '';
+						this.infoErrorService('Ups... algo salió mal, por favor intente más tarde (getFilesRiceibingToProcesar).');
+						this.spinner.hide();
+					}
               );
          	}
         }else 
@@ -125,11 +134,14 @@ export class PrivadoPageComponent implements OnInit {
   }
 
   searchByDate(){
+	  this.spinner.show();
     this.authServ.getUserByUserNameWithSessionId(localStorage.getItem('username'),localStorage.getItem('sessionId')).subscribe(
     result => {
       if(result.resultCode == 0){
-        if(result.logged == 0)
-          this.router.navigate(['/']);
+		if(result.logged == 0){
+			this.spinner.hide();
+          	this.router.navigate(['/']);
+		}
         else{
 
 			var dateControlStart: any = document.getElementById('fechaStart');
@@ -179,47 +191,136 @@ export class PrivadoPageComponent implements OnInit {
                  	}
                     }else{
                       	this.tableHidden = true;
-                      	this.isError= true;
-                  		this.isInfo= false;
-						this.errorCode = 'ERR-SERVICE';
-						this.errorMsj = result.resultDescription;
-                    }
+						this.infoErrorService('Ups... algo salió mal, por favor intente más tarde. (getFilesRiceibingToProcesarByDateRange)');
+					}
+					this.spinner.hide();
                 },error => {
-					this.isInfo= false;
 					this.infoCode = '';
 					this.infoMsj = '';
 					this.isError= true;
-					this.errorCode = error.resultCode;
-					this.errorMsj = error.resultDescription;
+					this.infoErrorService('Ups... algo salió mal, por favor intente más tarde. (getFilesRiceibingToProcesarByDateRange)');
+
                 }
             );
             }
         }
       }
-    });
+    },errorr=>{
+		this.infoErrorService('Ups... algo salió mal, por favor intente más tarde. (getUserByUserNameWithSessionId)');
+		this.spinner.hide();
+	});
   }
 
   exportXLSWO(){
-		this.authServ.getUserByUserNameWithSessionId(localStorage.getItem('username'),localStorage.getItem('sessionId')).subscribe(
-			result => {
-				if(result.resultCode == 0){
-					if(result.logged == 0)
-						this.router.navigate(['/']);
-					else{
-						let dateNow = new Date();
-				  		this.isInfo = true;
-				  		this.infoCode = 'EXPORT';
-				  		this.infoMsj = 'Se esta exportando los registros en un archivo XLS';
-				  		this.tableHidden = true; 
-				  		if(this.fechaStart === null || this.fechaEnd === null){
-				  			this.processFile.exportDataInFileXlsDefault().subscribe(
-						  			result => { 
-							  			if(result.byteLength > 0){
+	this.spinner.show();
+	this.authServ.getUserByUserNameWithSessionId(localStorage.getItem('username'),localStorage.getItem('sessionId')).subscribe(
+		result => {
+			if(result.resultCode == 0){
+				if(result.logged == 0){
+					this.spinner.hide();
+					this.router.navigate(['/']);
+				}
+				else{
+					let dateNow = new Date();
+					this.isInfo = true;
+					this.infoCode = 'EXPORT';
+					this.infoMsj = 'Se esta exportando los registros en un archivo XLS';
+					this.tableHidden = true; 
+					if(this.fechaStart === null || this.fechaEnd === null){
+						this.processFile.exportDataInFileXlsDefault().subscribe(
+							result => { 
+								if(result.byteLength > 0){
+									this.isInfo= false;
+									this.infoCode = '';
+									this.infoMsj = '';
+									this.isError = false;
+									this.tableHidden = false;
+									var file = new Blob([ result ], {
+										type : 'application/csv'
+									});
+									var fileURL = URL.createObjectURL(file);
+									var a = document.createElement('a');
+									a.href = fileURL;
+									a.target = '_blank';
+									a.download = 'listaArchivosRecibidosPROCESAR.xls';
+									a.click();
+								}else{
+									this.tableHidden = true; 
+									this.infoMsj = '';
+									this.infoCode = '';
+									this.infoErrorService('Ups... algo salió mal, por favor intente más tarde. (exportDataInFileXlsDefault)');
+								}
+								this.spinner.hide();
+							},error => {
+								this.infoCode = '';
+								this.infoMsj = '';
+								this.infoErrorService('Ups... algo salió mal, por favor intente más tarde. (exportDataInFileXlsDefault)');
+								this.spinner.hide();
+							}
+						);
+					}else{
+						if(this.dateRange.to.getUTCFullYear() + (this.dateRange.to.getUTCMonth() +1) + this.dateRange.to.getUTCDate() ==
+							dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate() || 
+							this.dateRange.to.getUTCFullYear() + (this.dateRange.to.getUTCMonth() +1) + this.dateRange.to.getUTCDate() >
+							dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate()){
+							this.tableHidden = true;
+							this.isInfo= false;
+							this.infoCode = '';
+							this.infoMsj = '';
+							this.isError= true;
+							this.errorCode = 'ERR-DR';
+							this.errorMsj = 'Rango de búsqueda por fecha debe ser hasta un día hábil anterior al día actual, para poder realizar la exportación de datos';
+						}else{
+							this.isInfo= true;
+							this.infoCode = 'EXPORT';
+							this.infoMsj = 'Se esta exportando los registros al archivo XLS';
+							this.tableHidden = true;
+							if(this.fechaDefault === undefined || this.fechaDefault === null){
+								this.processFile.exportDataInFileXlsDefault().subscribe(
+									result => { 
+										if(result.byteLength > 0){
+										this.isInfo= false;
+										this.infoCode = '';
+										this.infoMsj = '';
+										this.isError = false;
+										this.tableHidden = false;
+											var file = new Blob([ result ], {
+												type : 'application/csv'
+											});
+											var fileURL = URL.createObjectURL(file);
+											var a = document.createElement('a');
+											a.href = fileURL;
+											a.target = '_blank';
+											a.download = 'listaArchivosRecibidosPROCESAR.xls';
+											a.click();
+										}else{
+											this.errorCode = 'ERR-EXPORT';
+											this.errorMsj = 'No se generó archivo XLS porque no hay archivos por mostrar';
+											this.tableHidden = true; 
 											this.isInfo= false;
-									        this.infoCode = '';
-									        this.infoMsj = '';
-											this.isError = false;
-											this.tableHidden = false;
+											this.isError = true;
+											this.infoCode = '';
+											this.infoMsj = '';
+										}
+									},error => {
+										this.isInfo= false;
+										this.infoCode = '';
+										this.infoMsj = '';
+										this.isError = true;
+										this.errorCode = 'ERR-SERVICE';
+										this.errorMsj = 'No se generó registro porque no hay archivos por mostrar';
+										this.spinner.hide();
+									}
+								);
+							}else{
+								this.processFile.exportDataInFileXls(this.fechaStart, this.fechaEnd).subscribe(
+									result => { 
+										if(result.byteLength > 0){
+										this.isInfo= false;
+										this.infoCode = '';
+										this.infoMsj = '';
+										this.isError = false;
+										this.tableHidden = false;
 											var file = new Blob([ result ], {
 												type : 'application/csv'
 											});
@@ -238,111 +339,32 @@ export class PrivadoPageComponent implements OnInit {
 											this.infoCode = '';
 											this.infoMsj = '';
 										}
-								    },error => {
-								    	this.isInfo= false;
-								        this.infoCode = '';
-								        this.infoMsj = '';
-									    this.isError = true;
-									    this.errorCode = 'ERR-SERVICE';
-										this.errorMsj = 'No se generó archivo XLS porque no hay archivos por mostrar';
-								    }
-						  		);
-				  		}else{
-				  			if(this.dateRange.to.getUTCFullYear() + (this.dateRange.to.getUTCMonth() +1) + this.dateRange.to.getUTCDate() ==
-								dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate() || 
-								this.dateRange.to.getUTCFullYear() + (this.dateRange.to.getUTCMonth() +1) + this.dateRange.to.getUTCDate() >
-								dateNow.getUTCFullYear() + (dateNow.getUTCMonth() +1) + dateNow.getUTCDate()){
-					    		this.tableHidden = true;
-					  			this.isInfo= false;
-						        this.infoCode = '';
-						        this.infoMsj = '';
-					    		this.isError= true;
-							    this.errorCode = 'ERR-DR';
-								this.errorMsj = 'Rango de búsqueda por fecha debe ser hasta un día hábil anterior al día actual, para poder realizar la exportación de datos';
-							}else{
-								this.isInfo= true;
-						        this.infoCode = 'EXPORT';
-						        this.infoMsj = 'Se esta exportando los registros al archivo XLS';
-						        this.tableHidden = true;
-						  		if(this.fechaDefault === undefined || this.fechaDefault === null){
-									this.processFile.exportDataInFileXlsDefault().subscribe(
-							  			result => { 
-								  			if(result.byteLength > 0){
-											this.isInfo= false;
-									        this.infoCode = '';
-									        this.infoMsj = '';
-											this.isError = false;
-											this.tableHidden = false;
-												var file = new Blob([ result ], {
-													type : 'application/csv'
-												});
-												var fileURL = URL.createObjectURL(file);
-												var a = document.createElement('a');
-												a.href = fileURL;
-												a.target = '_blank';
-												a.download = 'listaArchivosRecibidosPROCESAR.xls';
-												a.click();
-											}else{
-												this.errorCode = 'ERR-EXPORT';
-												this.errorMsj = 'No se generó archivo XLS porque no hay archivos por mostrar';
-												this.isError = true;
-												this.tableHidden = true; 
-											    this.isInfo= false;
-										        this.infoCode = '';
-										        this.infoMsj = '';
-											}
-									    },error => {
-									    	this.isInfo= false;
-									        this.infoCode = '';
-									        this.infoMsj = '';
-										    this.isError = true;
-										    this.errorCode = 'ERR-SERVICE';
-											this.errorMsj = 'No se generó registro porque no hay archivos por mostrar';
-									    }
-							  		);
-						  		}else{
-						  			this.processFile.exportDataInFileXls(this.fechaStart, this.fechaEnd).subscribe(
-							  			result => { 
-								  			if(result.byteLength > 0){
-											this.isInfo= false;
-									        this.infoCode = '';
-									        this.infoMsj = '';
-											this.isError = false;
-											this.tableHidden = false;
-												var file = new Blob([ result ], {
-													type : 'application/csv'
-												});
-												var fileURL = URL.createObjectURL(file);
-												var a = document.createElement('a');
-												a.href = fileURL;
-												a.target = '_blank';
-												a.download = 'listaArchivosRecibidosPROCESAR.xls';
-												a.click();
-											}else{
-												this.errorCode = 'ERR-EXPORT';
-												this.errorMsj = 'No se generó archivo XLS porque no hay archivos por mostrar';
-												this.isError = true;
-												this.tableHidden = true; 
-											    this.isInfo= false;
-										        this.infoCode = '';
-										        this.infoMsj = '';
-											}
-									    },error => {
-									    	this.isInfo= false;
-									        this.infoCode = '';
-									        this.infoMsj = '';
-										    this.isError = true;
-										    this.errorCode = 'ERR-SERVICE';
-											this.errorMsj = 'No se generó registro porque no hay archivos por mostrar';
-									    }
-							  		);
-						  		}
+									},error => {
+										this.isInfo= false;
+										this.infoCode = '';
+										this.infoMsj = '';
+										this.isError = true;
+										this.errorCode = 'ERR-SERVICE';
+										this.errorMsj = 'No se generó registro porque no hay archivos por mostrar';
+										this.spinner.hide();
+									}
+								);
+								this.spinner.hide();
 							}
-				  		}
+						}
 					}
-				}else
+					this.spinner.hide();
+				}
+			}else{
+				this.spinner.hide();
 				this.router.navigate(['/']);
-			});	
+			}
+
+		},errorrr=>{
+			this.infoErrorService('Ups... algo salió mal, por favor intente más tarde. (getUserByUserNameWithSessionId)');
+			this.spinner.hide();
+		}
+		);	
   }
 
   sortTable(n) {
@@ -380,5 +402,12 @@ export class PrivadoPageComponent implements OnInit {
 		      	}
 		    }
 		 }
+	}
+
+	infoErrorService (messagge: string){
+		this.isError = true;
+		this.isInfo = false;
+		this.errorCode = '';
+		this.errorMsj = messagge;
 	}
 }
