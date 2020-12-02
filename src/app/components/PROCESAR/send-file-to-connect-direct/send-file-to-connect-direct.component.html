@@ -16,7 +16,7 @@
 	</div>
 </div>
 
-<div *ngIf="isContentTable" class="mce-container row" style="width: 80%; margin-left: 2%; margin-top: 0%">
+<div *ngIf="isContentTable && errorInicial == false" class="mce-container row" style="width: 80%; margin-left: 2%; margin-top: 0%">
 	<div class="col-md-12" style="margin-left: 9.8%;">
 		<div class="mce-container row">
 			<div class="col-md-3" style="padding: 0;">
@@ -47,7 +47,7 @@
 		Ups... Algo salió mal, por favor intente más tarde.
 	</div>
 
-	<div *ngIf="isContentTable" class="mce-container row" style="margin-top: 1%;">
+	<div *ngIf="isContentTable && errorInicial == false" class="mce-container row" style="margin-top: 1%;">
 		<table class="table table-hover tbody-scroll" id="tablafullModal">
 			<thead>
 				<tr>
@@ -235,7 +235,7 @@
 			</tbody>
 		</table>
 	</div>
-	<div *ngIf="isContentTable" class="mce-container row" style="width: 80%;margin-left: 10%;margin-top: 1%; height: 50px;">
+	<div *ngIf="isContentTable && errorInicial == false" class="mce-container row" style="width: 80%;margin-left: 10%;margin-top: 1%; height: 50px;">
 		<div style="margin-left: 8%; width: 50%;">
 			<pagination-controls (pageChange)="p = $event" directionLinks="true" responsive="true" screenReaderPaginationLabel="Pagination" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
 		</div>

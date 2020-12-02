@@ -21,6 +21,7 @@ export class SendFileToConnectDirectComponent implements OnInit {
 	public errorCode : string;
 	public errorMsj : string;
 	public isLogin : boolean;
+	public errorInicial : boolean = false;
 
 	/*this agregado */
 	public p: number;
@@ -61,13 +62,13 @@ export class SendFileToConnectDirectComponent implements OnInit {
 							this.processFile.getFilesToSendToConnectDirect().subscribe(
 					  			result => {           
 					        		if(result.resultCode == 0){
-										// this.files = result.listContentFile.filter(file => file.countLines !== 0);
 										this.files = result.listContentFile;
 									}
 									this.spinner.hide()
 							    },error => {
 									this.spinner.hide()
 									this.isError= true;
+									this.errorInicial = true;
 				    				this.errorCode = 'ERR-EXPORT';
 				    				this.errorMsj = 'No se pudo realizar la exportaci&oacute;n del listado de Archivos, error al exportar';
 							    }

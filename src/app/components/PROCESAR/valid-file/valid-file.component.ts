@@ -66,14 +66,15 @@ export class ValidFileComponent implements OnInit {
 							        	this.isContentTable = false;   
 							        	this.isInfo = true;
   										this.infoMsj = 'No hay archivos para validar';  
-							        }
+									}
+									this.spinner.hide();
 							    },error => {
 									this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (searchFilesToValidService)');
+									this.spinner.hide();
 							    }
 							);
 						}
 					}
-					this.spinner.hide();
 				},error =>{
 					this.infoErrorService('Ups... algo salió mal, intente más tarde por favor (getUserByUserName)');
 					this.spinner.hide();

@@ -51,6 +51,7 @@ export class PrivadoPageComponent implements OnInit {
 
   	ngOnInit() {
 
+		this.spinner.show();
 		this.fechaDefault = this.shared.getDateFormated2();
 		this.fechaStart = this.fechaDefault;
 		this.fechaEnd = this.fechaDefault;
@@ -77,7 +78,6 @@ export class PrivadoPageComponent implements OnInit {
 		});
 		});
 
-		this.spinner.show();
 		if(localStorage.getItem('username') === '' || localStorage.getItem('username') == null){
 			this.spinner.hide();
 			this.router.navigate(['/']);
@@ -116,7 +116,7 @@ export class PrivadoPageComponent implements OnInit {
 									this.currentPage = 1;
 									this.maxSize = 10;
 								}
-								this.spinner.hide();
+							this.spinner.hide();
                     	}
 					},error => {
 						this.infoCode = '';
@@ -124,8 +124,8 @@ export class PrivadoPageComponent implements OnInit {
 						this.infoErrorService('Ups... algo salió mal, por favor intente más tarde (getFilesRiceibingToProcesar).');
 						this.spinner.hide();
 					}
-              );
-         	}
+					);
+				}
         }else 
           this.router.navigate(['/']);
       }
