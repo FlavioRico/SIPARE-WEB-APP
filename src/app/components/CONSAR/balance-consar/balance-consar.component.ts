@@ -64,6 +64,8 @@ export class BalanceConsarComponent implements OnInit {
   flagAuth: boolean;
   flagLiquidation: boolean;
   flagPreNotice: boolean;
+  dependency: string = 'CONSAR';
+
 
   constructor(
     private render: Renderer2,
@@ -117,16 +119,20 @@ export class BalanceConsarComponent implements OnInit {
       data => {
         this.errService = false;
         this.messageErrService = '';
+        
         if(data.status == 204){
           alert('Sin archivos del día actual.');
           this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
           this.fechaCompleta = '';
           this.spinner.hide();  
+          return;
         }
         if(data.status == 500){
           this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'flex');
           this.fechaCompleta = '';
           this.spinner.hide(); 
+          return;
+
         }
         else{
 

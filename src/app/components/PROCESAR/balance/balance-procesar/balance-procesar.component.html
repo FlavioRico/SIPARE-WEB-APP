@@ -99,12 +99,8 @@
             <button id="btnAuthorized" #buttonValidacion (click)="sendFileToConnectDirect()" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
                 Autorizar
             </button>
-            <!-- <button id="btnAuthorized" #buttonValidacion (click)="aproveBalancePROCESAR()" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModalAutOK">
-                Autorizar
-            </button> -->
-            <!-- (click)="aproveBalancePROCESAR()" (click)="this.resourceBalance.authSucess(
-                btnAutorizar, messageValidacion)"  -->
         </div>
+        
         <div class="alert alert-danger alert-dismissible" *ngIf="isError">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>{{errorCode}}</strong> - {{errorMsj}}.
@@ -137,4 +133,4 @@
     </div>
 </div>
 
-<app-modal-auth [processAuth]="flagAuth" [processLiquidation]="flagLiquidation" [processPreNotice]="flagPreNotice"></app-modal-auth>
+<app-modal-auth [processAuth]="flagAuth" [processLiquidation]="flagLiquidation" [processPreNotice]="flagPreNotice" [dependency]="dependency"></app-modal-auth>

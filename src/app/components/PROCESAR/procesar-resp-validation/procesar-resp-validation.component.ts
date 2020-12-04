@@ -62,6 +62,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 	public changeTableStatusProcesar: boolean = false;
 	public ngLastEditBy : any;
 	public ngLastEditTimestamp : any;
+	public globalDate : any;
 
 
 
@@ -159,6 +160,8 @@ export class ProcesarRespValidationComponent implements OnInit {
 			}
 		);
 	}
+
+	this.fechaStart = this.globalDate;
   }
 		
 	errServices(valueBolean: boolean, message: string) {
@@ -169,7 +172,9 @@ export class ProcesarRespValidationComponent implements OnInit {
 	}
 
   	listRegisterByCodeAndFileResponseProcesar(procesarFileDate, procesarResponse){
-		  
+
+		this.fechaStart = this.globalDate;
+
   		this.processFile.searchFilesToFileT24RespProcesarService(procesarFileDate, procesarResponse).subscribe(
   			result => {   
 				
@@ -212,6 +217,7 @@ export class ProcesarRespValidationComponent implements OnInit {
   		this.tableStatusProcesar = true;
 		this.tableListRegisterByCode = false;
 		this.changeTableStatusProcesar = false;
+		this.fechaStart = this.globalDate;
   	}
 
  	updateRegistry(line, oid, code: any, flagEditable){
@@ -299,9 +305,6 @@ export class ProcesarRespValidationComponent implements OnInit {
     	this.processFile.updateRegistryResp(this.dataRowT24).subscribe(
   			result => {           
         		if(result.resultCode == 0){
-	        		this.tableListRegisterByCode = false;
- 					this.isContentTable = false;
-					this.tableStatusProcesar = true;
 
 					this.updateTwo(this.dataRowT24.usuarioIngresoT24, this.dataRowT24.idTransaccionT24);
 
@@ -322,6 +325,7 @@ export class ProcesarRespValidationComponent implements OnInit {
 	}
 
 	updateTwo (usuarioIngresoT24: string, idTransaccionT24: string) {
+
 		this.dataCaptureLine.response_type = this.responseType;
 		this.dataCaptureLine.capture_line = this.lineCap;
 		this.dataCaptureLine.user = localStorage.getItem('username');
@@ -330,7 +334,51 @@ export class ProcesarRespValidationComponent implements OnInit {
 		
 		this.processFile.updateCaptureLine(this.dataCaptureLine).subscribe(
 			dta => {
-				if (dta.body.response == 0) alert('Actualización realizada con exito');
+				
+				if (dta.body.response == 0){
+
+					this.tableListRegisterByCode = false;
+					this.isContentTable = false;
+					this.tableStatusProcesar = true;
+					this.changeTableStatusProcesar = false;
+
+					this.processFile.getLastFileToResponseProcesarServiceByDate(this.globalDate).subscribe(
+						data=>{
+			
+							let headers;
+							const keys = data.headers.keys();
+							headers = keys.map(key =>
+								`${key}: ${data.headers.get(key)}`
+							);
+							if(data.status === 200){
+			
+								this.tableStatusProcesar = true;
+								this.rows = data.body.listContent;
+								this.isError = false;
+			
+							}
+							if (data.status == 204){
+			
+								this.isError= true;
+								this.tableStatusProcesar = false;
+								this.errorCode = 'Emp-001';
+								this.errorMsj = 'Sin registros por el momento.';
+			
+							}
+			
+							this.spinner.hide();
+							
+						},error=>{
+							this.isError= true;
+							this.errorCode = '';
+							this.errorMsj = 'Ocurrió un error en los servicios, intente más tarde por favor. (getLastFileToResponseProcesarService)';
+							this.spinner.hide();
+						}
+					);
+					
+					alert('Actualización realizada con exito');
+
+				}
 				
 			}, err => {
 				alert(`Error en servicio de actualización updateCaptureLine`);
@@ -369,40 +417,50 @@ export class ProcesarRespValidationComponent implements OnInit {
 
 		this.spinner.show();
 		var dateControlStart: any = document.getElementById('fechaStart');		
-
-		this.processFile.getLastFileToResponseProcesarServiceByDate(dateControlStart.value).subscribe(
-			data=>{
-
-				let headers;
-				const keys = data.headers.keys();
-				headers = keys.map(key =>
-					`${key}: ${data.headers.get(key)}`
-				);
-				if(data.status === 200){
-
-					this.tableStatusProcesar = true;
-					this.rows = data.body.listContent;
-					this.isError = false;
-
-				}
-				if (data.status == 204){
-
+		this.globalDate = dateControlStart.value;
+		// console.log(dateControlStart.value);
+		
+		if(dateControlStart.value === null || dateControlStart.value === ''){
+			this.isError= true;
+			this.tableStatusProcesar = false;
+			this.errorCode = 'Atención.';
+			this.errorMsj = 'Se requiere seleccionar una fecha para realizar la busqueda';
+			this.spinner.hide();
+		}else{
+			this.processFile.getLastFileToResponseProcesarServiceByDate(dateControlStart.value).subscribe(
+				data=>{
+	
+					let headers;
+					const keys = data.headers.keys();
+					headers = keys.map(key =>
+						`${key}: ${data.headers.get(key)}`
+					);
+					if(data.status === 200){
+	
+						this.tableStatusProcesar = true;
+						this.rows = data.body.listContent;
+						this.isError = false;
+	
+					}
+					if (data.status == 204){
+	
+						this.isError= true;
+						this.tableStatusProcesar = false;
+						this.errorCode = 'Emp-001';
+						this.errorMsj = 'Sin registros por el momento';
+	
+					}
+	
+					this.spinner.hide();
+					
+				},error=>{
 					this.isError= true;
-					this.tableStatusProcesar = false;
-					this.errorCode = 'Emp-001';
-					this.errorMsj = 'Sin registros por el momento.';
-
+					this.errorCode = '';
+					this.errorMsj = 'Ocurrió un error en los servicios, intente más tarde por favor. (getLastFileToResponseProcesarService)';
+					this.spinner.hide();
 				}
-
-				this.spinner.hide();
-				
-			},error=>{
-				this.isError= true;
-				this.errorCode = '';
-				this.errorMsj = 'Ocurrió un error en los servicios, intente más tarde por favor. (getLastFileToResponseProcesarService)';
-				this.spinner.hide();
-			}
-		);
+			);
+		}
 
 	}
 

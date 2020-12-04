@@ -71,6 +71,7 @@ export class BalanceProcesarComponent implements OnInit {
   public flagLiquidation: boolean;
   public flagPreNotice: boolean;
   public flagWorkingDay: boolean = true;
+  dependency: string = 'PROCESAR';
 
   constructor(
     private render: Renderer2,

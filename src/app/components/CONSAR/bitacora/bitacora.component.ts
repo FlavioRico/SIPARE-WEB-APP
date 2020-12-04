@@ -91,7 +91,6 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
       //estatus erroneo
       if(data.status % 100 === 1) {
         
-        // let stop = Math.floor((data.status) / 100);
         let stop = this.findIndex(data.status) - 1;
         this.createSteps(0, stop, base, "active");
         this.createSteps(stop, base.length, base, "error");
@@ -104,11 +103,10 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
       }
       if(data.status % 100 === 3){
 
-        let stop = Math.floor(data.status/100);        
+        let stop = this.findIndex(data.status);
         this.createSteps(0, stop, base, "active");
-        this.createSteps(0, 1, base.filter(newNodo => (newNodo.id == data.status)), "active");
-        this.createSteps(stop + 1, base.length, base, "warning");
-
+        this.createSteps(stop, base.length, base, "warning");
+        
       }
       if(data.status % 2 === 0){
 
@@ -122,6 +120,12 @@ export class BitacoraComponent implements OnInit, AfterViewInit {
   }
 
   createSteps(startIndex: number, endIndex: number, base: FileStatus[], classStep: string) {
+    
+    // console.log('datos'
+    // ,'startIndex',
+    // startIndex,
+    // 'endIndex',
+    // endIndex);
     
     for(let i = startIndex; i < endIndex; i++){
             
