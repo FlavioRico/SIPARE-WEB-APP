@@ -1,5 +1,5 @@
-const baseUrl_Linux     = 'http://10.164.188.229';
-const baseUrl_Windows   = 'http://10.168.200.132';
+const baseUrl_Linux     = 'http://10.164.188.229'; 
+const baseUrl_Windows   = 'http://servtdd.multivaloresgf.local';
 const alfrescoHostName  = 'http://multiva-dispersor-06-esb-multiva.prod.multivaloresgf.local';
 
 export const environment = {
