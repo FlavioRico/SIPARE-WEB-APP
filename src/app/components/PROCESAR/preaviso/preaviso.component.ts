@@ -82,10 +82,10 @@ export class PreavisoComponent implements OnInit {
 											`${key}: ${data.headers.get(key)}`
 									);
 									if (data.status == 200){
+										console.log('entraré a loadDataPreNotice');
+										
 										this.loadDataPreNotice (data.body);
 									}
-
-									this.verifyTransactionToday();
 
 									this.spinner.hide();
 
@@ -138,19 +138,22 @@ export class PreavisoComponent implements OnInit {
 		this.ngKeyEntity = result.receiving_bank_key;
 		this.ngBankNameRecep =  result.receiving_bank_name;
 		
-		if (result.transaction_flag == 'S'){
-			this.message_liquidation = 'La transacción ya fue realizada.';
-			this.liquidation_flag = true;
-			$(document).ready(function(){
-				$("#btnAuthorized").prop('disabled', true); 
-			});
-		}else {
-			this.message_liquidation = 'La transacción aún no ha sido autorizada.';
-			this.liquidation_flag = false;
-			$(document).ready(function(){
-				$("#btnAuthorized").prop('disabled', false); 
-			});
-		}		
+		// if (result.transaction_flag == 'S'){
+		// 	this.message_liquidation = 'La transacción ya fue realizada.';
+		// 	this.liquidation_flag = true;
+		// 	$(document).ready(function(){
+		// 		$("#btnAuthorized").prop('disabled', true); 
+		// 	});
+		// }else {
+		// 	this.message_liquidation = 'La transacción aún no ha sido autorizada.';
+		// 	this.liquidation_flag = false;
+		// 	$(document).ready(function(){
+		// 		$("#btnAuthorized").prop('disabled', false); 
+		// 	});
+		// }		
+		console.log('entro aca');
+		this.verifyTransactionToday();
+		
 	}
 
 	clearInputs(){
@@ -228,6 +231,8 @@ export class PreavisoComponent implements OnInit {
 
 	verifyTransactionToday(){
 
+		console.log('entro a verifyTransactionToday');
+		
 		this.processFile.verifyTransactionToday().subscribe(
 			data=>{
 				let headers;
@@ -235,14 +240,25 @@ export class PreavisoComponent implements OnInit {
 				headers = keys.map(key =>
 					`${key}: ${data.headers.get(key)}`
 				);
-				if(data.body.httpStatus == 'OK' &&
-				data.body.isProgrammedOrExistStr == 'Programe la ejecución' &&
-				data.body.programmedOrExist == false){
+				if(data.body.programmedOrExist == true){
 
-					this.verifyBtn = false;
+					// this.verifyBtn = false;
+					this.message_liquidation = 'La transacción ya fue realizada.';
+					this.liquidation_flag = true;
+					$(document).ready(function(){
+						$("#btnAuthorized").prop('disabled', true); 
+					});
 
-				}else{
-					this.verifyBtn = true;
+				}else if (data.body.programmedOrExist == false){
+
+					// this.verifyBtn = true;
+					this.message_liquidation =
+						'La transacción aún no ha sido autorizada.';
+					this.liquidation_flag = false;
+					$(document).ready(function () {
+						$('#btnAuthorized').prop('disabled', false);
+					});
+
 				}
 			},error=>{
 				alert("Ups.. Error inesperado, contacte a soporte por favor (verifyTransactionToday).");
