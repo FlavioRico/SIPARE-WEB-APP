@@ -82,9 +82,8 @@ export class PreavisoComponent implements OnInit {
 											`${key}: ${data.headers.get(key)}`
 									);
 									if (data.status == 200){
-										console.log('entraré a loadDataPreNotice');
 										
-										this.loadDataPreNotice (data.body);
+										this.verifyTransactionToday(data.body);
 									}
 
 									this.spinner.hide();
@@ -98,7 +97,7 @@ export class PreavisoComponent implements OnInit {
 									else if (error.status == 428)
 										this.message = 'La conciliación de cifras PROCESAR no ha sido autorizada.';
 									else if (error.status == 500)
-										this.message = 'Fallo insesperado en BD';
+										this.message = 'La transacción aún no ha sido autorizada.';
 									else 
 										this.errServices(true, 'Fallo en servicio getPreNotice.');
 									this.message_liquidation_err = this.message;
@@ -120,9 +119,7 @@ export class PreavisoComponent implements OnInit {
 		
 	}
 
-	loadDataPreNotice (result: LiquidationPreAviso){
-
-		this.isError= false;
+	loadDataPreNotice (result: LiquidationPreAviso){		
 
 		this.ngDateRep = result.receiving_date;
 		this.ngRcv = this.shared.formatTable(result.rcv.toString()); //ACV
@@ -137,22 +134,6 @@ export class PreavisoComponent implements OnInit {
 		this.ngAccount = result.account_number;
 		this.ngKeyEntity = result.receiving_bank_key;
 		this.ngBankNameRecep =  result.receiving_bank_name;
-		
-		// if (result.transaction_flag == 'S'){
-		// 	this.message_liquidation = 'La transacción ya fue realizada.';
-		// 	this.liquidation_flag = true;
-		// 	$(document).ready(function(){
-		// 		$("#btnAuthorized").prop('disabled', true); 
-		// 	});
-		// }else {
-		// 	this.message_liquidation = 'La transacción aún no ha sido autorizada.';
-		// 	this.liquidation_flag = false;
-		// 	$(document).ready(function(){
-		// 		$("#btnAuthorized").prop('disabled', false); 
-		// 	});
-		// }		
-		console.log('entro aca');
-		this.verifyTransactionToday();
 		
 	}
 
@@ -173,11 +154,6 @@ export class PreavisoComponent implements OnInit {
 
 	paymentTransaction(){
 		this.updateProgrammed();
-
-        this.isSuccess= true;
-        this.successrMsj = 'Transacción T+2 programada con exito';
-		this.successCode = 'SUCCESS';
-		this.clearInputs();   
 	}
 
 	updateProgrammed() {
@@ -191,17 +167,16 @@ export class PreavisoComponent implements OnInit {
 					`${key}: ${data.headers.get(key)}`
 				);
 				if (data.status !== 200) {
-					this.errorCode = 'Atención - ';
-					this.errorMsj = 'No se pudo actualizar el programmed del día actual. (CRON).';
-					alert("No se pudo actualizar el programmed del día actual. (CRON)");
+					// this.errorCode = 'Atención - ';
+					// this.errorMsj = 'No se pudo actualizar el programmed del día actual. (CRON).';
+					alert("No se pudo actualizar el programmed del día actual. (CRON). Transacción T+2 no programada.");
 				}else{
-					alert("Se actualizó el Programmed del día actual.");
 					this.updateHour();
 				}
 			},error=>{
-				this.errorCode = 'Error inesperado - ';
-				this.errorMsj = 'Ups.. Contacte a soporte por favor (updateProgrammed).';
-				// alert("Ups.. Error inesperado, contacte a soporte por favor (updateProgrammed).");
+				// this.errorCode = 'Error inesperado - ';
+				// this.errorMsj = 'Ups.. Contacte a soporte por favor (updateProgrammed).';
+				alert("Ups.. Error inesperado, contacte a soporte por favor (updateProgrammed). Transacción T+2 no programada.");
 			}
 		);
 	
@@ -219,19 +194,23 @@ export class PreavisoComponent implements OnInit {
 					`${key}: ${data.headers.get(key)}`
 				);
 				if (data.status !== 200) {
-					alert("No se pudo actualizar la hora programada.");
+					alert("No se pudo actualizar la hora programada de la transacción T+2.");
 				}else{
-					this.successrMsj = 'Transacción T+2 programada con exito (con cambio en hora).';
+					this.message_liquidation =
+						'La transacción ya fue realizada';
+					this.isSuccess= true;
+					this.successrMsj = 'Transacción T+2 programada con exito';
+					this.successCode = 'SUCCESS';
+					this.clearInputs();   
 				}
 			},error=>{
-				alert("Ups.. Error inesperado, contacte a soporte por favor (updateHour).");
+				alert("Ups.. Error inesperado, contacte a soporte por favor (updateHour). Transacción T+2 no programada.");
 			}
 		);
+
 	}
 
-	verifyTransactionToday(){
-
-		console.log('entro a verifyTransactionToday');
+	verifyTransactionToday(result: LiquidationPreAviso){
 		
 		this.processFile.verifyTransactionToday().subscribe(
 			data=>{
@@ -242,22 +221,23 @@ export class PreavisoComponent implements OnInit {
 				);
 				if(data.body.programmedOrExist == true){
 
-					// this.verifyBtn = false;
 					this.message_liquidation = 'La transacción ya fue realizada.';
 					this.liquidation_flag = true;
 					$(document).ready(function(){
 						$("#btnAuthorized").prop('disabled', true); 
+						$("#btnAuthorized").hide();
 					});
 
 				}else if (data.body.programmedOrExist == false){
 
-					// this.verifyBtn = true;
 					this.message_liquidation =
 						'La transacción aún no ha sido autorizada.';
 					this.liquidation_flag = false;
 					$(document).ready(function () {
 						$('#btnAuthorized').prop('disabled', false);
 					});
+
+					this.loadDataPreNotice(result);
 
 				}
 			},error=>{

@@ -19,11 +19,9 @@
 	</div> -->
 	<div *ngIf="!liquidationErr">
 		<div class="alert alert-info alert-dismissible" *ngIf="balaceApproved">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<strong>{{ message_liquidation }}</strong>
 		</div>
 		<div class="alert alert-info alert-dismissible" *ngIf="!balaceApproved">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<strong>{{ message_liquidation }}</strong>
 		</div>
 	</div>

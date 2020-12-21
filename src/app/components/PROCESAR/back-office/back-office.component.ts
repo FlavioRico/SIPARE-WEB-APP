@@ -118,37 +118,41 @@ export class BackOfficeComponent implements OnInit {
 
 	loadDataLiquidation (result: Liquidation){
 		this.isError= false;
-		this.ngDateRep = result.receiving_date;
-
-		this.ngIMSS = this.shared.formatTable(result.imss.toString());
-		this.ngViv = this.shared.formatTable(result.viv.toString());
-		this.ngAcv = this.shared.formatTable(result.acv.toString());
-		this.ngTotal = this.shared.formatTable(result.total.toString());
-		
-		this.ngDateRegistry = result.registry_date;
-		this.ngTxt =  result.description;
-		this.ngTypeOperation = result.operation_type;
-		this.ngPlace = result.office;
-		this.ngFolio = result.sheet_number;
-		this.ngCodeBank = result.issuing_bank_key;
-		this.ngBankName = result.issuing_bank_name;
-		this.ngAccount = result.account_number;
-		this.ngKeyEntity = result.receiving_bank_key;
-		this.ngBankNameRecep =  result.receiving_bank_name;
 		
 		if (result.transaction_flag == 'S'){
+
 			this.message_liquidation = 'La transacción ya fue realizada.';
 			this.liquidation_flag = true;
 			$(document).ready(function(){
 				$("#btnAuthorized").prop('disabled', true); 
 				$("#btnAuthorized").hide();
 			});
+			
 		}else {
+
 			this.message_liquidation = 'La transacción aún no ha sido autorizada.';
 			this.liquidation_flag = false;
 			$(document).ready(function(){
 				$("#btnAuthorized").prop('disabled', false); 
 			});
+			this.ngDateRep = result.receiving_date;
+
+			this.ngIMSS = this.shared.formatTable(result.imss.toString());
+			this.ngViv = this.shared.formatTable(result.viv.toString());
+			this.ngAcv = this.shared.formatTable(result.acv.toString());
+			this.ngTotal = this.shared.formatTable(result.total.toString());
+			
+			this.ngDateRegistry = result.registry_date;
+			this.ngTxt =  result.description;
+			this.ngTypeOperation = result.operation_type;
+			this.ngPlace = result.office;
+			this.ngFolio = result.sheet_number;
+			this.ngCodeBank = result.issuing_bank_key;
+			this.ngBankName = result.issuing_bank_name;
+			this.ngAccount = result.account_number;
+			this.ngKeyEntity = result.receiving_bank_key;
+			this.ngBankNameRecep =  result.receiving_bank_name;
+
 		}		
 	}
 

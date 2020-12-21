@@ -465,10 +465,10 @@ export class ProcessFileService {
 
   getLastFileToResponseProcesarServiceByDate(date: string){
 
-    let url_date = 'http://10.160.188.123:8765/sipare-response-type-patch/procesarResponseSummary?date=';
+    // let url_date = 'http://10.160.188.123:8765/sipare-response-type-patch/procesarResponseSummary?date=';
     return this.http.get<any>(
-      url_date.concat(date),
-      // environment.getLastFileRespToProcesarUrlByDate.concat(date), 
+      // url_date.concat(date),
+      environment.getLastFileRespToProcesarUrlByDate.concat(date), 
       { observe : 'response'}
     );
 
