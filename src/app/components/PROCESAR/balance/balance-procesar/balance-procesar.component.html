@@ -28,20 +28,36 @@
 </div>
 
 <div *ngIf="flagWorkingDay" class="container">
-    <strong>Fecha: </strong> 
-    <span class="border border-light date">
-        {{ fechaCompleta }}
-    </span>
 
-    <button #exportExcel *ngIf="backOfficeCompleted" type="button" class="btn btn-outline-success float-right"
-        (click)="exportXLSConciliation()">Exportar a EXCEL
-    </button>
+    <div class="row">
+        <div class="col-6">
+            <strong>Fecha: </strong> 
+            <span class="border border-light date">
+                {{ fechaCompleta }}
+            </span>
+        </div>
+        <div class="col-6">
+            <button #exportExcel *ngIf="backOfficeCompleted" type="button" class="btn btn-outline-success float-right"
+            style="margin: 0px 0px 10px 10px;"
+            (click)="exportXLSConciliation()">
+                Exportar a EXCEL
+            </button>
+            <button #exportExcel *ngIf="viewBtn" type="button" class="btn btn-outline-success float-right"
+                (click)="exportXLSDailyTransmitionReport()">
+                    Archivo Transmisión Procesar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="flagWorkingDay" class="container">
 
     <div class="row title-short">
         <div class="col-12">
             Balance
         </div>
     </div>
+
 </div>
 
 <div class="content-balance" *ngIf="backOfficeCompleted && flagWorkingDay">

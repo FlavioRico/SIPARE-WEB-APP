@@ -61,6 +61,7 @@ export class BalanceProcesarComponent implements OnInit {
   parameterT1: boolean = true;
   parameterT2: boolean = true;
   backOfficeCompleted: boolean = true;
+  viewBtn: boolean = true;
   err: boolean = false;
 
   /*Agregado*/
@@ -100,6 +101,8 @@ export class BalanceProcesarComponent implements OnInit {
       },err =>{
         this.errService = true;
         this.messageErrService = 'Contacta a soporte por favor. (validateWorkingDay).';
+        this.backOfficeCompleted = false;
+        this.viewBtn = false;
         this.spinner.hide();
       }
     );
@@ -141,6 +144,7 @@ export class BalanceProcesarComponent implements OnInit {
             this.parameterT1 = true;
             this.parameterT2 = true;
             this.backOfficeCompleted = false;
+            this.viewBtn = false;
             this.err = true;
             this.render.setStyle(this.btnAutorizar.nativeElement, 'display', 'none');
             this.render.setStyle(this.exportExcel.nativeElement, 'display', 'none');
@@ -399,6 +403,41 @@ export class BalanceProcesarComponent implements OnInit {
       }
       
     );
+
+  }
+
+  exportXLSDailyTransmitionReport(){
+
+    this.spinner.show();    
+    this.processFile.exportDataDailyTransmitionReportXLS().subscribe(
+      
+      result => {           
+            if (result == null) {
+              this.isError= true;
+              this.errorCode = 'ERR-EXPORT';
+              this.errorMsj = 'No se genero el reporte de transmisión diaria, el servicio no esta disponible';
+              this.spinner.hide();
+            }
+            else {
+              var file = new Blob([ result ], {
+                type : 'application/csv'
+              });
+              var fileURL = URL.createObjectURL(file);
+              var a = document.createElement('a');
+              a.href = fileURL;
+              a.target = '_blank';
+              a.download = 'reporteDeTransmisiónDiaria.xlsx';
+              document.body.appendChild(a);
+              a.click();
+              this.spinner.hide();
+            }
+        },error => {
+          this.isError= true;
+          this.errorCode = 'ERR-SERVICE';
+          this.errorMsj = 'No se genero el reporte de transmisión diaria, el servicio no esta disponible';
+          this.spinner.hide();
+        }
+      );
 
   }
 

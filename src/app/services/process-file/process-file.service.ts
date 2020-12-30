@@ -13,7 +13,6 @@ import { LiquidationPreAviso } from 'src/app/components/models/models-preaviso/l
 import { Programmed } from 'src/app/components/models/models-backOffice/Programmed';
 import { NewHour } from 'src/app/components/models/models-backOffice/newHour';
 import { Dates } from 'src/app/components/models/models-collectionReport/Dates';
-import { FileDownload } from 'src/app/components/models/models-acuses/FileDownload';
 import { TransactionProgrammed } from 'src/app/components/models/models-preaviso/TransactionProgrammed';
 import { Acuse } from 'src/app/components/models/models-acuses/Acuse';
 
@@ -470,6 +469,19 @@ export class ProcessFileService {
       // url_date.concat(date),
       environment.getLastFileRespToProcesarUrlByDate.concat(date), 
       { observe : 'response'}
+    );
+
+  }
+
+  exportDataDailyTransmitionReportXLS() : Observable<any>{
+
+    var exportDto = {
+      typeExport : 'CNN'
+    };
+    return this.http.post(
+      environment.sipare_dataDailyTransmitionReport,
+      exportDto, 
+      {responseType : 'arraybuffer'}
     );
 
   }

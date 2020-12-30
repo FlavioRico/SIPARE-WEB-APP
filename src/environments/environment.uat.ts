@@ -13,6 +13,7 @@ export const environment = {
     downloadAcuse :                             alfrescoHostName.concat('/alfresco/fileDownload'),
 
     //YAXCHE SERVICES
+    sipare_dataDailyTransmitionReport:          baseUrl_Windows.concat(':8083/sipareMSProcessFileApp/multiva/sipare/generateTransmisionReport'),
     sipare_ms_authenticate_url :                baseUrl_Windows.concat(':8081/sipareMSAuthenticationApp/multiva/sipare/'),
     sipare_ms_processFile_url :                 baseUrl_Windows.concat(':8083/sipareMSProcessFileApp/multiva/sipare/'),
     sipare_ms_parameters_by_type_transaction :  baseUrl_Windows.concat(':8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction'),
