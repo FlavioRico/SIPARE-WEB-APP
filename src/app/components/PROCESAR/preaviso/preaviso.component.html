@@ -136,6 +136,14 @@
 
 		<div class="col-md">
 			<div class="form-group input-info">
+				Total:
+				<input #total name="total" id="total" [(ngModel)]="ngRcv" type="text" class="form-control" 
+				placeholder="" aria-describedby="currentName" readonly>
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="form-group input-info">
 				Texto:
 				<input #texto name="txt" id="txt" [(ngModel)]="ngTxt" type="text" class="form-control" 
 				placeholder="" aria-describedby="currentName" readonly>

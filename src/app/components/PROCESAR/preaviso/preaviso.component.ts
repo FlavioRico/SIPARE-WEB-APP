@@ -29,6 +29,7 @@ export class PreavisoComponent implements OnInit {
 	public ngBankNameRecep : string;
 	public ngTxt : string;
 	public ngRcv : any;
+	public ngTotal : any;
 	public errorMsj : string;
 	public errorCode : string;
 	public successrMsj : string;
@@ -125,7 +126,7 @@ export class PreavisoComponent implements OnInit {
 		this.ngRcv = this.shared.formatTable(result.rcv.toString()); //ACV
 		this.ngDateRegistry = result.registry_date;
 
-		this.ngTxt =  result.description;
+		this.ngTxt = result.description;
 		this.ngTypeOperation = result.operation_type;
 		this.ngPlace = result.office;
 		this.ngFolio = result.sheet_number;
@@ -133,7 +134,8 @@ export class PreavisoComponent implements OnInit {
 		this.ngBankName = result.issuing_bank_name;
 		this.ngAccount = result.account_number;
 		this.ngKeyEntity = result.receiving_bank_key;
-		this.ngBankNameRecep =  result.receiving_bank_name;
+		this.ngBankNameRecep = result.receiving_bank_name;
+		this.ngTotal = this.shared.formatTable(result.total.toString());
 		
 	}
 
@@ -150,6 +152,7 @@ export class PreavisoComponent implements OnInit {
 		this.ngDateRep = '';
 		this.ngRcv = '';
 		this.ngTxt = '';
+		this.ngTotal = '';
 	}
 
 	paymentTransaction(){
