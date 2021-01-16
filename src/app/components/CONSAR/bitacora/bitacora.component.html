@@ -1,0 +1,49 @@
+
+<app-navbar></app-navbar>
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Cargando contenido</p>
+</ngx-spinner>
+
+<div class="container">
+  <div class="alert alert-primary title-opc" role="alert">
+      <strong>CONSAR</strong> - Bitácora de archivos
+  </div>
+  <strong>Fecha: </strong> 
+  <span class="border border-light date">
+      {{ fechaCompleta }}
+  </span>
+  <br><br>
+  <strong>
+    Nombre del archivo:
+  </strong>
+  <span class="name-file-found">
+    {{ fileName }}
+  </span>
+  <br>
+  <strong>
+    Estatus:
+  </strong>
+  <span class="name-file-found">
+    {{ statusFile }}
+  </span>
+  <br>
+  <span *ngIf="flagErr" class="name-file-not-found">
+    <strong>Atención.</strong> El archivo tuvo el siguiente incoveniente:
+    <strong>{{ messageError }}</strong>.
+  </span>
+  <br>
+  <div class="row title-short">
+      <div class="col-12">
+        Bitácora
+      </div>
+  </div>
+
+  <div class="container-step-progress-bar">
+    <ul #stepLists class="progressbar"></ul>
+  </div>
+</div>

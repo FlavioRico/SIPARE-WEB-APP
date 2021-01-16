@@ -1,0 +1,126 @@
+.container-step-progress-bar {
+  width: 100%;
+}
+.name-file-not-found {
+  color: #cf292a;
+}
+.name-file-found {
+  color:rgb(68, 68, 68);
+}
+.progressbar {
+  counter-reset: step;
+}
+.progressbar li {
+  list-style: none;
+  display: inline-block;
+  min-width: 14%;
+  max-width: 15%;
+  position: relative;
+  text-align: center;
+  margin: 10px 0px 10px 0px;
+}
+.progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 30px;
+  height: 30px;
+  line-height : 30px;
+  border: 1px solid grey;
+  border-radius: 100%;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  background-color: #fff;
+}
+.progressbar li:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: grey;
+  top: 15px;
+  left: -50%;
+  z-index : -1;
+}
+.progressbar li:first-child:after {
+  content: none;
+}
+.progressbar li.active {
+  color: rgba(0, 128, 0, 0.775);
+}
+.progressbar li.active:before {
+  border-color: rgba(0, 128, 0, 0.775);
+  content: counter(step);
+} 
+.progressbar li.active + li:after {
+  background-color: rgba(0, 128, 0, 0.775);
+}
+.progressbar li.warning {
+  color: rgba(253, 144, 0, 0.83);
+}
+.progressbar li.warning:before {
+  border-color: rgba(253, 144, 0, 0.83);
+  content: counter(step);
+} 
+.progressbar li.warning + li:after {
+  background-color: rgba(253, 144, 0, 0.83);
+}
+.progressbar li.error {
+  color: #cf292a;
+}
+.progressbar li.error:before {
+  border-color: #cf292a;
+  content: counter(step);
+} 
+.progressbar li.error + li:after {
+  background-color: #cf292a;
+}
+
+.text {
+  font-size: 12px;
+}
+
+@media (max-width: 1024px) {
+  .progressbar li {
+    list-style: none;
+    display: inline-block;
+    min-width: 20%;
+    max-width: 15%;
+    position: relative;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+  }
+}
+@media (max-width: 768px) {
+  .progressbar li {
+    list-style: none;
+    display: inline-block;
+    min-width: 25%;
+    max-width: 15%;
+    position: relative;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+  }
+}
+@media (max-width: 425px) {
+  .progressbar li {
+    list-style: none;
+    display: inline-block;
+    min-width: 50%;
+    max-width: 15%;
+    position: relative;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+  }
+}
+@media (max-width: 425px) {
+  .progressbar li {
+    list-style: none;
+    display: inline-block;
+    min-width: 50%;
+    max-width: 15%;
+    position: relative;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+  }
+}

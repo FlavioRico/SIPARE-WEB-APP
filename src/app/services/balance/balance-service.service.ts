@@ -12,19 +12,12 @@ export class BalanceServiceService {
 
   constructor(private http:HttpClient) { }
 
-  // urlBalancePROCESAR = 'http://10.160.14.213:8081/sipare-retrieve-consar-balance/balances?type=CONSAR';
-  // urlBalanceCONSAR = 'http://10.160.14.213:8081/sipare-retrieve-consar-balance/balances?type=CONSAR';
-  // urlAproveBalancePROCESAR = 'http://10.160.14.213:8081/sipare-approve-balance/balances';
-  
-  // urlBalanceCONSAR = 'http://localhost:8765/sipare-retrieve-consar-balance/balances?type=CONSAR';
-  
-  // urlBalancePROCESAR = 'http://10.160.188.123:8765/sipare-retrieve-balance/balances/findByTypeAndDate?type=PROCESAR';
-  // urlAproveBalancePROCESAR = 'http://10.160.188.123:8765/sipare-approve-balance/balances';
-
-
   retrieveBalanceCONSAR(){
 
-    return this.http.get<BalanceConsar>(environment.urlBalanceCONSAR);
+    return this.http.get<BalanceConsar>(
+      environment.urlBalanceCONSAR,
+      { observe : 'response'}
+      );
 
   }
 
@@ -53,8 +46,6 @@ export class BalanceServiceService {
 
   createLiquidation () {
 
-    // let url_Liquidation = 'http://10.160.188.123:8765/sipare-procesar-liquidations/liquidations';
-
     return this.http.post<any>(environment.url_Liquidation, 
       { observe: 'response' }
     );
@@ -63,12 +54,32 @@ export class BalanceServiceService {
 
   createPreNotice () {
 
-    // let url_PreNotice = 'http://10.160.188.123:8765/sipare-procesar-pre-notice/preaviso';
-
     return this.http.post<any>(environment.url_PreNotice, 
       { observe: 'response' }
     );
   
+  }
+
+  sendTransactionNotifications(){
+    return this.http.post<any>(
+      environment.transactionNotifications,
+      { observe: 'response'}
+    );
+  }
+
+  validateWorkingDay() {
+    return this.http.get<any>(
+      environment.workingDate,
+      { observe: 'response'}
+    );
+  }
+
+  aproveBalanceCONSAR(balance: BalanceProcesar){
+
+    balance.status = 203;
+    balance.approved_by = localStorage.getItem('username');
+    return this.http.put<BalanceProcesar>(environment.urlAproveBalanceCONSAR, balance);
+
   }
 
 }

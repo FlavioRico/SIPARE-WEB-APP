@@ -1,3 +1,87 @@
+const baseUrl_Linux     = 'http://10.164.188.229'; 
+const baseUrl_Windows   = 'http://servtdd.multivaloresgf.local';
+const alfrescoHostName  = 'http://multiva-dispersor-06-esb-multiva.prod.multivaloresgf.local';
+
 export const environment = {
-  production: true
+  
+  production: true,
+
+  name :          '',
+  contentType :   'Content-Type',
+  appJson :       'application/json',
+
+  //ALFRESCO MULTIVA
+  downloadAcuse :                             alfrescoHostName.concat('/alfresco/fileDownload'),
+
+  //YAXCHE SERVICES
+  sipare_dataDailyTransmitionReport:          baseUrl_Windows.concat(':8083/sipareMSProcessFileApp/multiva/sipare/generateTransmisionReport'),
+  sipare_ms_authenticate_url :                baseUrl_Windows.concat(':8081/sipareMSAuthenticationApp/multiva/sipare/'),
+  sipare_ms_processFile_url :                 baseUrl_Windows.concat(':8083/sipareMSProcessFileApp/multiva/sipare/'),
+  sipare_ms_parameters_by_type_transaction :  baseUrl_Windows.concat(':8083/sipareMSProcessFileApp/multiva/sipare/getParameterByTypeTransaction'),
+  transactionNotifications:                   baseUrl_Windows.concat(':8083/sipareMSProcessFileApp/multiva/sipare/transactionNotifications'),
+  sipare_generate_processFile :               baseUrl_Windows.concat(':8084/multiva/sipare/generateFileToPROCESAR'),
+  genetateListAllFilesUrl :                   'genetateListAllFiles',
+  genetateListAllFilesByDateRangeUrl :        'generateListAllFilesByDateRange',
+  genetateListXlsUrl :                        'genetateListXls',
+  genetateListAllFilesToT24Url :              'genetateListAllFilesToT24',
+  genetateListAllFilesToT2ByDateRange4Url :   'generateListAllFilesToT24ToRangeDate',
+  getContentByFileT24Url :                    'getContentByFileT24',
+  getBalanceT24Url :                          'getAccountBalanceT24',
+  loginUrl :                                  'login',
+  logoutUrl :                                 'logout',
+  searchUserUrl :                             'searchUser',
+  sendFileToConnectDirectUrl :                'generateFileToPROCESAR',
+  getListFilesToSendConnectDirectUrl :        'getContentByFileToSendProcesar',
+  getContentFileToSendConnectDirectUrl :      'getContentFileToSendProcesar',
+  searchFileToSendCdUrl :                     'searchFileToSendCd',
+  filesToSendCdUrl :                          'filesToSendCd',
+  getDataByLineCaptureByRespProcesarUrl :     'getDataByLineCaptureByRespProcesar',
+  updateRegistryRespUrl :                     'updateRegistryResp',
+  genetateListXLSConciliationUrl :            'generateXLSConciliation',
+  searchFileToValidUrl :                      'searchFileToValid',
+  sendValidatedFileToPROCESAR :               'sendValidatedFile',
+  getContentFileEditUrl :                     'getContentFile',
+  editFiletUrl :                              'editFile',
+  validTwoFileUrl :                           'validatedEditFile',
+  addParameterBackOfficeUrl :                 'addParametersBackOffice',
+  getBankByCodeUrl :                          'getBankByCode',
+  getParameterByTypeTransactionURL :          'getParameterByTypeTransaction',
+  paymentTransactionAndSendNotificationURL :  'paymentTransactionAndSendNotification',
+  listTrxsFailedURL :                         'getListTrxsFailed',
+  trxReProcessUrl :                           'paymentTransactionAndSendNotificationReProcess',
+  trxReProcessProgrammedUrl :                 'getUpdateDateProgrammedTrxsFailed',
+  
+  /* SIPARE REST API by FYG*/    
+  generateSummaryReportByMonth :              'conciliation/monthly/summaries',
+  generateSummaryReportByDate :               'conciliation/daily/summaries',
+  sipare_api :                                baseUrl_Linux.concat(':8082/api/v1/sipare/'),
+  downloadReport :                            baseUrl_Linux.concat(':8083/sipare/api/v1/reports/conciliation/date_types/'),
+  urlAproveBalancePROCESAR :                  baseUrl_Linux.concat(':8765/sipare-approve-balance/balances'),
+  urlAproveBalanceCONSAR :                    baseUrl_Linux.concat(':8765/sipare-consar-approve-balance/balances'),
+  sipare_ms_updateParameter_url :             baseUrl_Linux.concat(':8765/sipare-backoffice-parameters/parameters'),
+  urlBalancePROCESAR :                        baseUrl_Linux.concat(':8765/sipare-retrieve-procesar-balance/balances/findByTypeAndDate?type=PROCESAR'),
+  addParameter :                              baseUrl_Linux.concat(':8765/sipare-procesar-parameters/parameters'),
+  addParameterT2:                             baseUrl_Linux.concat(':8765/sipare-procesar-pre-notice/preaviso'),
+  url_Liquidation :                           baseUrl_Linux.concat(':8765/sipare-procesar-liquidations/liquidations'),
+  url_Get_Liquidation :                       baseUrl_Linux.concat(':8765/sipare-procesar-liquidations/liquidations/findByCurrentDate'),
+  url_PreNotice :                             baseUrl_Linux.concat(':8765/sipare-procesar-pre-notice/prenotices'),
+  url_Get_PreNotice :                         baseUrl_Linux.concat(':8765/sipare-procesar-pre-notice/prenotices/findByCurrentDate'),
+  urlParameter1 :                             baseUrl_Linux.concat(':8765/sipare-procesar-parameters/parameters/116027'),
+  urlParameter2 :                             baseUrl_Linux.concat(':8765/sipare-procesar-parameters/parameters/116018'),
+  url_Data_Complementary :                    baseUrl_Linux.concat(':8765/sipare-response-type-patch/captureLineData'),
+  verifyButtonTransaction:                    baseUrl_Linux.concat(':8765/sipare-procesar-transactions/transactions'),
+  updateHourTansaction:                       baseUrl_Linux.concat(':8765/sipare-procesar-transactions/transactions?type=HOUR'),
+  updateProgrammedDefault:                    baseUrl_Linux.concat(':8765/sipare-procesar-transactions/transactions?type=DEFAULT'),
+  updateProgrammedCron:                       baseUrl_Linux.concat(':8765/sipare-procesar-transactions/transactions?type=CRON'),
+  datesCollectionReport :                     baseUrl_Linux.concat(':8765/sipare-procesar-retrieve-dates/dates/'),
+  workingDate :                               baseUrl_Linux.concat(':8765/sipare-procesar-retrieve-dates/dates/isWorkingDay'),
+  urlFileStatus :                             baseUrl_Linux.concat(':8765/sipare-consar-file-status/status'),
+  urlFileWorklog :                            baseUrl_Linux.concat(':8765/sipare-consar-file-worklog/worklogs/'),
+  getLastFileRespToProcesarUrl :              baseUrl_Linux.concat(':8765/sipare-response-type-patch/procesarResponseSummary?date=today'),
+  getLastFileRespToProcesarUrlByDate :        baseUrl_Linux.concat(':8765/sipare-response-type-patch/procesarResponseSummary?date='),
+  getRespProcesarUrl :                        baseUrl_Linux.concat(':8765/sipare-response-type-patch/procesarResponseCaptureLines?date='),
+  urlBalanceCONSAR :                          baseUrl_Linux.concat(':8765/sipare-consar-retrieve-balance/balances?type=CONSAR'),
+  getAcuses :                                 baseUrl_Linux.concat(':8765/sipare-consar-replies/getAllConsarReplies'),
+  getMonthlyKeys :                            baseUrl_Linux.concat(':8765/sipare-consar-replies/getAllConsarPasswords'),
+
 };

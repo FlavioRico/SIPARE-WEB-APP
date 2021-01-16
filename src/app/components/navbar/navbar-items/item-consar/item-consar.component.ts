@@ -24,10 +24,17 @@ export class ItemCONSARComponent implements OnInit {
     this.opcMenuShort = 'Balance';
     this.dependenciaClicked.emit(this.dependencia);
   }
+
   opcConsarBitacoraCONSAR(){
     this.dependencia = 'CONSAR';
     this.opcMenu = 'Bitácora de Archivos';
     this.opcMenuShort = 'Bitácora';
+  }
+
+  opcConsarAcusesCONSAR(){
+    this.dependencia = 'CONSAR';
+    this.opcMenu = 'Acuses';
+    this.opcMenuShort = 'Acuses';
   }
 
 }

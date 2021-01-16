@@ -1,8 +1,8 @@
 export class FileWorklog {
-    dispatch_date: String;
-    file_name: String;
+    dispatch_date: string;
+    file_name: string;
     records_number: number;
     status: number;
-    payment_date: String;
-    timestamp: String;
+    payment_date: string;
+    timestamp: string;
 }

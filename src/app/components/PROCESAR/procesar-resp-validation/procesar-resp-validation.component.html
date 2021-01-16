@@ -1,0 +1,600 @@
+<!-- this -->
+<app-navbar></app-navbar>
+
+<div class="container">
+	<div class="alert alert-primary title-opc" role="alert">
+        <strong>PROCESAR</strong> - Reporte validaciones.
+    </div>
+</div>
+
+<div *ngIf="errService" class="container alert alert-danger" role="alert">
+	<h4 class="alert-heading">Error inesperado.</h4>
+	<p>Error en servicios.</p>
+	<hr>
+	<p class="mb-0">{{ messageErrService }}</p>
+</div>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.5)"
+  size="large"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+    <p style="font-size: 20px; color: white">Cargando...</p>
+</ngx-spinner>
+
+<div class="container" style="margin-top: 1%">
+	<div class="alert alert-warning alert-dismissible" *ngIf="isError">
+	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  	<strong>{{errorCode}}</strong> {{errorMsj}}.
+	</div>
+	<div class="alert alert-info alert-dismissible" *ngIf="isInfo">
+	  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	  	<strong>{{infoMsj}}</strong>.
+	</div>
+</div>
+
+<div class="container">
+
+	<div *ngIf="tableStatusProcesar" class="alert alert-primary" role="alert" style="text-align: center; background-color: white;">
+		Resultato de Validaciones PROCESAR para correcciones (Resumen). <br>
+	</div>
+
+	<div *ngIf="!changeTableStatusProcesar" class="row">
+		<div class="col-2">
+			<input #startDate type="date" id="fechaStart" [ngModel]="fechaStart" style="min-height: 100%; min-width: 95%;">
+		</div>
+		<div class="col-1"></div>
+		<button type="button" class="btn btn-outline-success float-right col-2"
+			(click)="searchByDate();">
+			Buscar por fecha
+		</button>
+	</div>
+
+
+
+	<div *ngIf="tableStatusProcesar" class="mce-container row" style="margin-top: 1%;">
+		<table class="table table-hover tbody-scroll tabContent" id="tablafullModal">
+			<thead>
+				<tr>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 200px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">Fecha Operaci&oacute;n</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 200px;">
+							<div class="col-md-9">
+								<p style="margin-left: -15px; text-align: center; font-size: 13px; width: 150px;">
+									Clave
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 160px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Concepto
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 200px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Total Operaciones
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 200px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Monto Total
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 165px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Rechazadas
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 165px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Atendidas
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 165px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Pendientes
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;">
+						<div class="row cenContent" style="width: 165px;">
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">
+									Aceptadas
+								</p>
+							</div>
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="pointer" *ngFor="let row of rows | paginate: { itemsPerPage: 9, currentPage: p }" (click)="listRegisterByCodeAndFileResponseProcesar(row.procesarFileDate, row.procesarResponse);">
+					<td style="display: inline-flex; width: 184px; padding: 0rem; border-top: 0px;">
+						<p style="margin-left: 25%;">{{row.procesarFileDate}}</p>
+					</td>
+					<td style="padding: 0rem; border-top: 0px; width: 200px;">
+						<p style="text-align: center; font-size: 13px;">
+							<b>{{row.codeString}}</b>
+						</p>
+					</td>
+					<td style="padding: 0rem; border-top: 0px; width: 200px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.description}}
+						</p>
+					</td>
+					<td style="padding: 0rem; border-top: 0px; width: 160px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.captureLines}}
+						</p>
+					</td>
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{this.shared.formatTable(row.totalAmmount)}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.rejected}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.attended}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.unattended}}
+						</p>
+					</td> 
+					<td style="padding: 0rem; border-top: 0px; width: 165px;">
+						<p style="text-align: center; font-size: 13px;">
+							{{row.accepted}}
+						</p>
+					</td> 
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div *ngIf="tableStatusProcesar" class="mce-container row" style="width: 80%;margin-left: 10%;margin-top: 1%; height: 50px;">
+		<div style="margin-left: 8%; width: 50%;">
+			<pagination-controls (pageChange)="p = $event" directionLinks="true" responsive="true" screenReaderPaginationLabel="Pagination" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+		</div>
+	</div>
+</div>
+
+	<div *ngIf="tableListRegisterByCode" class="container" style="margin-top: 1%;">
+		<table class="table table-hover tbody-scroll tabContent" id="tablafullModal">
+			<thead class="thead-tbody-display">
+				<tr>
+					<th style="padding: 0.4em; vertical-align: baseline;"><!--this (click)="sortTable(0)"-->
+						<div class="row" style="width: 525px;">
+							<div class="col-md-1" style="margin-bottom: 20px">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" style="margin-left: 20px;">
+							</div>
+							<div class="col-md-9">
+								<p style="margin-left: 5%; font-size: 13px">L&iacute;nea de Captura</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(6)"-->
+						<div class="row" style="width: 165px;">
+							<div class="col-md-1">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
+							</div>
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">Clave de estatus</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;"><!--this (click)="sortTable(1)"-->
+						<div class="row" style="width: 160px;">
+							<div class="col-md-1" style="margin-bottom: 20px">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC">
+							</div>
+							<div class="col-md-7" style="width: 150px;">
+								<p style="margin-left: -15px; text-align: center; font-size: 13px; width: 115px;">
+									Fecha operaci&oacute;n Sucursal
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(1)"-->
+						<div class="row" style="width: 160px;">
+							<div class="col-md-1" style="margin-bottom: 20px">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC">
+							</div>
+							<div class="col-md-7" style="width: 150px;">
+								<p style="margin-left: -15px; text-align: center; font-size: 13px; width: 115px;">
+									Fecha reportada PROCESAR 
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(1)"-->
+						<div class="row" style="width: 160px;">
+							<div class="col-md-1" style="margin-bottom: 20px">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC">
+							</div>
+							<div class="col-md-7" style="width: 150px;">
+								<p style="margin-left: -15px; text-align: center; font-size: 13px; width: 115px;">
+									Fecha respuesta PROCESAR 
+								</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(0)"-->
+						<div class="row" style="width: 500px;">
+							<div class="col-md-1" style="margin-bottom: 20px">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" style="margin-left: 20px;">
+							</div>
+							<div class="col-md-9">
+								<p style="margin-left: 5%; font-size: 13px">Resultado de la operaci&oacute;n</p>
+							</div>
+						</div>
+					</th>
+					<th style="padding: 0.4em; vertical-align: baseline;"> <!--this (click)="sortTable(5)"-->
+						<div class="row" style="width: 165px;">
+							<div class="col-md-1">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAACXBIWXMAAAsSAAALEgHS3X78AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKpJREFUeNrMVEsOQyEIBHoxTY/VpGKTXquPo/QohcS8qKV+dp2EjcIMPwVwwI9nUGPvjsDHoZYscBrQMacVhdop9Co0YHdVsC605O4h8v0mvUKC3ziJLhU7DwIgxCvK8RJaYG8ywEnuPTL8H7ZrwNJWCwgzbx0e0kb18RycDuRtgxmoiLLnZjX0gFf6T56swy5f21ptbdMAK3T2gPL2KphKUVqH9wEYPgIMAFPjPn9zJp++AAAAAElFTkSuQmCC" class="fas fa-sort" style="margin-left: 10px;">
+							</div>
+							<div class="col-md-9">
+								<p style="text-align: center; font-size: 13px">Monto</p>
+							</div>
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let fileContent of filesContent | paginate: { itemsPerPage: 7, currentPage: p }"> <!--this, se agregó variable-->
+					<td style="padding: 0rem; width: 140px; border-top: 0px;">
+						<div class="col-md-9" style="width: 500px;">
+							<a> 
+								<i class="glyphicon glyphicon-align-justify" style="color: blue; left: -75px; top: 15px;"></i>
+							</a>
+							<p (click)="updateRegistry(fileContent.captureLine, fileContent.oid, fileContent.procesarResponseString, fileContent.editable);" style="text-align: left; font-family: andale mono; font-size: 13px; margin-left: 10px;width: 135px;">
+								<b class="pointer">{{fileContent.captureLine}}</b>
+							</p>
+						</div>
+					</td>
+					<td style="padding: 0rem; width: 140px; border-top: 0px; text-align: right;">
+						<div class="col-md-9" style="width: 155px;">
+							<p style="font-size: 13px;">{{fileContent.procesarResponseString}}</p>
+						</div>
+					</td>
+					<td style="padding: 0rem; width: 140px; border-top: 0px;">
+						<div class="col-md-9" style="width: 138px;">
+							<p style="font-size: 13px;">{{fileContent.branchOperationDate}}</p>
+						</div>
+					</td>
+					<td style="padding: 0rem; width: 140px; border-top: 0px;">
+						<div class="col-md-12"
+							style="width: 169px; margin-left: 0px;">
+							<p style="font-size: 13px;">{{fileContent.procesarReportedDate}}</p>
+						</div>
+					</td>
+					<td style="padding: 0rem; width: 140px; border-top: 0px;">
+						<div class="col-md-9" style="width: 138px;">
+							<p style="font-size: 13px;">{{fileContent.procesarReportedDate}}</p>
+						</div>
+					</td>
+					<td style="padding: 0rem; width: 140px; border-top: 0px;">
+						<div class="col-md-9" style="width: 475px;">
+							<p style="font-size: 13px;width: 435px;">{{fileContent.operationResult}}</p>
+						</div>
+					</td>
+					<td style="padding: 0rem; width: 140px; border-top: 0px;">
+						<div class="col-md-9"
+							style="width: 152px;">
+							<p style="font-size: 13px;">{{ this.shared.formatTable(fileContent.totalAmount) }}</p>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div *ngIf="tableListRegisterByCode"  class="container" style="width: 100%;">
+		<div class="row" style="margin-top: 20px;width: 100%;">
+			<div class="col-md-9">
+				<div style="margin-left: 35%; width: 50%; margin-top: 3%;" class="jeje">
+					<pagination-controls (pageChange)="p = $event" directionLinks="true" responsive="true" screenReaderPaginationLabel="Pagination" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+				</div>
+			</div>
+		</div>
+		<button type="button" class="btn btn-outline-success float-right"
+		(click)="backPagePrincipal();" style="margin-bottom: 10px;">
+				Regresar
+		</button>
+	</div>
+
+
+<div class="container" *ngIf="isContentTable">
+
+	<!--this, tipo de operacion-->
+	<div class="col-sm" style="padding: 0;">
+		<strong class="dropBox">Tipo de respuesta: </strong>
+		<div class="input-group" style="margin-top: 5px;">
+			<div class="input-group-prepend btn-dprdwn">
+				<button *ngIf="!flagCorrect" class="btn btn-outline-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">Opciones</button>
+				<div class="opciones">
+					<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(1)">1<br>Corrección ER</button>
+					<div class="dropdown-divider"></div>
+					<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(2)">2<br>Confirmación positiva</button>
+					<div class="dropdown-divider"></div>
+					<button type="button" class="btn btn-light opc dropBox" (click)="seleccion(3)">3<br>Confirmación negativa ER</button>
+				</div>
+			</div>
+			<input [ngModel]="globalResp" class="dropBox" type="text" style="min-width: 20px;" readonly="readonly">
+		</div>
+	</div>
+
+	<div class="row end-element"> <!--end-element al último elemento para realizar separación-->
+
+		<div class="col-3" style="margin-top: 10px;">
+			Fecha y hora de recepción:
+			<div class="form-group input-info">
+				<input #dateAnHourReception type="text" class="form-control inputCustom" 
+				aria-describedby="basic-addon1" value={{dataRowT24.datePayment}}>
+			</div>
+		</div>
+		<div class="col-6" style="margin-top: 10px;">
+			Sucursal:
+			<div class="form-group input-info">
+				<input #sucursal class="form-control inputCustom" 
+				value={{dataRowT24.placeOffice}}>
+			</div>
+		</div>
+		<div class="col-3" style="margin-top: 10px;">
+			Usuario:
+			<div class="form-group input-info">
+				<input #user class="form-control inputCustom" value={{dataRowT24.clientOrUser}}>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-9">
+			<div class="form-group input-info">
+				Linea de captura:
+				<input #linecap type="text" class="form-control inputCustom" value={{dataRowT24.line}} minlength="53" maxlength="53">
+			</div>
+		</div>
+		<div class="col-3">
+			<div class="form-group input-info">
+				Folio T24:
+				<input #folioT24 type="text" class="form-control inputCustom" value={{dataRowT24.idTransaccionT24}} 
+				[(ngModel)]="dataRowT24.idTransaccionT24"
+				minlength="53" maxlength="53">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-3">
+			<div class="form-group input-info">
+				Usuario T24:
+				<input #userT24 type="text" class="form-control inputCustom"value={{dataRowT24.usuarioIngresoT24}} 
+				[(ngModel)]="dataRowT24.usuarioIngresoT24" minlength="53" maxlength="53">
+			</div>
+		</div>
+		<div class="col-md"></div>
+	</div>
+
+
+	<div *ngIf="isContentTable" class="alert alert-success" role="alert">
+		Detalle Línea de captura:
+	</div>
+
+	<div class="row end-element">
+		<div class="col-md">
+			<div class="form-group input-info">
+				Nombre del cliente:
+				<input #nameClient type="text" class="form-control inputCustom" id="buscadorModal" pattern="[a-zA-Z ]$">
+			</div>
+		</div>
+		<div class="col-md"></div>
+		<div class="col-md"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm">
+			<div class="form-group input-info">
+				Registro patronal:
+				<input #patronRegistry name="patronRegistry" type="text" class="form-control inputCustom" value={{dataRowT24.patronRegistry}} 
+				minlength="11" maxlength="11" id="patronRegistry" name="patronRegistry" [(ngModel)]="dataRowT24.patronRegistry"/>	
+			</div>
+		</div>
+		<div class="col-sm">
+			<div class="col-sm banco">
+				Nombre o RFC:
+				<div class="form-group input-info">
+					<input #nameOrRfc name="nameBussines" type="text"
+					class="form-control inputCustom" value={{dataRowT24.nameBussines}} id="nameBussines" name="nameBussines" [(ngModel)]="dataRowT24.nameBussines"/>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm">
+			<div class="col-sm banco">
+				Forma de Pago:
+				<div class="form-group input-info">
+					<input #bankNameRecep name="bankNameRecep" type="text"
+					class="form-control inputCustom" value={{dataRowT24.formatPayment}}  id="buscadorModal"/>
+				</div>
+				
+			</div>
+		</div>
+		<div class="col-sm">
+			<div class="col-sm banco">
+				Cliente o Ususario:
+				<div class="form-group input-info">
+					<input #clientOrUserDetail name="buscadorModal" type="text"
+					class="form-control inputCustom" value={{dataRowT24.clientOrUser}} id="buscadorModal"/>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm">
+			Teléfono:
+			<div class="form-group input-info">
+				<input #tel type="text"
+				class="form-control inputCustom" value={{dataRowT24.telephone}} id="telephone" name="telephone" [(ngModel)]="dataRowT24.telephone"/>
+			</div>
+		</div>
+		<div class="col-sm">
+			Nombre de contacto:
+			<div class="form-group input-info">
+				<input #nameContact type="text"
+				class="form-control inputCustom" value={{dataRowT24.nameContact}} id="nameContact" name="nameContact" [(ngModel)]="dataRowT24.nameContact"/>
+			</div>
+		</div>
+		<div class="col-sm">
+			Correo electrónico:
+			<div class="form-group input-info">
+				<input #email type="text"
+				class="form-control inputCustom" value={{dataRowT24.email}} id="email" name="email" [(ngModel)]="dataRowT24.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm">
+			Importe IMSS:
+			<div class="form-group input-info">
+				<input #importIMSS type="text"
+				class="form-control inputCustom" value={{ngBalanceImss}} id="ngBalanceImss" name="ngBalanceImss" [(ngModel)]="ngBalanceImss" />
+			</div>
+		</div>
+		<div class="col-sm">
+			Importe RCV:
+			<div class="form-group input-info">
+				<input #importRCV type="text"
+				class="form-control inputCustom" value={{ngBalanceRcv}} id="ngBalanceRcv" name="ngBalanceRcv" [(ngModel)]="ngBalanceRcv"/>
+			</div>
+		</div>
+		<div class="col-sm">
+			Importe Vivienda:
+			<div class="form-group input-info">
+				<input #importVIV type="text"
+				class="form-control inputCustom" value={{ngBalanceViv}} id="ngBalanceViv" name="ngBalanceViv" [(ngModel)]="ngBalanceViv"/>
+			</div>
+		</div>
+		<div class="col-sm">
+			Importe ACV:
+			<div class="form-group input-info">
+				<input #importACV type="text"
+				class="form-control inputCustom" value={{ngBalanceAcv}} id="ngBalanceAcv" name="ngBalanceAcv" [(ngModel)]="ngBalanceAcv"/>
+			</div>
+		</div>
+		<div class="col-sm">
+			Importe Total:
+			<div class="form-group input-info">
+				<input #total type="text"
+				class="form-control inputCustom" value={{ngBalanceTotal}} id="ngBalanceTotal" name="ngBalanceTotal" [(ngModel)]="ngBalanceTotal"/>
+			</div>
+		</div>
+	</div>
+
+	<div *ngIf="isContentTable" class="alert alert-success" role="alert">
+		Observaciones:
+	</div>
+	<strong>Resultado validación PROCESAR:</strong>
+	<div class="row end-element">
+		<div class="col-lg">
+			<div class="form-group input-info">
+				<input #respValidateProcesar type="text"
+				class="form-control inputCustom" value={{this.respProcesar}}/>
+			</div>
+		</div>
+	</div>
+	<div class="row end-element">
+		<div class="col-lg">
+			<div class="form-group input-info">
+				Diagnostico 1:
+				<input #diagnostic1 type="text"
+				class="form-control inputCustom" value={{this.respuestas.diagnosisOne}}/>
+			</div>
+		</div>
+	</div>
+	<div class="row end-element">
+		<div class="col-lg">
+			<div class="form-group input-info">
+				Diagnostico 2:
+				<input #diagnostic2 type="text"
+				class="form-control inputCustom" value={{this.respuestas.diagnosisTwo}}/>
+			</div>
+		</div>
+	</div>
+	<div class="row end-element">
+		<div class="col-lg">
+			<div class="form-group input-info">
+				Diagnostico 3:
+				<input #diagnostic3 type="text"
+				class="form-control inputCustom" value={{this.respuestas.diagnosisThree}}/>
+			</div>
+		</div>
+	</div>
+
+	<div *ngIf="isContentTable" class="alert alert-success" role="alert">
+		Datos de la última modificación realizada:
+	</div>
+	<div class="row">
+		<div class="col-md">
+			Autor:
+			<div class="form-group input-info">
+				<input type="text"
+				class="form-control inputCustom" value={{this.respuestas.lastEditBy}} readonly/>
+			</div>
+		</div>
+		<div class="col-md">
+			Fecha y hora:
+			<div class="form-group input-info">
+				<input type="text"
+				class="form-control inputCustom" value={{this.respuestas.lastEditTimestamp}} readonly/>
+			</div>
+		</div>
+	</div>
+
+	
+	<button type="button" class="btn btn-outline-success float-right" style="margin: 0px 0px 15px 10px;"
+	(click)="hideContentFileT24Resp();">
+		Regresar
+	</button>
+	<button *ngIf="notAutorized" type="button" class="btn btn-outline-warning float-right" style="margin-bottom: 15px;"
+	(click)="updateConfirmRegistry(dataRowT24, ngBalanceImss, ngBalanceRcv, ngBalanceViv, ngBalanceAcv, ngBalanceTotal);">
+		Actualizar
+	</button>
+
+</div>

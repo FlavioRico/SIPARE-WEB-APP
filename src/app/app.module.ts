@@ -1,51 +1,56 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { BrowserModule } from                           '@angular/platform-browser';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from        '@angular/core';
+import { FormsModule } from                             '@angular/forms';
+import { HttpClientModule } from                        '@angular/common/http';
+import { BrowserAnimationsModule } from                 '@angular/platform-browser/animations';
+import { HashLocationStrategy, LocationStrategy } from  '@angular/common';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { NgxSpinnerModule } from "ngx-spinner";
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxSpinnerModule } from                  "ngx-spinner";
+import { NgxPaginationModule } from               'ngx-pagination'; 
+import { AppRoutingModule } from                  './app-routing.module';
 
 
-//Components
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { BitacoraComponent } from './components/bitacora/bitacora.component';
-import { LoginComponent } from './components/login/login.component';
-import { IconsMenuComponent } from './components/navbar/icons-menu/icons-menu.component';
-import { ItemPROCESARComponent } from './components/navbar/navbar-items/item-procesar/item-procesar.component';
-import { ItemCONSARComponent } from './components/navbar/navbar-items/item-consar/item-consar.component';
-import { BalanceProcesarComponent } from './components/balance/balance-procesar/balance-procesar.component';
-import { BalanceConsarComponent } from './components/balance/balance-consar/balance-consar.component';
-import { ModalAuthComponent } from './components/balance/modals/modal-auth/modal-auth.component';
-import { SharedComponent } from './shared/shared/shared.component';
-import { PreloaderComponent } from './components/preloader/preloader.component';
-import { ValidFileComponent } from './components/valid-file/valid-file.component';
-import { TransactionComponent } from './components/transaction/transaction.component';
-import { ParametersComponent } from './components/parameters/parameters.component';
-import { BackOfficeComponent } from './components/back-office/back-office.component';
-import { PreavisoComponent } from './components/preaviso/preaviso.component';
-import { CollectionReportComponent } from './components/collection-report/collection-report.component';
-import { ConciliationComponent } from './components/conciliation/conciliation.component';
-import { FileCdComponent } from './components/file-cd/file-cd.component';
-import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
-import { PrivadoPageComponent } from './components/privado-page/privado-page.component';
-import { ProcesarRespValidationComponent } from './components/procesar-resp-validation/procesar-resp-validation.component';
-import { RegisterPageComponent } from './components/register-page/register-page.component';
-import { SendFileToConnectDirectComponent } from './components/send-file-to-connect-direct/send-file-to-connect-direct.component';
-import { ModalFilesNotFoundComponent } from './components/balance/modals/modal-files-not-found/modal-files-not-found.component';
-import { ConciliationReportComponent } from './components/conciliation-report/conciliation-report.component';
+//GENERAL COMPONENTS
+import { AppComponent } from                      './app.component';
+import { NavbarComponent } from                   './components/navbar/navbar.component';
+import { LoginComponent } from                    './components/login/login.component';
+import { IconsMenuComponent } from                './components/navbar/icons-menu/icons-menu.component';
+import { ItemCONSARComponent } from               './components/navbar/navbar-items/item-consar/item-consar.component';
+import { SharedComponent } from                   './shared/shared/shared.component';
+import { NotFoundPageComponent } from             './components/not-found-page/not-found-page.component';
+import { ItemPROCESARComponent } from             './components/navbar/navbar-items/item-procesar/item-procesar.component';
 
-//Services
-import { BitacoraServiceService } from './services/bitacora/bitacora-service.service';
-import { BalanceServiceService } from './services/balance/balance-service.service';
-import { AuthenticationService } from './services/authentication/authentication.service';
-import { ProcessFileService } from  './services/process-file/process-file.service';
-import { SipareApiService } from  './services/conciliation-report/sipare-api.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+//CONSAR COMPONENTS
+import { BitacoraComponent } from                 './components/CONSAR/bitacora/bitacora.component';
+import { BalanceConsarComponent } from            './components/CONSAR/balance-consar/balance-consar.component';
+import { MonthlyKeysComponent } from              './components/CONSAR/monthly-keys/monthly-keys.component';
+import { AcusesComponent } from                   './components/CONSAR/acuses/acuses.component';
+
+//PROCESAR COMPONENTS
+import { BalanceProcesarComponent } from          './components/PROCESAR/balance/balance-procesar/balance-procesar.component';
+import { ModalAuthComponent } from                './components/PROCESAR/balance/modals/modal-auth/modal-auth.component';
+import { ValidFileComponent } from                './components/PROCESAR/valid-file/valid-file.component';
+import { ParametersComponent } from               './components/PROCESAR/parameters/parameters.component';
+import { BackOfficeComponent } from               './components/PROCESAR/back-office/back-office.component';
+import { PreavisoComponent } from                 './components/PROCESAR/preaviso/preaviso.component';
+import { CollectionReportComponent } from         './components/PROCESAR/collection-report/collection-report.component';
+import { FileCdComponent } from                   './components/PROCESAR/file-cd/file-cd.component';
+import { PrivadoPageComponent } from              './components/PROCESAR/privado-page/privado-page.component';
+import { ProcesarRespValidationComponent } from   './components/PROCESAR/procesar-resp-validation/procesar-resp-validation.component';
+import { SendFileToConnectDirectComponent } from  './components/PROCESAR/send-file-to-connect-direct/send-file-to-connect-direct.component';
+import { ModalFilesNotFoundComponent } from       './components/PROCESAR/balance/modals/modal-files-not-found/modal-files-not-found.component';
+import { ConciliationReportComponent } from       './components/PROCESAR/conciliation-report/conciliation-report.component';
+
+//SERVICES
+import { BitacoraServiceService } from            './services/bitacora/bitacora-service.service';
+import { BalanceServiceService } from             './services/balance/balance-service.service';
+import { AuthenticationService } from             './services/authentication/authentication.service';
+import { ProcessFileService } from                './services/process-file/process-file.service';
+import { SipareApiService } from                  './services/conciliation-report/sipare-api.service';
+import { KeysService } from                       './services/CONSAR/keys/keys.service';
+
+//OTHERS
+import { NgbModule } from                         '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -61,22 +66,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     BalanceConsarComponent,
     ModalAuthComponent,
     SharedComponent,
-    PreloaderComponent,
     ValidFileComponent,
-    TransactionComponent,
     ParametersComponent,
     BackOfficeComponent,
     PreavisoComponent,
     CollectionReportComponent,
-    ConciliationComponent,
     FileCdComponent,
     NotFoundPageComponent,
     PrivadoPageComponent,
     ProcesarRespValidationComponent,
-    RegisterPageComponent,
     SendFileToConnectDirectComponent,
     ModalFilesNotFoundComponent,
-    ConciliationReportComponent
+    ConciliationReportComponent,
+    AcusesComponent,
+    MonthlyKeysComponent
   ],
   imports: [
     FormsModule,
@@ -94,6 +97,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AuthenticationService,
     ProcessFileService,
     SipareApiService,
+    KeysService,
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
